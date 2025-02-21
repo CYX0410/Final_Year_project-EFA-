@@ -1,0 +1,5 @@
+# Force LF for specific files
+*.mjs text eol=lf
+
+# Default text files to LF
+* text=auto
