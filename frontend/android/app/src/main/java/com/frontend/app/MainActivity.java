@@ -1,4 +1,4 @@
-package ionic.frontend;
+package com.frontend.app;
 
 import com.getcapacitor.BridgeActivity;
 
