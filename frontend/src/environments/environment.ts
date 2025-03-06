@@ -7,10 +7,10 @@ export const environment = {
   firebase: {
     apiKey: 'your-api-key',
     authDomain: 'your-auth-domain',
-    projectId: 'your-project-id',
+    projectId: 'fyp-efa',
     storageBucket: 'your-storage-bucket',
     messagingSenderId: 'your-messaging-sender-id',
-    appId: 'your-app-id'
+    appId: '1:777269589498:android:a6f129e931b64a9f64a043'
   }
 };
 
