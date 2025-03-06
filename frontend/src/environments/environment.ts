@@ -5,12 +5,12 @@
 export const environment = {
   production: false,
   firebase: {
-    apiKey: 'your-api-key',
-    authDomain: 'your-auth-domain',
-    projectId: 'fyp-efa',
-    storageBucket: 'your-storage-bucket',
-    messagingSenderId: 'your-messaging-sender-id',
-    appId: '1:777269589498:android:a6f129e931b64a9f64a043'
+    apiKey: "AIzaSyD9AAckHKBPPm6IcDdlkNFNaqvs4Bqkz4Y",
+    authDomain: "fyp-efa.firebaseapp.com",
+    projectId: "fyp-efa",
+    storageBucket: "fyp-efa.firebasestorage.app",
+    messagingSenderId: "777269589498",
+    appId: "1:777269589498:android:a6f129e931b64a9f64a043"
   }
 };
 
