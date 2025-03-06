@@ -6,6 +6,7 @@ import { provideFirebaseApp, initializeApp } from '@angular/fire/app';
 import { getAuth, provideAuth } from '@angular/fire/auth';
 import { routes } from './app/app.routes';
 import { AppComponent } from './app/app.component';
+import { importProvidersFrom } from '@angular/core'; 
 
 bootstrapApplication(AppComponent, {
   providers: [
