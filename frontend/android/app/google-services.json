@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "777269589498",
+    "project_id": "fyp-efa",
+    "storage_bucket": "fyp-efa.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:777269589498:android:a6f129e931b64a9f64a043",
+        "android_client_info": {
+          "package_name": "com.uum.efa"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyD9AAckHKBPPm6IcDdlkNFNaqvs4Bqkz4Y"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
