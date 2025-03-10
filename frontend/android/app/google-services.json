@@ -12,7 +12,20 @@
           "package_name": "com.uum.efa"
         }
       },
-      "oauth_client": [],
+      "oauth_client": [
+        {
+          "client_id": "777269589498-v85v1kv2a2l6e3n4ol3dns4c88k9k8tp.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.uum.efa",
+            "certificate_hash": "afbcb393bc62dd03d2fe99bddeaed9a5b20e56fd"
+          }
+        },
+        {
+          "client_id": "777269589498-ntrhts225dfl4lkjqq545kcvmm89em28.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
       "api_key": [
         {
           "current_key": "AIzaSyD9AAckHKBPPm6IcDdlkNFNaqvs4Bqkz4Y"
@@ -20,7 +33,12 @@
       ],
       "services": {
         "appinvite_service": {
-          "other_platform_oauth_client": []
+          "other_platform_oauth_client": [
+            {
+              "client_id": "777269589498-ntrhts225dfl4lkjqq545kcvmm89em28.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
         }
       }
     }
