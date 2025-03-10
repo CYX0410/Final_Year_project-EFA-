@@ -97,7 +97,7 @@ export class LoginPage {
     this.errorMessage = '';
     try {
       await this.authService.signInWithGoogle();
-      this.router.navigate(['/tabs']);
+      this.router.navigate(['/tabs']); 
     } catch (error: any) {
       this.errorMessage = error.message;
       console.error('Google sign in failed:', error);
