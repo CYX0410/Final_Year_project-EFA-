@@ -5,7 +5,10 @@ import {
   signInWithEmailAndPassword,
   GoogleAuthProvider,
   sendPasswordResetEmail,
-  signInWithPopup 
+  signInWithPopup,
+  signOut,
+  updateProfile,
+  User
 } from '@angular/fire/auth';
 import { HttpClient } from '@angular/common/http';
 
@@ -19,6 +22,51 @@ export class AuthService {
     private auth: Auth,
     private http: HttpClient
   ) {}
+  async getCurrentUser(): Promise<User | null> {
+    return this.auth.currentUser;
+  }
+
+  async updateUserProfile(profileData: any) {
+    try {
+      const user = await this.getCurrentUser();
+      if (!user) throw new Error('No user logged in');
+
+      // Update Firebase profile
+      await updateProfile(user, {
+        displayName: profileData.username
+      });
+
+      // Update MySQL profile
+      await this.http.put(`${this.apiUrl}/users/profile/${user.uid}`, {
+        username: profileData.username,
+        email: user.email,
+        bio: profileData.bio,
+        preferences: profileData.preferences
+      }).toPromise();
+
+    } catch (error) {
+      console.error('Error updating profile:', error);
+      throw error;
+    }
+  }
+  async getUserProfile(uid: string) {
+    try {
+      const response = await this.http.get(`${this.apiUrl}/users/profile/${uid}`).toPromise();
+      return response;
+    } catch (error) {
+      console.error('Error fetching profile:', error);
+      throw error;
+    }
+  }
+  async signOut(): Promise<void> {
+    try {
+      await signOut(this.auth);
+    } catch (error) {
+      console.error('Sign out error:', error);
+      throw error;
+    }
+  }
+
   async resetPassword(email: string) {
     return sendPasswordResetEmail(this.auth, email);
   }

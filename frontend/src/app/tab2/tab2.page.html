@@ -1,17 +1,55 @@
 <ion-header [translucent]="true">
   <ion-toolbar>
-    <ion-title>
-      Tab 2
-    </ion-title>
+    <ion-title>Profile</ion-title>
+    <ion-buttons slot="end">
+      <ion-button (click)="editProfile()" *ngIf="!isEditing">
+        <ion-icon name="create-outline"></ion-icon>
+      </ion-button>
+      <ion-button (click)="saveProfile()" *ngIf="isEditing">
+        <ion-icon name="checkmark-outline"></ion-icon>
+      </ion-button>
+    </ion-buttons>
   </ion-toolbar>
 </ion-header>
 
-<ion-content [fullscreen]="true">
-  <ion-header collapse="condense">
-    <ion-toolbar>
-      <ion-title size="large">Tab 2</ion-title>
-    </ion-toolbar>
-  </ion-header>
+<ion-content [fullscreen]="true" class="ion-padding">
+  <form [formGroup]="profileForm">
+    <div class="profile-header">
+      <ion-avatar>
+        <img [src]="userPhotoURL || 'assets/default-avatar.png'" alt="Profile photo">
+      </ion-avatar>
+    </div>
 
-  <app-explore-container name="Profile"></app-explore-container>
+    <ion-list>
+      <ion-item>
+        <ion-label position="stacked">Username</ion-label>
+        <ion-input formControlName="username" [readonly]="!isEditing"></ion-input>
+      </ion-item>
+
+      <ion-item>
+        <ion-label position="stacked">Email</ion-label>
+        <ion-input formControlName="email" readonly></ion-input>
+      </ion-item>
+
+      <ion-item>
+        <ion-label position="stacked">Bio</ion-label>
+        <ion-textarea 
+          formControlName="bio" 
+          [readonly]="!isEditing" 
+          rows="3"
+          placeholder="Tell us about yourself...">
+        </ion-textarea>
+      </ion-item>
+
+      <ion-item>
+        <ion-label position="stacked">Preferences</ion-label>
+        <ion-textarea 
+          formControlName="preferences" 
+          [readonly]="!isEditing" 
+          rows="2"
+          placeholder="Enter your environmental interests (e.g., recycling, sustainable living)">
+        </ion-textarea>
+      </ion-item>
+    </ion-list>
+  </form>
 </ion-content>

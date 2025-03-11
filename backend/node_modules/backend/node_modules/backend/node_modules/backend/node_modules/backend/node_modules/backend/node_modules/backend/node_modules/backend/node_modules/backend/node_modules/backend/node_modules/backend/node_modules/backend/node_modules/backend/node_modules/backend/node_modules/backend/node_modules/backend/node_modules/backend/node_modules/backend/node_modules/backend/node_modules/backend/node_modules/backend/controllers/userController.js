@@ -44,6 +44,56 @@ const userController = {
             console.error('Error fetching user:', error);
             res.status(500).json({ message: error.message });
         }
+    },
+
+    updateProfile: async (req, res) => {
+        try {
+            const { uid } = req.params;
+            const { username, email, bio, preferences } = req.body;
+            
+            // Check if profile exists
+            const [existing] = await pool.query('SELECT * FROM profiles WHERE uid = ?', [uid]);
+            
+            if (existing.length > 0) {
+                // Update existing profile
+                await pool.query(
+                    'UPDATE profiles SET username = ?, email = ?, bio = ?, preferences = ? WHERE uid = ?',
+                    [username, email, bio, preferences, uid]
+                );
+            } else {
+                // Create new profile
+                await pool.query(
+                    'INSERT INTO profiles (uid, username, email, bio, preferences) VALUES (?, ?, ?, ?, ?)',
+                    [uid, username, email, bio, preferences]
+                );
+            }
+            
+            res.status(200).json({ 
+                message: 'Profile updated successfully',
+                profile: { uid, username, email, bio, preferences }
+            });
+        } catch (error) {
+            console.error('Error updating profile:', error);
+            res.status(500).json({ message: error.message });
+        }
+    },
+
+    getProfile: async (req, res) => {
+        try {
+            const [rows] = await pool.query(
+                'SELECT * FROM profiles WHERE uid = ?',
+                [req.params.uid]
+            );
+            
+            if (rows.length > 0) {
+                res.json(rows[0]);
+            } else {
+                res.status(404).json({ message: 'Profile not found' });
+            }
+        } catch (error) {
+            console.error('Error fetching profile:', error);
+            res.status(500).json({ message: error.message });
+        }
     }
 };
 
