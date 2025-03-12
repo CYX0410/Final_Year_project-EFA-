@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { Router } from '@angular/router';
 import { FormsModule } from '@angular/forms';
+import { AlertController, MenuController } from '@ionic/angular/standalone';
 import { 
   IonApp, 
   IonRouterOutlet,
@@ -14,19 +15,22 @@ import {
   IonIcon,
   IonLabel,
   IonToggle,
-  IonMenuButton
+  IonMenuButton,
+  IonAlert,
+  IonButtons,
+  IonButton
 } from '@ionic/angular/standalone';
 import { AuthService } from './services/auth.service';
 import { addIcons } from 'ionicons';
 import { 
-  languageOutline, 
-  notificationsOutline, 
-  moonOutline, 
-  chatboxOutline, 
-  logOutOutline,
-  settingsOutline 
+  language, 
+  notifications, 
+  moon, 
+  chatbox, 
+  logOut,
+  settings,
+  arrowBackOutline
 } from 'ionicons/icons';
-import { NgModel } from '@angular/forms';
 
 @Component({
   selector: 'app-root',
@@ -47,7 +51,10 @@ import { NgModel } from '@angular/forms';
     IonIcon,
     IonLabel,
     IonToggle,
-    IonMenuButton
+    IonMenuButton,
+    IonAlert,
+    IonButtons,
+    IonButton
   ],
 })
 export class AppComponent {
@@ -56,16 +63,23 @@ export class AppComponent {
 
   constructor(
     private authService: AuthService,
-    private router: Router
+    private router: Router,
+    private alertController: AlertController,
+    private menuController: MenuController
   ) {
     addIcons({ 
-      languageOutline, 
-      notificationsOutline, 
-      moonOutline, 
-      chatboxOutline, 
-      logOutOutline,
-      settingsOutline 
+      language, 
+      notifications, 
+      moon, 
+      chatbox, 
+      logOut,
+      settings,
+      arrowBackOutline
     });
+  }
+
+  async closeMenu() {
+    await this.menuController.close();
   }
 
   changeLanguage() {
@@ -89,11 +103,30 @@ export class AppComponent {
   }
 
   async logout() {
-    try {
-      await this.authService.signOut();
-      this.router.navigate(['/login']);
-    } catch (error) {
-      console.error('Logout failed:', error);
-    }
+    const alert = await this.alertController.create({
+      header: 'Confirm Logout',
+      message: 'Are you sure you want to log out?',
+      buttons: [
+        {
+          text: 'Cancel',
+          role: 'cancel',
+          cssClass: 'secondary'
+        },
+        {
+          text: 'Yes',
+          handler: async () => {
+            try {
+              await this.menuController.close(); // Close menu first
+              await this.authService.signOut();
+              this.router.navigate(['/login']);
+            } catch (error) {
+              console.error('Logout failed:', error);
+            }
+          }
+        }
+      ]
+    });
+  
+    await alert.present();
   }
 }

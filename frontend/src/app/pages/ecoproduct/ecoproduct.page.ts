@@ -1,20 +1,44 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { IonContent, IonHeader, IonTitle, IonToolbar } from '@ionic/angular/standalone';
+import { Router } from '@angular/router';
+import { 
+  IonContent, 
+  IonHeader, 
+  IonTitle, 
+  IonToolbar,
+  IonButtons,
+  IonButton,
+  IonIcon 
+} from '@ionic/angular/standalone';
+import { addIcons } from 'ionicons';
+import { arrowBackOutline } from 'ionicons/icons';
 
 @Component({
   selector: 'app-ecoproduct',
   templateUrl: './ecoproduct.page.html',
   styleUrls: ['./ecoproduct.page.scss'],
   standalone: true,
-  imports: [IonContent, IonHeader, IonTitle, IonToolbar, CommonModule, FormsModule]
+  imports: [
+    CommonModule, 
+    FormsModule, 
+    IonContent, 
+    IonHeader, 
+    IonTitle, 
+    IonToolbar,
+    IonButtons,
+    IonButton,
+    IonIcon
+  ]
 })
 export class EcoproductPage implements OnInit {
-
-  constructor() { }
-
-  ngOnInit() {
+  constructor(private router: Router) {
+    addIcons({ arrowBackOutline });
   }
 
+  ngOnInit() {}
+
+  goBack() {
+    this.router.navigate(['/tabs/home']);
+  }
 }

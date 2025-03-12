@@ -2,6 +2,8 @@ import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
 import { Router, RouterLink } from '@angular/router';
+import { addIcons } from 'ionicons';
+import { logoGoogle } from 'ionicons/icons'; 
 import { 
   IonContent, 
   IonHeader, 
@@ -54,6 +56,7 @@ export class LoginPage {
       email: ['', [Validators.required, Validators.email]],
       password: ['', [Validators.required, Validators.minLength(6)]]
     });
+    addIcons({ logoGoogle });
   }
 
   async onSubmit() {
