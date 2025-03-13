@@ -8,3 +8,64 @@
     <ion-title>Eco Challenges</ion-title>
   </ion-toolbar>
 </ion-header>
+
+<ion-content [fullscreen]="true" class="ion-padding">
+  <!-- Error Message -->
+  <div *ngIf="errorMessage" class="error-message">
+    {{ errorMessage }}
+  </div>
+
+  <!-- Active Challenges -->
+  <ion-list *ngIf="activeChallenges.length > 0">
+    <h2>Active Challenges</h2>
+    <ion-card *ngFor="let progress of activeChallenges">
+      <ion-card-header>
+        <ion-card-title>{{ progress.title }}</ion-card-title>
+        <ion-card-subtitle>
+          Current Streak: {{ progress.current_streak }} days
+        </ion-card-subtitle>
+      </ion-card-header>
+      <ion-card-content>
+        <ion-progress-bar [value]="progress.current_streak / progress.duration_days"></ion-progress-bar>
+        <ion-button expand="block" (click)="checkIn(progress.progress_id)" class="ion-margin-top">
+          Daily Check-in
+        </ion-button>
+      </ion-card-content>
+    </ion-card>
+  </ion-list>
+
+  <!-- Available Challenges -->
+  <ion-list>
+    <h2>Available Challenges</h2>
+    <ion-card *ngFor="let challenge of availableChallenges">
+      <ion-card-header>
+        <ion-card-title>{{ challenge.title }}</ion-card-title>
+        <ion-card-subtitle>
+          {{ challenge.duration_days }} days • {{ challenge.points }} points
+        </ion-card-subtitle>
+      </ion-card-header>
+      <ion-card-content>
+        <p>{{ challenge.description }}</p>
+        <ion-button expand="block" (click)="startChallenge(challenge.challenge_id)" class="ion-margin-top">
+          Start Challenge
+        </ion-button>
+      </ion-card-content>
+    </ion-card>
+  </ion-list>
+
+  <!-- Completed Challenges -->
+  <ion-list *ngIf="completedChallenges.length > 0">
+    <h2>Completed Challenges</h2>
+    <ion-card *ngFor="let progress of completedChallenges">
+      <ion-card-header>
+        <ion-card-title>
+          {{ progress.title }}
+          <ion-icon name="trophy" color="warning"></ion-icon>
+        </ion-card-title>
+        <ion-card-subtitle>
+          Completed on {{ progress.last_check_in | date }}
+        </ion-card-subtitle>
+      </ion-card-header>
+    </ion-card>
+  </ion-list>
+</ion-content>
