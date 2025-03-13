@@ -10,6 +10,12 @@
 </ion-header>
 
 <ion-content [fullscreen]="true" class="ion-padding">
+   <!-- Loading Indicator -->
+   <div *ngIf="loading" class="loading-container">
+    <ion-spinner></ion-spinner>
+    <p>Loading challenges...</p>
+  </div>
+ 
   <!-- Error Message -->
   <div *ngIf="errorMessage" class="error-message">
     {{ errorMessage }}
@@ -27,9 +33,14 @@
       </ion-card-header>
       <ion-card-content>
         <ion-progress-bar [value]="progress.current_streak / progress.duration_days"></ion-progress-bar>
-        <ion-button expand="block" (click)="checkIn(progress.progress_id)" class="ion-margin-top">
-          Daily Check-in
-        </ion-button>
+        <ion-button 
+        expand="block" 
+        (click)="checkIn(progress.progress_id)" 
+        class="ion-margin-top"
+        [disabled]="isCheckedIn(progress.progress_id)"
+        [color]="isCheckedIn(progress.progress_id) ? 'medium' : 'primary'">
+        {{ isCheckedIn(progress.progress_id) ? 'Already Checked In' : 'Daily Check-in' }}
+      </ion-button>
       </ion-card-content>
     </ion-card>
   </ion-list>
@@ -37,6 +48,9 @@
   <!-- Available Challenges -->
   <ion-list>
     <h2>Available Challenges</h2>
+    <div *ngIf="availableChallenges.length === 0 && !loading" class="no-data">
+      No challenges available at the moment.
+    </div>
     <ion-card *ngFor="let challenge of availableChallenges">
       <ion-card-header>
         <ion-card-title>{{ challenge.title }}</ion-card-title>
