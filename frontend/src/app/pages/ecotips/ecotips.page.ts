@@ -17,7 +17,8 @@ import {
   IonInput,
   IonSpinner,
   IonCard,
-  IonCardContent
+  IonCardContent,
+  IonFooter 
 } from '@ionic/angular/standalone';
 import { addIcons } from 'ionicons';
 import { arrowBackOutline, sendOutline } from 'ionicons/icons';
@@ -48,7 +49,8 @@ interface ChatMessage {
     IonInput,
     IonSpinner,
     IonCard,
-    IonCardContent
+    IonCardContent,
+    IonFooter 
   ]
 })
 export class EcotipsPage implements OnInit {
