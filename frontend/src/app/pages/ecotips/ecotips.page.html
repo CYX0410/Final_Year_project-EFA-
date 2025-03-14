@@ -8,3 +8,37 @@
     <ion-title>Eco Tips</ion-title>
   </ion-toolbar>
 </ion-header>
+
+<ion-content [fullscreen]="true" class="ion-padding">
+  <ion-list>
+    <ion-item lines="none" *ngFor="let message of messages">
+      <ion-card [class.user-message]="message.isUser" [class.bot-message]="!message.isUser">
+        <ion-card-content>
+          {{ message.text }}
+          <div class="timestamp">
+            {{ message.timestamp | date:'shortTime' }}
+          </div>
+        </ion-card-content>
+      </ion-card>
+    </ion-item>
+  </ion-list>
+
+  <div *ngIf="isLoading" class="loading-indicator">
+    <ion-spinner></ion-spinner>
+  </div>
+</ion-content>
+
+<ion-footer>
+  <ion-toolbar>
+    <ion-item>
+      <ion-input 
+        [(ngModel)]="userMessage" 
+        placeholder="Type your message..." 
+        (keyup.enter)="sendMessage()"
+      ></ion-input>
+      <ion-button slot="end" (click)="sendMessage()" [disabled]="!userMessage.trim()">
+        <ion-icon name="send-outline"></ion-icon>
+      </ion-button>
+    </ion-item>
+  </ion-toolbar>
+</ion-footer>
