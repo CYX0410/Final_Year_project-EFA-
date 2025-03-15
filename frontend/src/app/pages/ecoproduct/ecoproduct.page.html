@@ -8,3 +8,49 @@
     <ion-title>Eco Products</ion-title>
   </ion-toolbar>
 </ion-header>
+
+<ion-content [fullscreen]="true" class="ion-padding">
+  <!-- Loading State -->
+  <div *ngIf="loading" class="loading-container">
+    <ion-spinner></ion-spinner>
+    <p>Loading products...</p>
+  </div>
+
+  <!-- Error State -->
+  <div *ngIf="error" class="error-message">
+    <ion-icon name="alert-circle-outline"></ion-icon>
+    <p>{{ error }}</p>
+  </div>
+
+  <!-- Products List -->
+  <ion-list *ngIf="!loading && !error">
+    <ion-card *ngFor="let product of products">
+      <ion-card-header>
+        <ion-card-subtitle>{{ product.category }}</ion-card-subtitle>
+        <ion-card-title>{{ product.name }}</ion-card-title>
+      </ion-card-header>
+
+      <ion-card-content>
+        <p>{{ product.description }}</p>
+
+        <!-- Eco Alternatives -->
+        <div *ngIf="hasAlternatives(product)" class="alternatives-section">
+          <h3>
+            <ion-icon name="leaf-outline" color="success"></ion-icon>
+            Eco-Friendly Alternatives
+          </h3>
+          <ion-accordion-group>
+            <ion-accordion *ngFor="let alt of product.alternatives">
+              <ion-item slot="header">
+                <ion-label>{{ alt.name }}</ion-label>
+              </ion-item>
+              <div slot="content" class="ion-padding">
+                <p>{{ alt.description }}</p>
+              </div>
+            </ion-accordion>
+          </ion-accordion-group>
+        </div>
+      </ion-card-content>
+    </ion-card>
+  </ion-list>
+</ion-content>

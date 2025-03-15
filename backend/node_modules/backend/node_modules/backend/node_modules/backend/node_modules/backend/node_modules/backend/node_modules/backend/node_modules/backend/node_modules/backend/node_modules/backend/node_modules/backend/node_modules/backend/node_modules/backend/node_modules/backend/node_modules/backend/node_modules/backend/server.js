@@ -3,6 +3,7 @@ const bodyParser = require('body-parser');
 const cors = require('cors');
 const userRoutes = require('./routes/userRoutes');
 const challengeRoutes = require('./routes/challengeRoutes');
+const productRoutes = require('./routes/productRoutes');
 require('dotenv').config();
 const app = express();
 const { GoogleGenerativeAI } = require('@google/generative-ai');
@@ -21,7 +22,6 @@ app.use(cors({
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(express.json()); // Ensure this is added to parse JSON requests
-
 app.post('/chat', async (req, res) => {
   const userMessage = req.body.message;
   try {
@@ -52,7 +52,7 @@ app.use((req, res, next) => {
 // Routes
 app.use('/api/users', userRoutes);
 app.use('/api/challenges', challengeRoutes);
-
+app.use('/api', productRoutes);
 // Error handling middleware
 app.use((err, req, res, next) => {
   console.error('Error:', err);
