@@ -11,6 +11,14 @@ import {
   User
 } from '@angular/fire/auth';
 import { HttpClient } from '@angular/common/http';
+import { Observable } from 'rxjs';
+export interface UserProfile {
+  uid: string;
+  username: string;
+  email: string;
+  bio: string;
+  preferences: string;
+}
 
 @Injectable({
   providedIn: 'root'
@@ -18,6 +26,7 @@ import { HttpClient } from '@angular/common/http';
 export class AuthService {
   private apiUrl = 'http://localhost:5010/api';
 
+  
   constructor(
     private auth: Auth,
     private http: HttpClient
@@ -49,14 +58,8 @@ export class AuthService {
       throw error;
     }
   }
-  async getUserProfile(uid: string) {
-    try {
-      const response = await this.http.get(`${this.apiUrl}/users/profile/${uid}`).toPromise();
-      return response;
-    } catch (error) {
-      console.error('Error fetching profile:', error);
-      throw error;
-    }
+  getUserProfile(uid: string): Observable<UserProfile> {
+    return this.http.get<UserProfile>(`${this.apiUrl}/users/profile/${uid}`);
   }
   async signOut(): Promise<void> {
     try {

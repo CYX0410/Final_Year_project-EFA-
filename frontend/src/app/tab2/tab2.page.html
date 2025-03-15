@@ -2,11 +2,13 @@
   <ion-toolbar>
     <ion-title>Profile</ion-title>
     <ion-buttons slot="end">
-      <ion-button (click)="editProfile()" *ngIf="!isEditing">
-        <ion-icon name="create-outline"></ion-icon>
+      <ion-button (click)="editProfile()" *ngIf="!isEditing" color="primary">
+        <ion-icon name="create-outline" slot="start"></ion-icon>
+        Edit
       </ion-button>
-      <ion-button (click)="saveProfile()" *ngIf="isEditing">
-        <ion-icon name="checkmark-outline"></ion-icon>
+      <ion-button (click)="saveProfile()" [disabled]="profileForm.invalid" *ngIf="isEditing" color="primary">
+        <ion-icon name="checkmark-outline" slot="start"></ion-icon>
+        Save
       </ion-button>
     </ion-buttons>
   </ion-toolbar>
@@ -14,42 +16,46 @@
 
 <ion-content [fullscreen]="true" class="ion-padding">
   <form [formGroup]="profileForm">
-    <div class="profile-header">
-      <ion-avatar>
+    <div class="profile-header ion-text-center">
+      <ion-avatar class="large-avatar">
         <img [src]="userPhotoURL || '../../../assets/default-avatar.png'" alt="Profile photo">
       </ion-avatar>
+      <h2>{{ username }}</h2>
+      <p>{{ email }}</p>
     </div>
 
-    <ion-list>
+    <ion-list lines="full">
       <ion-item>
-        <ion-label position="stacked">Username</ion-label>
+        <ion-label position="floating">Username</ion-label>
         <ion-input formControlName="username" [readonly]="!isEditing"></ion-input>
       </ion-item>
-
       <ion-item>
-        <ion-label position="stacked">Email</ion-label>
-        <ion-input formControlName="email" readonly></ion-input>
+        <ion-label position="floating">Email</ion-label>
+        <ion-input formControlName="email" [readonly]="true"></ion-input>
       </ion-item>
-
       <ion-item>
-        <ion-label position="stacked">Bio</ion-label>
+        <ion-label position="floating">Bio</ion-label>
         <ion-textarea 
           formControlName="bio" 
           [readonly]="!isEditing" 
-          rows="3"
+          rows="3" 
           placeholder="Tell us about yourself...">
         </ion-textarea>
       </ion-item>
-
       <ion-item>
-        <ion-label position="stacked">Preferences</ion-label>
+        <ion-label position="floating">Preferences</ion-label>
         <ion-textarea 
           formControlName="preferences" 
           [readonly]="!isEditing" 
-          rows="2"
-          placeholder="Enter your environmental interests (e.g., recycling, sustainable living)">
+          rows="2" 
+          placeholder="e.g., recycling, sustainable living, renewable energy">
         </ion-textarea>
       </ion-item>
     </ion-list>
   </form>
+
+  <!-- Validation Feedback -->
+  <ion-text color="danger" class="ion-padding" *ngIf="errorMessage">
+    {{ errorMessage }}
+  </ion-text>
 </ion-content>

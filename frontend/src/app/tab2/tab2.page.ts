@@ -5,7 +5,8 @@ import {
   IonHeader, IonToolbar, IonTitle, IonContent,
   IonList, IonItem, IonLabel, IonInput,
   IonTextarea, IonSelect, IonSelectOption,
-  IonAvatar, IonButton, IonIcon, IonButtons
+  IonAvatar, IonButton, IonIcon, IonButtons,
+  IonText 
 } from '@ionic/angular/standalone';
 import { AuthService } from '../services/auth.service';
 import { addIcons } from 'ionicons';
@@ -27,7 +28,8 @@ interface PreferenceOption {
     IonHeader, IonToolbar, IonTitle, IonContent,
     IonList, IonItem, IonLabel, IonInput,
     IonTextarea, IonSelect, IonSelectOption,
-    IonAvatar, IonButton, IonIcon, IonButtons
+    IonAvatar, IonButton, IonIcon, IonButtons,
+    IonText
   ]
 })
 export class Tab2Page implements OnInit {
@@ -53,18 +55,38 @@ export class Tab2Page implements OnInit {
   ngOnInit() {
     this.loadUserProfile();
   }
+  get username(): string {
+    return this.profileForm.get('username')?.value || '';
+  }
 
+  get email(): string {
+    return this.profileForm.get('email')?.value || '';
+  }
   async loadUserProfile() {
     try {
       const user = await this.authService.getCurrentUser();
       if (user) {
-        this.profileForm.patchValue({
-          username: user.displayName || '',
-          email: user.email || '',
-          bio: '',
-          preferences: []
-        });
         this.userPhotoURL = user.photoURL;
+        
+        this.authService.getUserProfile(user.uid).subscribe({
+          next: (profile) => {
+            this.profileForm.patchValue({
+              username: profile?.username || user.displayName || '',
+              email: user.email || '',
+              bio: profile?.bio || '',
+              preferences: profile?.preferences || ''
+            });
+          },
+          error: (error) => {
+            console.warn('Profile not found, using default values:', error);
+            this.profileForm.patchValue({
+              username: user.displayName || '',
+              email: user.email || '',
+              bio: '',
+              preferences: ''
+            });
+          }
+        });
       }
     } catch (error) {
       console.error('Error loading profile:', error);
