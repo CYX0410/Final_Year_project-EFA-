@@ -24,7 +24,7 @@
   <!-- Active Challenges -->
   <ion-list *ngIf="activeChallenges.length > 0">
     <h2>Active Challenges</h2>
-    <ion-card *ngFor="let progress of activeChallenges">
+    <ion-card *ngFor="let progress of activeChallenges; let i = index">
       <ion-card-header>
         <ion-card-title>{{ progress.title }}</ion-card-title>
         <ion-card-subtitle>
@@ -32,15 +32,22 @@
         </ion-card-subtitle>
       </ion-card-header>
       <ion-card-content>
-        <ion-progress-bar [value]="progress.current_streak / progress.duration_days"></ion-progress-bar>
+        <div class="progress-container">
+          <div *ngFor="let tick of getTicks(progress.duration_days); let j = index"
+               class="tick"
+               [class.completed]="j < progress.current_streak"
+               [@tickAnimation]>
+            <ion-icon name="checkmark-circle-outline"></ion-icon>
+          </div>
+        </div>
         <ion-button 
-        expand="block" 
-        (click)="checkIn(progress.progress_id)" 
-        class="ion-margin-top"
-        [disabled]="isCheckedIn(progress.progress_id)"
-        [color]="isCheckedIn(progress.progress_id) ? 'medium' : 'primary'">
-        {{ isCheckedIn(progress.progress_id) ? 'Already Checked In' : 'Daily Check-in' }}
-      </ion-button>
+          expand="block" 
+          (click)="checkIn(progress.progress_id)" 
+          class="ion-margin-top"
+          [disabled]="isCheckedIn(progress.progress_id)"
+          [color]="isCheckedIn(progress.progress_id) ? 'medium' : 'primary'">
+          {{ isCheckedIn(progress.progress_id) ? 'Already Checked In' : 'Daily Check-in' }}
+        </ion-button>
       </ion-card-content>
     </ion-card>
   </ion-list>

@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
+import { trigger, style, animate, transition } from '@angular/animations';
 import { 
   IonContent, IonHeader, IonTitle, IonToolbar,
   IonButtons, IonButton, IonIcon, IonCard,
@@ -17,6 +18,14 @@ import { AuthService } from '../../services/auth.service';
   selector: 'app-eco-challenges',
   templateUrl: './eco-challenges.page.html',
   styleUrls: ['./eco-challenges.page.scss'],
+  animations: [
+    trigger('tickAnimation', [
+      transition(':enter', [
+        style({ transform: 'scale(0)', opacity: 0 }),
+        animate('0.3s ease-out', style({ transform: 'scale(1)', opacity: 1 }))
+      ])
+    ])
+  ],
   standalone: true,
   imports: [
     CommonModule,
@@ -103,7 +112,10 @@ export class EcoChallengesPage implements OnInit {
       this.errorMessage = 'Failed to start challenge';
     }
   }
-
+  getTicks(totalDays: number): any[] {
+    return Array(totalDays).fill(null);
+  }
+  
   async checkIn(progressId: string) {
     if (this.isCheckedIn(progressId)) {
       this.errorMessage = 'You have already checked in today for this challenge';

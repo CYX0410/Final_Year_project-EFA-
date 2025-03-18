@@ -1,1 +1,48 @@
 
+ion-tabs {
+    height: 100%; /* Ensures full height */
+  }
+  
+  ion-tab-bar {
+    background-color: #F4FDF6; /* Soft green for eco-friendly theme */
+    border-top-left-radius: 10px; /* Curved corners for the tab bar */
+    border-top-right-radius: 10px; /* Curved corners for the tab bar */
+    border-top: 1px solid #E8F8ED; /* Subtle border for separation */
+    box-shadow: 0 -2px 4px rgba(0, 0, 0, 0.1); /* Light shadow for a floating effect */
+    padding: 10px 0;
+    overflow: hidden; /* Prevent content from overflowing the rounded edges */
+  }
+  
+  
+  ion-tab-button {
+    flex: 1; /* Ensures even spacing between tabs */
+    background-color: #E8F8ED; /* Soft green background for the tabs */
+    color: #2F855A; /* Darker green text for contrast */
+    font-family: 'Arial', sans-serif;
+    transition: background-color 0.3s ease, color 0.3s ease;
+    border-radius: 8px; /* Adds a bit of roundness to the tabs for a cohesive look */
+    margin: 0 5px; /* Adds spacing between each tab */
+  }
+  
+  ion-tab-button:hover {
+    background-color: #BDE3C6; /* Slightly brighter green on hover */
+    color: #2F855A; /* Maintains darker green text on hover */
+  }
+  
+  ion-tab-button[aria-selected="true"] {
+    background-color: #88C999; /* Highlighted soft green for active tab */
+    color: white; /* White text for readability */
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2); /* Slight shadow for the active tab */
+    border-radius: 10px; /* Further rounds the corners for active state */
+  }
+  
+  ion-icon {
+    font-size: 1.4rem; /* Adjust icon size */
+    color: inherit; /* Inherits the color of the tab for consistency */
+  }
+  
+  ion-label {
+    font-size: 0.85rem; /* Keeps label text proportionate */
+    margin-top: 4px; /* Provides slight spacing between the icon and label */
+  }
+  
