@@ -11,16 +11,27 @@
       <ion-label position="floating">Email</ion-label>
       <ion-input type="email" formControlName="email"></ion-input>
     </ion-item>
-    <div class="error-message" *ngIf="registerForm.get('email')?.touched && registerForm.get('email')?.errors?.['required']">
-      Email is required
+    <div class="error-message" *ngIf="registerForm.get('email')?.touched && registerForm.get('email')?.errors">
+      {{ getEmailError() }}
     </div>
 
     <ion-item>
       <ion-label position="floating">Password</ion-label>
       <ion-input type="password" formControlName="password"></ion-input>
     </ion-item>
-    <div class="error-message" *ngIf="registerForm.get('password')?.touched && registerForm.get('password')?.errors?.['required']">
-      Password is required
+    <div class="error-message" *ngIf="registerForm.get('password')?.touched && registerForm.get('password')?.errors">
+      {{ getPasswordError() }}
+    </div>
+    
+    <div class="password-requirements">
+      <p>Password must contain:</p>
+      <ul>
+        <li>At least 12 characters</li>
+        <li>One uppercase letter</li>
+        <li>One lowercase letter</li>
+        <li>One number</li>
+        <li>One special character (!&#64;#$%^&amp;*)</li>
+      </ul>
     </div>
 
     <ion-button expand="block" type="submit" [disabled]="!registerForm.valid" class="ion-margin-top">

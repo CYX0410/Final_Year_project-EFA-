@@ -8,7 +8,10 @@ import {
   signInWithPopup,
   signOut,
   updateProfile,
-  User
+  User,
+  updatePassword,
+  EmailAuthProvider,
+  reauthenticateWithCredential
 } from '@angular/fire/auth';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
@@ -24,7 +27,7 @@ export interface UserProfile {
   providedIn: 'root'
 })
 export class AuthService {
-  private apiUrl = 'http://localhost:5010/api';
+  private apiUrl = 'http://54.179.34.214:5010/api';
 
   
   constructor(
@@ -35,6 +38,26 @@ export class AuthService {
     return this.auth.currentUser;
   }
 
+  async changePassword(currentPassword: string, newPassword: string): Promise<void> {
+    try {
+      const user = await this.getCurrentUser();
+      if (!user || !user.email) throw new Error('No user logged in');
+
+      // Re-authenticate user before changing password
+      const credential = EmailAuthProvider.credential(user.email, currentPassword);
+      await reauthenticateWithCredential(user, credential);
+
+      // Change password
+      await updatePassword(user, newPassword);
+    } catch (error: any) {
+      console.error('Change password error:', error);
+      if (error.code === 'auth/wrong-password') {
+        throw new Error('Current password is incorrect');
+      }
+      throw error;
+    }
+  }
+  
   async updateUserProfile(profileData: any) {
     try {
       const user = await this.getCurrentUser();

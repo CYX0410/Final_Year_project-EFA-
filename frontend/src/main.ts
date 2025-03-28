@@ -7,7 +7,7 @@ import { getAuth, provideAuth } from '@angular/fire/auth';
 import { routes } from './app/app.routes';
 import { AppComponent } from './app/app.component';
 import { provideHttpClient } from '@angular/common/http';
-
+import { provideAnimations } from '@angular/platform-browser/animations';
 bootstrapApplication(AppComponent, {
   providers: [
     provideFirebaseApp(() => initializeApp(environment.firebase)),
@@ -16,5 +16,6 @@ bootstrapApplication(AppComponent, {
     { provide: RouteReuseStrategy, useClass: IonicRouteStrategy },
     provideIonicAngular(),
     provideRouter(routes, withPreloading(PreloadAllModules)),
+    provideAnimations()
   ],
 });

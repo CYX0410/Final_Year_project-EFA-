@@ -1,0 +1,63 @@
+<ion-header [translucent]="true">
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-button (click)="goBack()">
+        <ion-icon name="arrow-back-outline"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+    <ion-title>About EFA</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true" class="ion-padding">
+  <ion-card>
+    <ion-card-header>
+      <ion-card-title>Welcome to EFA (Eco-Friendly Assistant)</ion-card-title>
+    </ion-card-header>
+    <ion-card-content>
+      <h2>How to Use This App</h2>
+      
+      <ion-list>
+        <ion-item lines="none">
+          <ion-icon name="home" slot="start" color="primary"></ion-icon>
+          <ion-label>
+            <h3>Home Page</h3>
+            <p>Access eco-friendly products, tips, and challenges from the main dashboard.</p>
+          </ion-label>
+        </ion-item>
+
+        <ion-item lines="none">
+          <ion-icon name="leaf" slot="start" color="success"></ion-icon>
+          <ion-label>
+            <h3>Eco Products</h3>
+            <p>Discover sustainable alternatives to everyday products.</p>
+          </ion-label>
+        </ion-item>
+
+        <ion-item lines="none">
+          <ion-icon name="bulb" slot="start" color="warning"></ion-icon>
+          <ion-label>
+            <h3>Eco Tips</h3>
+            <p>Get AI-powered advice on sustainable living practices.</p>
+          </ion-label>
+        </ion-item>
+
+        <ion-item lines="none">
+          <ion-icon name="trophy" slot="start" color="tertiary"></ion-icon>
+          <ion-label>
+            <h3>Eco Challenges</h3>
+            <p>Participate in daily challenges and earn points for sustainable actions.</p>
+          </ion-label>
+        </ion-item>
+
+        <ion-item lines="none">
+          <ion-icon name="analytics" slot="start" color="secondary"></ion-icon>
+          <ion-label>
+            <h3>Tracking</h3>
+            <p>Monitor your progress and view earned rewards.</p>
+          </ion-label>
+        </ion-item>
+      </ion-list>
+    </ion-card-content>
+  </ion-card>
+</ion-content>

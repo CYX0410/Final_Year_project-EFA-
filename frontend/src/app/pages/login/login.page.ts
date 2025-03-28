@@ -53,12 +53,34 @@ export class LoginPage {
     private router: Router
   ) {
     this.loginForm = this.formBuilder.group({
-      email: ['', [Validators.required, Validators.email]],
-      password: ['', [Validators.required, Validators.minLength(6)]]
+      email: ['', [Validators.required, Validators.email, Validators.pattern(/^[^\s@]+@[^\s@]+\.[^\s@]+$/)]],
+      password: ['', [Validators.required, Validators.minLength(12),  Validators.pattern(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*])[A-Za-z\d!@#$%^&*]{12,}$/)]]
     });
     addIcons({ logoGoogle });
   }
-
+  getEmailError() {
+    const control = this.loginForm.get('email');
+    if (control?.hasError('required')) {
+      return 'Email is required';
+    }
+    if (control?.hasError('email') || control?.hasError('pattern')) {
+      return 'Please enter a valid email address';
+    }
+    return '';
+  }
+  getPasswordError() {
+    const control = this.loginForm.get('password');
+    if (control?.hasError('required')) {
+      return 'Password is required';
+    }
+    if (control?.hasError('minlength')) {
+      return 'Password must be at least 12 characters';
+    }
+    if (control?.hasError('pattern')) {
+      return 'Password must contain uppercase, lowercase, number, and special character';
+    }
+    return '';
+  }
   async onSubmit() {
     if (this.loginForm.valid) {
       this.loading = true;

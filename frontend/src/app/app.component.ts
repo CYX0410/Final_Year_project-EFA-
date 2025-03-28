@@ -29,8 +29,8 @@ import {
   chatbox, 
   logOut,
   settings,
-  arrowBackOutline
-} from 'ionicons/icons';
+  arrowBackOutline,
+  keyOutline, informationCircle } from 'ionicons/icons';
 
 @Component({
   selector: 'app-root',
@@ -67,21 +67,22 @@ export class AppComponent {
     private alertController: AlertController,
     private menuController: MenuController
   ) {
-    addIcons({ 
-      language, 
-      notifications, 
-      moon, 
-      chatbox, 
-      logOut,
-      settings,
-      arrowBackOutline
-    });
+    addIcons({arrowBackOutline,language,notifications,moon,chatbox,logOut,keyOutline,informationCircle,settings});
+    const savedTheme = localStorage.getItem('darkMode');
+    if (savedTheme) {
+      this.isDarkMode = savedTheme === 'true';
+      this.applyTheme(this.isDarkMode);
+    }
   }
 
   async closeMenu() {
     await this.menuController.close();
   }
-
+  async aboutEFA() {
+    await this.menuController.close();
+    this.router.navigate(['/about-efa']);
+  }
+  
   changeLanguage() {
     // Implement language change logic
     console.log('Change language clicked');
@@ -92,16 +93,112 @@ export class AppComponent {
     console.log('Notifications:', this.notificationsEnabled);
   }
 
-  toggleTheme() {
-    this.isDarkMode = !this.isDarkMode;
-    document.body.classList.toggle('dark', this.isDarkMode);
-  }
+toggleTheme() {
+  this.applyTheme(this.isDarkMode);
+  // Save preference
+  localStorage.setItem('darkMode', this.isDarkMode.toString());
+}
 
+private applyTheme(isDark: boolean) {
+  if (isDark) {
+    document.documentElement.classList.add('ion-palette-dark');
+  } else {
+    document.documentElement.classList.remove('ion-palette-dark');
+  }
+}
   provideFeedback() {
     // Implement feedback logic
     console.log('Provide feedback clicked');
   }
 
+  async changePassword() {
+    const alert = await this.alertController.create({
+      header: 'Change Password',
+      inputs: [
+        {
+          name: 'currentPassword',
+          type: 'password',
+          placeholder: 'Current Password',
+        },
+        {
+          name: 'newPassword',
+          type: 'password',
+          placeholder: 'New Password (min 12 characters)',
+        },
+        {
+          name: 'confirmPassword',
+          type: 'password',
+          placeholder: 'Confirm New Password',
+        },
+      ],
+      buttons: [
+        {
+          text: 'Cancel',
+          role: 'cancel',
+        },
+        {
+          text: 'Change',
+          handler: async (data) => {
+            if (data.newPassword !== data.confirmPassword) {
+              this.showError('New passwords do not match');
+              return false;
+            }
+            
+            // Password validation
+            if (data.newPassword.length < 12) {
+              this.showError('Password must be at least 12 characters');
+              return false;
+            }
+            if (!/[A-Z]/.test(data.newPassword)) {
+              this.showError('Password must contain at least one uppercase letter');
+              return false;
+            }
+            if (!/[a-z]/.test(data.newPassword)) {
+              this.showError('Password must contain at least one lowercase letter');
+              return false;
+            }
+            if (!/[0-9]/.test(data.newPassword)) {
+              this.showError('Password must contain at least one number');
+              return false;
+            }
+            if (!/[!@#$%^&*]/.test(data.newPassword)) {
+              this.showError('Password must contain at least one special character (!@#$%^&*)');
+              return false;
+            }
+  
+            try {
+              await this.authService.changePassword(data.currentPassword, data.newPassword);
+              this.showSuccess('Password changed successfully');
+              await this.menuController.close();
+              return true;
+            } catch (error: any) {
+              this.showError(error.message || 'Failed to change password');
+              return false;
+            }
+          },
+        },
+      ],
+    });
+  
+    await alert.present();
+  }
+  private async showError(message: string) {
+    const alert = await this.alertController.create({
+      header: 'Error',
+      message: message,
+      buttons: ['OK'],
+    });
+    await alert.present();
+  }
+
+  private async showSuccess(message: string) {
+    const alert = await this.alertController.create({
+      header: 'Success',
+      message: message,
+      buttons: ['OK'],
+    });
+    await alert.present();
+  }
   async logout() {
     const alert = await this.alertController.create({
       header: 'Confirm Logout',

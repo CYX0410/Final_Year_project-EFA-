@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
-import { trigger, style, animate, transition } from '@angular/animations';
+import { trigger, style, animate, transition, state } from '@angular/animations';
 import { 
   IonContent, IonHeader, IonTitle, IonToolbar,
   IonButtons, IonButton, IonIcon, IonCard,
@@ -10,7 +10,7 @@ import {
   IonLabel, IonProgressBar, IonSpinner
 } from '@ionic/angular/standalone';
 import { addIcons } from 'ionicons';
-import { arrowBackOutline, trophy, checkmark, time } from 'ionicons/icons';
+import { arrowBackOutline, trophy, checkmark, time, checkmarkCircleOutline} from 'ionicons/icons';
 import { ChallengeService, Challenge, ChallengeProgress } from '../../services/challenge.service';
 import { AuthService } from '../../services/auth.service';
 
@@ -20,9 +20,16 @@ import { AuthService } from '../../services/auth.service';
   styleUrls: ['./eco-challenges.page.scss'],
   animations: [
     trigger('tickAnimation', [
-      transition(':enter', [
-        style({ transform: 'scale(0)', opacity: 0 }),
-        animate('0.3s ease-out', style({ transform: 'scale(1)', opacity: 1 }))
+      state('void', style({
+        transform: 'scale(0)',
+        opacity: 0
+      })),
+      state('*', style({
+        transform: 'scale(1)',
+        opacity: 1
+      })),
+      transition('void => *', [
+        animate('0.3s ease-out')
       ])
     ])
   ],
@@ -49,7 +56,7 @@ export class EcoChallengesPage implements OnInit {
     private challengeService: ChallengeService,
     private authService: AuthService
   ) {
-    addIcons({ arrowBackOutline, trophy, checkmark, time });
+    addIcons({ arrowBackOutline, trophy, checkmark, time, checkmarkCircleOutline});
   }
 
   async ngOnInit() {

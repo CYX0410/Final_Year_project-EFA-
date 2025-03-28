@@ -1,0 +1,47 @@
+version: '3.8'
+
+services:
+  api:
+    build: .
+    ports:
+      - "5010:5010"
+    environment:
+      - DB_HOST=db
+      - DB_PORT=3306
+      - DB_USER=root
+      - DB_PASSWORD=ACE375!*!cyx
+      - DB_NAME=eco_dataset
+      - GEMINI_API_KEY=${GEMINI_API_KEY}
+    depends_on:
+      db:
+        condition: service_healthy
+    networks:
+      - app-network
+
+  db:
+    image: mariadb:10.6
+    environment:
+      MYSQL_ROOT_PASSWORD: ACE375!*!cyx
+      MYSQL_DATABASE: eco_dataset
+      MYSQL_TCP_PORT: 3306
+      MYSQL_ROOT_HOST: '%'
+    ports:
+      - "3308:3306"
+    volumes:
+      - mariadb_data:/var/lib/mysql
+      - ./db/init.sql:/docker-entrypoint-initdb.d/init.sql
+    command: --default-authentication-plugin=mysql_native_password
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-u", "root", "-p${MYSQL_ROOT_PASSWORD}"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    networks:
+      - app-network
+
+volumes:
+  mariadb_data:
+
+networks:
+  app-network:
+    driver: bridge

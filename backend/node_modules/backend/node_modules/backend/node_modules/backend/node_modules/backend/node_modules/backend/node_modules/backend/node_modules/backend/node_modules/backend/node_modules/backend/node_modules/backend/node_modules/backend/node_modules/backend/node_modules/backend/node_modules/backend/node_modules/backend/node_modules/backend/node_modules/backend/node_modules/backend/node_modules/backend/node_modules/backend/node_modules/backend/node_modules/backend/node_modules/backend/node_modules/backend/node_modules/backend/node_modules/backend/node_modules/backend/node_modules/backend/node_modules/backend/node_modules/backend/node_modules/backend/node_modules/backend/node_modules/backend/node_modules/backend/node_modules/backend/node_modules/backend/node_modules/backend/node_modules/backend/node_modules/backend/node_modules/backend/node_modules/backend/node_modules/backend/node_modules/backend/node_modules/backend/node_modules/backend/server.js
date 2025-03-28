@@ -58,7 +58,17 @@ app.use((err, req, res, next) => {
   console.error('Error:', err);
   res.status(500).json({ message: err.message });
 });
-
+app.get('/', (req, res) => {
+  res.json({
+    message: 'Welcome to the EFA API',
+    endpoints: {
+      users: '/api/users',
+      challenges: '/api/challenges',
+      products: '/api/products',
+      chat: '/chat'
+    }
+  });
+});
 const PORT = process.env.PORT || 5010;
 app.listen(PORT, () => {
   console.log(`Server running on http://localhost:${PORT}`);
