@@ -51,8 +51,6 @@ import {
     IonIcon,
     IonLabel,
     IonToggle,
-    IonMenuButton,
-    IonAlert,
     IonButtons,
     IonButton
   ],
@@ -69,7 +67,7 @@ export class AppComponent {
   ) {
     addIcons({arrowBackOutline,language,notifications,moon,chatbox,logOut,keyOutline,informationCircle,settings});
     const savedTheme = localStorage.getItem('darkMode');
-    if (savedTheme) {
+    if (savedTheme !== null) {
       this.isDarkMode = savedTheme === 'true';
       this.applyTheme(this.isDarkMode);
     }
@@ -93,19 +91,18 @@ export class AppComponent {
     console.log('Notifications:', this.notificationsEnabled);
   }
 
-toggleTheme() {
-  this.applyTheme(this.isDarkMode);
-  // Save preference
-  localStorage.setItem('darkMode', this.isDarkMode.toString());
-}
-
-private applyTheme(isDark: boolean) {
-  if (isDark) {
-    document.documentElement.classList.add('ion-palette-dark');
-  } else {
-    document.documentElement.classList.remove('ion-palette-dark');
+  toggleTheme() {
+    this.applyTheme(this.isDarkMode);
+    localStorage.setItem('darkMode', this.isDarkMode.toString());
   }
-}
+
+  private applyTheme(isDark: boolean) {
+    if (isDark) {
+      document.documentElement.classList.add('ion-palette-dark');
+    } else {
+      document.documentElement.classList.remove('ion-palette-dark');
+    }
+  }
   provideFeedback() {
     // Implement feedback logic
     console.log('Provide feedback clicked');

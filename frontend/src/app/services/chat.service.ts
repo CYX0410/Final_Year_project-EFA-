@@ -7,7 +7,7 @@ import { catchError, timeout } from 'rxjs/operators';
   providedIn: 'root'
 })
 export class ChatService {
-  private apiUrl = 'http://54.179.34.214:5010';
+  private apiUrl = 'http://localhost:5010';
   private timeoutDuration = 30000; // 30 seconds timeout
 
   constructor(private http: HttpClient) {}

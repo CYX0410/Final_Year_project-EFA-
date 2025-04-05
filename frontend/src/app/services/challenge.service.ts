@@ -30,7 +30,7 @@ export interface ChallengeProgress {
   providedIn: 'root'
 })
 export class ChallengeService {
-  private apiUrl = 'http://54.179.34.214:5010/api';
+  private apiUrl = 'http://localhost:5010/api';
   private checkedInToday = new Set<string>();
 
   constructor(private http: HttpClient) {

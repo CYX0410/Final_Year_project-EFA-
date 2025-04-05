@@ -1,8 +1,17 @@
 // For information on how to create your own theme, please see:
 // http://ionicframework.com/docs/theming/
 :root {
-    // ... your existing light theme variables ...
-  
+  // Light theme variables
+  --ion-background-color: #ffffff;
+  --ion-background-color-rgb: 255,255,255;
+  --ion-text-color: #000000;
+  --ion-text-color-rgb: 0,0,0;
+  --ion-border-color: #d8d8d8;
+  --ion-item-background: #ffffff;
+  --ion-toolbar-background: #ffffff;
+  --ion-tab-bar-background: #ffffff;
+  --ion-card-background: #ffffff;
+}
     /* Dark theme overrides */
     .ion-palette-dark {
       --ion-background-color: #121212;
@@ -15,4 +24,4 @@
       --ion-tab-bar-background: #1f1f1f;
       --ion-card-background: #1e1e1e;
     }
-  }
+  
