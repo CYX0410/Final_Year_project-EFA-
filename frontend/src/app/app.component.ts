@@ -63,7 +63,7 @@ export class AppComponent {
     private authService: AuthService,
     private router: Router,
     private alertController: AlertController,
-    private menuController: MenuController
+    private menuController: MenuController,
   ) {
     addIcons({arrowBackOutline,language,notifications,moon,chatbox,logOut,keyOutline,informationCircle,settings});
     const savedTheme = localStorage.getItem('darkMode');
@@ -105,11 +105,6 @@ export class AppComponent {
       document.documentElement.classList.remove('ion-palette-dark');
     }
   }
-  provideFeedback() {
-    // Implement feedback logic
-    console.log('Provide feedback clicked');
-  }
-
   async changePassword() {
     const alert = await this.alertController.create({
       header: 'Change Password',
