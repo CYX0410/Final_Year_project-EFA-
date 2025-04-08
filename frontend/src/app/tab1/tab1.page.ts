@@ -1,20 +1,20 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
+import { AuthService } from '../services/auth.service';
 import { CommonModule } from '@angular/common';
-import { PopoverController } from '@ionic/angular/standalone';
+import { PopoverController, IonIcon, IonButton } from '@ionic/angular/standalone';
 import { DailyTipComponent } from '../components/daily-tip/daily-tip.component';
+import { MenuController } from '@ionic/angular/standalone';
+import { addIcons } from 'ionicons';
+import { settingsOutline, bagHandle, leaf, trophy, ribbon } from 'ionicons/icons';
+import { ChallengeService, ChallengeProgress } from '../services/challenge.service';
 import { 
-  IonHeader, 
-  IonToolbar, 
-  IonTitle, 
   IonContent,
   IonCard,
   IonCardContent,
   IonCardHeader,
   IonCardSubtitle,
-  IonCardTitle,
-  IonButtons,
-  IonMenuButton
+  IonCardTitle
 } from '@ionic/angular/standalone';
 
 @Component({
@@ -23,27 +23,72 @@ import {
   styleUrls: ['tab1.page.scss'],
   standalone: true,
   imports: [
-    IonHeader, 
-    IonToolbar, 
-    IonTitle, 
+    CommonModule,
+    IonButton, 
+    IonIcon, 
     IonContent,
     IonCard,
     IonCardContent,
     IonCardHeader,
     IonCardSubtitle,
-    IonCardTitle,
-    IonButtons,
-    IonMenuButton,
-    DailyTipComponent
+    IonCardTitle
   ],
 })
 export class Tab1Page implements OnInit {
-  constructor(private router: Router,
-    private popoverController: PopoverController
-  ) {}
+  username: string = '';
+  activeChallenges: ChallengeProgress[] = [];
+  completedChallenges: ChallengeProgress[] = []; // Add this property
+  totalPoints: number = 0;
+
+  constructor(
+    private router: Router,
+    private popoverController: PopoverController,
+    private authService: AuthService,
+    private menuController: MenuController,
+    private challengeService: ChallengeService 
+  ) {
+    addIcons({ 
+      settingsOutline, 
+      bagHandle, 
+      leaf, 
+      trophy, 
+      ribbon 
+    });
+  }
+
   async ngOnInit() {
-    // ...existing code...
+    const user = await this.authService.getCurrentUser();
+    if (user) {
+      this.authService.getUserProfile(user.uid).subscribe({
+        next: (profile) => {
+          this.username = profile?.username || user.displayName || 'User';
+        },
+        error: (error) => {
+          console.error('Error loading profile:', error);
+          this.username = 'User';
+        }
+      });
+       // Load challenges and points
+       this.challengeService.getUserChallenges(user.uid).subscribe({
+        next: (progress) => {
+          this.activeChallenges = progress.filter(p => p.completion_status === 'in_progress');
+          this.completedChallenges = progress.filter(p => p.completion_status === 'completed');
+          this.calculateTotalPoints(progress);
+        },
+        error: (error) => {
+          console.error('Error loading challenges:', error);
+        }
+      });
+    }
     await this.presentDailyTip();
+  }
+  private calculateTotalPoints(challenges: ChallengeProgress[]) {
+    this.totalPoints = challenges
+      .filter(c => c.completion_status === 'completed')
+      .reduce((sum, challenge) => sum + challenge.points, 0);
+  }
+  async openSettings() {
+    await this.menuController.open();
   }
 
   async presentDailyTip() {
@@ -62,7 +107,40 @@ export class Tab1Page implements OnInit {
       popover.dismiss();
     }, 10000);
   }
+
   navigateTo(path: string) {
     this.router.navigate([path]);
+  }
+
+  getEcoScore(): number {
+    // Calculate eco score based on:
+    // 1. Completed challenges
+    // 2. Total points earned
+    // 3. Sustainable actions tracked
+    let score = 0;
+    const maxScore = 100;
+    
+    // Example calculation
+    const challengeWeight = 0.4;
+    const pointsWeight = 0.4;
+    const actionsWeight = 0.2;
+
+    const challengeScore = (this.activeChallenges?.length || 0) * 10; // 10 points per challenge
+    const pointsScore = this.totalPoints / 100; // Convert points to percentage
+    const actionsScore = 80; // This could come from tracked sustainable actions
+
+    score = (challengeScore * challengeWeight) + 
+            (pointsScore * pointsWeight) + 
+            (actionsScore * actionsWeight);
+
+    return Math.min(Math.round(score), maxScore);
+  }
+
+  getCompletedChallengesCount(): number {
+    return this.completedChallenges?.length || 0;
+  }
+
+  getTotalPoints(): number {
+    return this.totalPoints || 0;
   }
 }

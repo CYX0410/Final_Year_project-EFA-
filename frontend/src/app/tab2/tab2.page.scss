@@ -6,26 +6,112 @@
   border-radius: 50%;
   overflow: hidden;
 }
+.content-container {
+  display: flex;
+  flex-direction: column;
+  min-height: 100%;
+  max-width: 600px;
+  margin: 0 auto;
+  padding: 20px;
+}
+// Add this to your existing styles
+.action-buttons {
+  padding: 16px;
+  margin-top: 20px;
 
-.profile-header {
-  padding: 20px 0;
-  background-color: var(--ion-color-light);
+  ion-button {
+    margin: 8px 0;
+    height: 48px;
+    --border-radius: 8px;
+    font-weight: 500;
+    font-size: 16px;
+    
+    &.edit-button {
+      --background: #81C784;
+      --color: white;
+    }
+    
+    &.save-button {
+      --background: #66BB6A;
+      --color: white;
+    }
+
+    ion-icon {
+      margin-right: 8px;
+      font-size: 20px;
+    }
+  }
 }
 
-ion-input[readonly],
-ion-textarea[readonly] {
-  --background: transparent;
-  --padding-start: 0;
-  opacity: 0.7;
-  border-bottom: none;
+// Update existing styles
+.custom-input {
+  --background: rgba(255, 255, 255, 0.9); 
+  --border-radius: 15px;
+  --border-width: 1px;
+  --border-color: #81C784;
+  --highlight-height: 0;
+  --padding-start: 16px;
+  margin: 16px 0;
+  transition: all 0.3s ease;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
+
+  &.item-has-focus {
+    --background: rgba(255, 255, 255, 0.8);
+    --border-color: #43A047;
+  }
+
+  ion-icon {
+    font-size: 18px;
+    transition: all 0.3s ease;
+    color: var(--ion-color-medium);
+  }
+
+  ion-label {
+    color: #2E7D32; 
+    margin-left: 8px;
+    font-size: 18px;
+    font-weight: 400;
+  }
+
+  ion-input, ion-textarea {
+    --padding-start: 8px;
+    font-family: 'Poppins', sans-serif;
+    font-size: 15px;
+    --placeholder-color: var(--ion-color-medium);
+    --placeholder-opacity: 0.8;
+  }
+
+  &.item-has-value {
+    --border-color: var(--ion-color-success);
+    
+    ion-icon {
+      color: var(--ion-color-success);
+    }
+  }
+
+  &:hover {
+    --border-color: var(--ion-color-medium);
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  }
+
+  &[readonly] {
+    --background: rgba(255, 255, 255, 0.7);
+    opacity: 0.8;
+  }
 }
 
+// Update ion-list styles
 ion-list {
   margin-top: 20px;
+  background: transparent;
+  padding: 0;
 }
 
+// Update ion-item styles
 ion-item {
   --padding-start: 0;
+  --background: transparent;
+  margin-bottom: 16px;
 }
 
 h2 {

@@ -6,8 +6,7 @@ import {
   IonContent, IonHeader, IonTitle, IonToolbar,
   IonButtons, IonButton, IonIcon, IonCard,
   IonCardHeader, IonCardTitle, IonCardSubtitle,
-  IonCardContent, IonBadge, IonList, IonItem,
-  IonLabel, IonProgressBar, IonSpinner
+  IonCardContent,IonList,IonSpinner
 } from '@ionic/angular/standalone';
 import { addIcons } from 'ionicons';
 import { arrowBackOutline, trophy, checkmark, time, checkmarkCircleOutline} from 'ionicons/icons';
@@ -39,8 +38,8 @@ import { AuthService } from '../../services/auth.service';
     IonContent, IonHeader, IonTitle, IonToolbar,
     IonButtons, IonButton, IonIcon, IonCard,
     IonCardHeader, IonCardTitle, IonCardSubtitle,
-    IonCardContent, IonBadge, IonList, IonItem,
-    IonLabel, IonProgressBar, IonSpinner
+    IonCardContent,IonList,
+    IonSpinner
   ]
 })
 export class EcoChallengesPage implements OnInit {

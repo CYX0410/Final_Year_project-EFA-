@@ -1,66 +1,73 @@
-<ion-header [translucent]="true">
-  <ion-toolbar>
-    <ion-title>Login</ion-title>
-  </ion-toolbar>
-</ion-header>
-
-<ion-content [fullscreen]="true" class="ion-padding">
-  <form [formGroup]="loginForm" (ngSubmit)="onSubmit()">
-    <ion-item>
-      <ion-label position="floating">Email</ion-label>
-      <ion-input type="email" formControlName="email"></ion-input>
-    </ion-item>
-    <div class="error-message" *ngIf="loginForm.get('email')?.touched && loginForm.get('email')?.errors">
-      {{ getEmailError() }}
+<ion-content [fullscreen]="true" class="ion-padding" #content>
+  <div class = "content-container">
+  <div class="login-container">
+    <div class="welcome-text">
+      <p class="tagline">Start Living <span class="highlight">Green</span> Today!</p>
+      <h1 class="heading">Let's Get Started!</h1>
     </div>
+    <form [formGroup]="loginForm" (ngSubmit)="onSubmit()">
+      <ion-item class="custom-input">
+        <ion-icon 
+          [name]="loginForm.get('email')?.valid ? 'mail' : 'mail-outline'" 
+          [color]="loginForm.get('email')?.valid ? 'success' : 'medium'"
+          slot="start">
+        </ion-icon>
+        <ion-label position="floating">Email</ion-label>
+        <ion-input type="email" formControlName="email"></ion-input>
+      </ion-item>
+      <div class="error-message" *ngIf="loginForm.get('email')?.touched && loginForm.get('email')?.errors">
+        {{ getEmailError() }}
+      </div>
+    
+      <ion-item class="custom-input">
+        <ion-icon 
+          [name]="loginForm.get('password')?.valid ? 'lock-closed' : 'lock-closed-outline'"
+          [color]="loginForm.get('password')?.valid ? 'success' : 'medium'"
+          slot="start">
+        </ion-icon>
+        <ion-label position="floating">Password</ion-label>
+        <ion-input type="password" formControlName="password" (ionInput)="onPasswordInput()"></ion-input>
+      </ion-item>
+      
+      <a class="forgot-password" (click)="resetPassword()">Forgot Password?</a>
 
-    <ion-item>
-      <ion-label position="floating">Password</ion-label>
-      <ion-input type="password" formControlName="password"></ion-input>
-    </ion-item>
-    <div class="error-message" *ngIf="loginForm.get('password')?.touched && loginForm.get('password')?.errors">
-      {{ getPasswordError() }}
-    </div>
-    <div class="password-requirements">
-      <p>Password must contain:</p>
-      <ul>
-        <li>At least 12 characters</li>
-        <li>One uppercase letter</li>
-        <li>One lowercase letter</li>
-        <li>One number</li>
-        <li>One special character (!&#64;#$%^&amp;*)</li>
-      </ul>
-    </div>
-    <div class="error-message" *ngIf="errorMessage">
-      {{ errorMessage }}
-    </div>
+      <div class="password-strength" *ngIf="loginForm.get('password')?.dirty">
+        <div class="strength-meter">
+          <div class="strength-bar" [style.width.%]="passwordStrength"></div>
+        </div>
+        <div class="requirements-list">
+          <span [class.met]="hasMinLength">12+ characters</span>
+          <span [class.met]="hasUpperCase">ABC</span>
+          <span [class.met]="hasLowerCase">abc</span>
+          <span [class.met]="hasNumber">123</span>
+          <span [class.met]="hasSpecialChar">!&#64;#</span>
+        </div>
+      </div>
 
-    <!-- Add success message display -->
-    <div class="success-message" *ngIf="successMessage">
-      {{ successMessage }}
-    </div>
+      <div class="success-message" *ngIf="successMessage">
+        {{ successMessage }}
+      </div>
 
-    <ion-button expand="block" type="submit" [disabled]="!loginForm.valid || loading" class="ion-margin-top">
-      <ion-spinner *ngIf="loading"></ion-spinner>
-      <span *ngIf="!loading">Login</span>
-    </ion-button>
-
-    <ion-button expand="block" type="button" (click)="signInWithGoogle()" [disabled]="loading" class="ion-margin-top google-btn">
-      <ion-icon name="logo-google" slot="start"></ion-icon>
-      Sign in with Google
-    </ion-button>
-
-    <div class="ion-text-center ion-margin-top">
-      <ion-button fill="clear" (click)="resetPassword()" [disabled]="loading || !loginForm.get('email')?.valid">
-        Forgot Password?
+      <ion-button expand="block" type="submit" [disabled]="!loginForm.valid || loading" class="ion-margin-top" color="success">
+        <ion-spinner *ngIf="loading"></ion-spinner>
+        <span *ngIf="!loading">Login</span>
       </ion-button>
-    </div>
+      
+      <div class="divider">
+        <span>or</span>
+      </div>
 
-    <div class="ion-text-center ion-margin-top">
-      <ion-text>New user?</ion-text>
-      <ion-button fill="clear" [routerLink]="['/register']">
-        Register here
+      <ion-button expand="block" class="google-btn ion-margin-top" (click)="signInWithGoogle()" [disabled]="loading">
+        <ion-icon name="logo-google" slot="start"></ion-icon>
+        <span *ngIf="!loading">Sign in with Google</span>
+        <ion-spinner *ngIf="loading" name="dots"></ion-spinner>
       </ion-button>
-    </div>
-  </form>
+
+      <div class="auth-link ion-margin-top">
+        <span>New user?</span>
+        <ion-button fill="clear" [routerLink]="['/register']">Register here</ion-button>
+      </div>
+    </form>
+  </div>
+</div>
 </ion-content>

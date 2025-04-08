@@ -1,16 +1,15 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
 import { 
-  IonHeader, IonToolbar, IonTitle, IonContent,
+  IonContent,
   IonList, IonItem, IonLabel, IonInput,
-  IonTextarea, IonSelect, IonSelectOption,
-  IonAvatar, IonButton, IonIcon, IonButtons,
-  IonText 
+  IonTextarea,
+  IonAvatar, IonButton, IonIcon
 } from '@ionic/angular/standalone';
 import { AuthService } from '../services/auth.service';
 import { addIcons } from 'ionicons';
-import { createOutline, checkmarkOutline } from 'ionicons/icons';
+import { createOutline, checkmarkOutline, personOutline, mailOutline, bookOutline, leafOutline } from 'ionicons/icons';
 
 interface PreferenceOption {
   value: string;
@@ -25,14 +24,14 @@ interface PreferenceOption {
   imports: [
     CommonModule,
     ReactiveFormsModule,
-    IonHeader, IonToolbar, IonTitle, IonContent,
+    IonContent,
     IonList, IonItem, IonLabel, IonInput,
-    IonTextarea, IonSelect, IonSelectOption,
-    IonAvatar, IonButton, IonIcon, IonButtons,
-    IonText
+    IonTextarea,
+    IonAvatar, IonButton, IonIcon
   ]
 })
 export class Tab2Page implements OnInit {
+  @ViewChild(IonContent) content!: IonContent;
   profileForm: FormGroup;
   isEditing = false;
   userPhotoURL: string | null = null;
@@ -42,7 +41,7 @@ export class Tab2Page implements OnInit {
     private formBuilder: FormBuilder,
     private authService: AuthService
   ) {
-    addIcons({ createOutline, checkmarkOutline });
+    addIcons({createOutline,checkmarkOutline,personOutline,mailOutline,bookOutline,leafOutline});
 
     this.profileForm = this.formBuilder.group({
       username: ['', Validators.required],
@@ -54,6 +53,12 @@ export class Tab2Page implements OnInit {
 
   ngOnInit() {
     this.loadUserProfile();
+  }
+  ionViewDidEnter() {
+    // Ensure content is properly initialized
+    setTimeout(() => {
+      this.content?.scrollToTop();
+    }, 100);
   }
   get username(): string {
     return this.profileForm.get('username')?.value || '';

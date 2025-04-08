@@ -45,7 +45,6 @@ interface ChatMessage {
     IonIcon,
     IonList,
     IonItem,
-    IonLabel,
     IonInput,
     IonSpinner,
     IonCard,

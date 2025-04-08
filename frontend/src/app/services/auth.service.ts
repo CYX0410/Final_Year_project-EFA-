@@ -28,35 +28,83 @@ export interface UserProfile {
 })
 export class AuthService {
   private apiUrl = 'http://localhost:5010/api';
-
+  private authStateReady = false;
   
   constructor(
     private auth: Auth,
     private http: HttpClient
-  ) {}
+  ) {
+     // Listen to auth state changes
+     this.auth.onAuthStateChanged((user) => {
+      this.authStateReady = true;
+      console.log('Auth state changed:', user ? 'Logged in' : 'Logged out');
+    });
+  }
   async getCurrentUser(): Promise<User | null> {
+    // Wait for auth state to be ready
+    if (!this.authStateReady) {
+      await new Promise(resolve => {
+        const unsubscribe = this.auth.onAuthStateChanged((user) => {
+          unsubscribe();
+          resolve(user);
+        });
+      });
+    }
     return this.auth.currentUser;
   }
 
   async changePassword(currentPassword: string, newPassword: string): Promise<void> {
     try {
-      const user = await this.getCurrentUser();
-      if (!user || !user.email) throw new Error('No user logged in');
+        const user = await this.getCurrentUser();
+        if (!user?.email) {
+            console.error('No user found or email missing');
+            throw new Error('Please log in again to change your password');
+        }
 
-      // Re-authenticate user before changing password
-      const credential = EmailAuthProvider.credential(user.email, currentPassword);
-      await reauthenticateWithCredential(user, credential);
+        // First re-authenticate
+        try {
+            const credential = EmailAuthProvider.credential(user.email, currentPassword);
+            await reauthenticateWithCredential(user, credential);
+        } catch (error) {
+            console.error('Re-authentication failed:', error);
+            throw new Error('Current password is incorrect');
+        }
 
-      // Change password
-      await updatePassword(user, newPassword);
+        // Update Firebase password first
+        try {
+            await updatePassword(user, newPassword);
+        } catch (firebaseError) {
+            console.error('Firebase password update failed:', firebaseError);
+            throw firebaseError;
+        }
+
+        // Then update MySQL password
+        try {
+            const response = await this.http.put(`${this.apiUrl}/users/password/${user.uid}`, {
+                password: newPassword
+            }).toPromise();
+            
+            console.log('MySQL password update response:', response);
+            
+            if (!response) {
+                throw new Error('No response from database');
+            }
+        } catch (mysqlError) {
+            console.error('MySQL password update failed:', mysqlError);
+            // If MySQL fails, we need to rollback Firebase password
+            try {
+                await updatePassword(user, currentPassword);
+            } catch (rollbackError) {
+                console.error('Failed to rollback Firebase password:', rollbackError);
+            }
+            throw new Error('Failed to update password in database');
+        }
+
     } catch (error: any) {
-      console.error('Change password error:', error);
-      if (error.code === 'auth/wrong-password') {
-        throw new Error('Current password is incorrect');
-      }
-      throw error;
+        console.error('Change password error:', error);
+        throw error;
     }
-  }
+}
   
   async updateUserProfile(profileData: any) {
     try {

@@ -1,20 +1,6 @@
 ion-content {
   --background: #F0FFF4; /* Soft green background for whole page */
 }
-
-.card-container {
-  display: flex;
-  flex-direction: column;
-  gap: 20px;
-  padding: 20px;
-  max-width: 600px;
-  margin: 0 auto;
-  // Remove background-color from here since it's now on ion-content
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-}
-
-// ... rest of your existing styles
-
 .card-container {
   display: flex;
   flex-direction: column;
@@ -73,4 +59,88 @@ ion-card-subtitle {
   font-size: 1.2em;
   color: #4A5568; /* Neutral gray for subtitles */
   font-style: italic; /* Adds elegance */
+}
+.greeting-container {
+  background: linear-gradient(145deg, #E8F5E9, #C8E6C9);
+  border-radius: 20px;
+  padding: 24px;
+  margin-bottom: 24px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+
+  .greeting {
+    font-size: 28px;
+    font-weight: 600;
+    color: #2E7D32;
+    margin: 0;
+    
+    .username {
+      color: #00C853;
+    }
+  }
+
+  .welcome-text {
+    margin: 8px 0 0;
+    color: #666;
+    font-size: 16px;
+  }
+}
+.eco-stats {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 16px;
+  margin-top: 20px;
+
+  .stat-item {
+    background: rgba(255, 255, 255, 0.9);
+    padding: 16px;
+    border-radius: 12px;
+    text-align: center;
+
+    ion-icon {
+      font-size: 24px;
+      margin-bottom: 8px;
+    }
+
+    span {
+      font-size: 12px;
+      color: #666;
+    }
+
+    h3 {
+      margin: 8px 0 0;
+      font-size: 20px;
+      color: #2E7D32;
+    }
+  }
+}
+.animated-card {
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+
+  &:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+  }
+}
+.settings-container {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  z-index: 100;
+
+  ion-button {
+    --padding-start: 8px;
+    --padding-end: 8px;
+    --border-radius: 50%;
+    width: 44px;
+    height: 44px;
+    margin: 0;
+    
+    ion-icon {
+      font-size: 24px;
+    }
+
+    &:hover {
+      --background: rgba(0, 0, 0, 0.05);
+    }
+  }
 }

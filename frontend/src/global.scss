@@ -80,3 +80,45 @@ ion-item {
   * {
     transition: background-color 0.3s ease, color 0.3s ease;
   }
+  // Alert styles
+.light-alert {
+  .alert-wrapper {
+    background: #ffffff;
+    color: #000000;
+  }
+
+  .alert-input {
+    background: #f4f4f4;
+    color: #000000;
+    border: 1px solid #dedede;
+  }
+
+  .alert-button-cancel {
+    color: #6b6b6b;
+  }
+
+  .alert-button-confirm {
+    color: var(--ion-color-primary);
+  }
+}
+
+.dark-alert {
+  .alert-wrapper {
+    background: #1e1e1e;
+    color: #ffffff;
+  }
+
+  .alert-input {
+    background: #2d2d2d;
+    color: #ffffff;
+    border: 1px solid #3d3d3d;
+  }
+
+  .alert-button-cancel {
+    color: #a0a0a0;
+  }
+
+  .alert-button-confirm {
+    color: var(--ion-color-primary);
+  }
+}

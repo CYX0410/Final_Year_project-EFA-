@@ -1,20 +1,5 @@
-<ion-header [translucent]="true">
-  <ion-toolbar>
-    <ion-title>Profile</ion-title>
-    <ion-buttons slot="end">
-      <ion-button (click)="editProfile()" *ngIf="!isEditing" color="primary">
-        <ion-icon name="create-outline" slot="start"></ion-icon>
-        Edit
-      </ion-button>
-      <ion-button (click)="saveProfile()" [disabled]="profileForm.invalid" *ngIf="isEditing" color="primary">
-        <ion-icon name="checkmark-outline" slot="start"></ion-icon>
-        Save
-      </ion-button>
-    </ion-buttons>
-  </ion-toolbar>
-</ion-header>
-
 <ion-content [fullscreen]="true" class="ion-padding">
+  <div class="content-container">
   <form [formGroup]="profileForm">
     <div class="profile-header ion-text-center">
       <ion-avatar class="large-avatar">
@@ -24,16 +9,21 @@
       <p>{{ email }}</p>
     </div>
 
-    <ion-list lines="full">
-      <ion-item>
+    <ion-list lines="none">
+      <ion-item class="custom-input">
+        <ion-icon name="person-outline" slot="start"></ion-icon>
         <ion-label position="floating">Username</ion-label>
         <ion-input formControlName="username" [readonly]="!isEditing"></ion-input>
       </ion-item>
-      <ion-item>
+    
+      <ion-item class="custom-input">
+        <ion-icon name="mail-outline" slot="start"></ion-icon>
         <ion-label position="floating">Email</ion-label>
         <ion-input formControlName="email" [readonly]="true"></ion-input>
       </ion-item>
-      <ion-item>
+    
+      <ion-item class="custom-input">
+        <ion-icon name="book-outline" slot="start"></ion-icon>
         <ion-label position="floating">Bio</ion-label>
         <ion-textarea 
           formControlName="bio" 
@@ -42,7 +32,9 @@
           placeholder="Tell us about yourself...">
         </ion-textarea>
       </ion-item>
-      <ion-item>
+
+      <ion-item class="custom-input">
+        <ion-icon name="leaf-outline" slot="start"></ion-icon>
         <ion-label position="floating">Preferences</ion-label>
         <ion-textarea 
           formControlName="preferences" 
@@ -52,10 +44,30 @@
         </ion-textarea>
       </ion-item>
     </ion-list>
-  </form>
 
-  <!-- Validation Feedback -->
-  <ion-text color="danger" class="ion-padding" *ngIf="errorMessage">
-    {{ errorMessage }}
-  </ion-text>
+    <!-- Action Buttons -->
+    <div class="action-buttons">
+      <ion-button 
+        expand="block" 
+        color="primary" 
+        (click)="editProfile()" 
+        *ngIf="!isEditing"
+        class="edit-button">
+        <ion-icon name="create-outline" slot="start"></ion-icon>
+        Edit Profile
+      </ion-button>
+
+      <ion-button 
+        expand="block" 
+        color="success" 
+        (click)="saveProfile()" 
+        [disabled]="profileForm.invalid" 
+        *ngIf="isEditing"
+        class="save-button">
+        <ion-icon name="checkmark-outline" slot="start"></ion-icon>
+        Save Changes
+      </ion-button>
+    </div>
+  </form>
+  </div>
 </ion-content>

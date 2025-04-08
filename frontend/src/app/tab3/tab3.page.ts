@@ -1,9 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { 
-  IonHeader, 
-  IonToolbar, 
-  IonTitle, 
   IonContent,
   IonCard,
   IonCardHeader,
@@ -11,10 +8,8 @@ import {
   IonCardSubtitle,
   IonCardContent,
   IonIcon,
-  IonBadge,
   IonProgressBar,
   IonList,
-  IonItem,
   IonLabel,
   IonSpinner,
   IonListHeader
@@ -31,9 +26,6 @@ import { AuthService } from '../services/auth.service';
   standalone: true,
   imports: [
     CommonModule,
-    IonHeader, 
-    IonToolbar, 
-    IonTitle, 
     IonContent,
     IonCard,
     IonCardHeader,
@@ -41,10 +33,8 @@ import { AuthService } from '../services/auth.service';
     IonCardSubtitle,
     IonCardContent,
     IonIcon,
-    IonBadge,
     IonProgressBar,
     IonList,
-    IonItem,
     IonLabel,
     IonSpinner,
     IonListHeader

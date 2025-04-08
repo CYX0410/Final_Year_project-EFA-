@@ -1,53 +1,57 @@
-```html
-<ion-header [translucent]="true">
-  <ion-toolbar>
-    <ion-title>Register</ion-title>
-  </ion-toolbar>
-</ion-header>
-
 <ion-content [fullscreen]="true" class="ion-padding">
-  <form [formGroup]="registerForm" (ngSubmit)="onSubmit()">
-    <ion-item>
-      <ion-label position="floating">Email</ion-label>
-      <ion-input type="email" formControlName="email"></ion-input>
-    </ion-item>
-    <div class="error-message" *ngIf="registerForm.get('email')?.touched && registerForm.get('email')?.errors">
-      {{ getEmailError() }}
+  <div class="content-container">
+  <div class="register-container">
+    <div class="welcome-text">
+      <p class="tagline">Join Our <span class="highlight">Green</span> Community!</p>
+      <h1 class="heading">Create Account</h1>
     </div>
+    <form [formGroup]="registerForm" (ngSubmit)="onSubmit()">
+      <ion-item class="custom-input">
+        <ion-icon 
+          [name]="registerForm.get('email')?.valid ? 'mail' : 'mail-outline'" 
+          [color]="registerForm.get('email')?.valid ? 'success' : 'medium'"
+          slot="start">
+        </ion-icon>
+        <ion-label position="floating">Email</ion-label>
+        <ion-input type="email" formControlName="email"></ion-input>
+      </ion-item>
+      <div class="error-message" *ngIf="registerForm.get('email')?.touched && registerForm.get('email')?.errors">
+        {{ getEmailError() }}
+      </div>
 
-    <ion-item>
-      <ion-label position="floating">Password</ion-label>
-      <ion-input type="password" formControlName="password"></ion-input>
-    </ion-item>
-    <div class="error-message" *ngIf="registerForm.get('password')?.touched && registerForm.get('password')?.errors">
-      {{ getPasswordError() }}
-    </div>
-    
-    <div class="password-requirements">
-      <p>Password must contain:</p>
-      <ul>
-        <li>At least 12 characters</li>
-        <li>One uppercase letter</li>
-        <li>One lowercase letter</li>
-        <li>One number</li>
-        <li>One special character (!&#64;#$%^&amp;*)</li>
-      </ul>
-    </div>
+      <ion-item class="custom-input">
+        <ion-icon 
+          [name]="registerForm.get('password')?.valid ? 'lock-closed' : 'lock-closed-outline'"
+          [color]="registerForm.get('password')?.valid ? 'success' : 'medium'"
+          slot="start">
+        </ion-icon>
+        <ion-label position="floating">Password</ion-label>
+        <ion-input type="password" formControlName="password" (ionInput)="onPasswordInput()"></ion-input>
+      </ion-item>
 
-    <ion-button expand="block" type="submit" [disabled]="!registerForm.valid" class="ion-margin-top">
-      Register
-    </ion-button>
+      <div class="password-strength" *ngIf="registerForm.get('password')?.dirty">
+        <div class="strength-meter">
+          <div class="strength-bar" [style.width.%]="passwordStrength"></div>
+        </div>
+        <div class="requirements-list">
+          <span [class.met]="hasMinLength">12+ characters</span>
+          <span [class.met]="hasUpperCase">ABC</span>
+          <span [class.met]="hasLowerCase">abc</span>
+          <span [class.met]="hasNumber">123</span>
+          <span [class.met]="hasSpecialChar">!&#64;#</span>
+        </div>
+      </div>
 
-    <ion-button expand="block" type="button" (click)="signInWithGoogle()" class="ion-margin-top google-btn">
-      <ion-icon name="logo-google" slot="start"></ion-icon>
-      Register with Google
-    </ion-button>
-
-    <div class="ion-text-center ion-margin-top">
-      <ion-text>Already have an account?</ion-text>
-      <ion-button fill="clear" routerLink="/login">
-        Login
+      <ion-button expand="block" type="submit" [disabled]="!registerForm.valid || loading" class="ion-margin-top" color="success">
+        <ion-spinner *ngIf="loading"></ion-spinner>
+        <span *ngIf="!loading">Register</span>
       </ion-button>
-    </div>
-  </form>
+
+      <div class="auth-link ion-margin-top">
+        <span>Already have an account?</span>
+        <ion-button fill="clear" routerLink="/login">Login</ion-button>
+      </div>
+    </form>
+  </div>
+  </div>
 </ion-content>

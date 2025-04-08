@@ -3,12 +3,11 @@ import { CommonModule } from '@angular/common';
 import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
 import { Router, RouterLink} from '@angular/router';
 import { addIcons } from 'ionicons';
-import { logoGoogle } from 'ionicons/icons'; 
+import { logoGoogle, lockClosedOutline, mailOutline, mail, lockClosed  } from 'ionicons/icons'; 
 import { 
-  IonContent, IonHeader, IonTitle, IonToolbar, 
+  IonContent,
   IonItem, IonLabel, IonInput, IonButton,
-  IonIcon, IonText 
-} from '@ionic/angular/standalone';
+  IonIcon, IonSpinner } from '@ionic/angular/standalone';
 import { AuthService } from '../../services/auth.service';
 
 @Component({
@@ -16,19 +15,23 @@ import { AuthService } from '../../services/auth.service';
   templateUrl: './register.page.html',
   styleUrls: ['./register.page.scss'],
   standalone: true,
-  imports: [
+  imports: [IonSpinner, 
     CommonModule,
     ReactiveFormsModule, RouterLink,
-    IonContent, IonHeader, IonTitle, IonToolbar,
-    IonItem, IonLabel, IonInput, IonButton,
-    IonIcon, IonText
+    IonContent, IonItem, IonLabel, IonInput, IonButton,
+    IonIcon
   ]
 })
 export class RegisterPage {
   registerForm: FormGroup;
   loading = false;
   errorMessage = '';
-
+  hasMinLength = false;
+  hasUpperCase = false;
+  hasLowerCase = false;
+  hasNumber = false;
+  hasSpecialChar = false;
+  passwordStrength = 0;
   constructor(
     private formBuilder: FormBuilder,
     private authService: AuthService,
@@ -39,7 +42,7 @@ export class RegisterPage {
       email: ['', [Validators.required, Validators.email, Validators.pattern(/^[^\s@]+@[^\s@]+\.[^\s@]+$/)]],
       password: ['', [Validators.required, Validators.minLength(6),   Validators.pattern(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*])[A-Za-z\d!@#$%^&*]{12,}$/)]]
     });
-    addIcons({ logoGoogle });
+    addIcons({mailOutline, mail,lockClosedOutline,lockClosed, logoGoogle});
   }
   getEmailError() {
     const control = this.registerForm.get('email');
@@ -81,17 +84,23 @@ export class RegisterPage {
       this.loading = false;
     }
   }
-  getPasswordError() {
-    const control = this.registerForm.get('password');
-    if (control?.hasError('required')) {
-      return 'Password is required';
-    }
-    if (control?.hasError('minlength')) {
-      return 'Password must be at least 12 characters';
-    }
-    if (control?.hasError('pattern')) {
-      return 'Password must contain at least one uppercase letter, one lowercase letter, one number, and one special character';
-    }
-    return '';
+  onPasswordInput() {
+    const password = this.registerForm.get('password')?.value;
+    
+    this.hasMinLength = password?.length >= 12;
+    this.hasUpperCase = /[A-Z]/.test(password);
+    this.hasLowerCase = /[a-z]/.test(password);
+    this.hasNumber = /[0-9]/.test(password);
+    this.hasSpecialChar = /[!@#$%^&*]/.test(password);
+
+    const requirements = [
+      this.hasMinLength,
+      this.hasUpperCase,
+      this.hasLowerCase,
+      this.hasNumber,
+      this.hasSpecialChar
+    ];
+    
+    this.passwordStrength = (requirements.filter(Boolean).length / requirements.length) * 100;
   }
 }

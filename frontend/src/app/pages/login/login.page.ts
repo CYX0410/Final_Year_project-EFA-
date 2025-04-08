@@ -3,18 +3,14 @@ import { CommonModule } from '@angular/common';
 import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
 import { Router, RouterLink } from '@angular/router';
 import { addIcons } from 'ionicons';
-import { logoGoogle } from 'ionicons/icons'; 
+import { logoGoogle, lockClosedOutline, mailOutline, mail, lockClosed } from 'ionicons/icons'; 
 import { 
   IonContent, 
-  IonHeader, 
-  IonTitle, 
-  IonToolbar,
   IonItem,
   IonLabel,
   IonInput,
   IonButton,
   IonIcon,
-  IonText,
   IonSpinner
 } from '@ionic/angular/standalone';
 import { AuthService } from '../../services/auth.service';
@@ -29,15 +25,11 @@ import { AuthService } from '../../services/auth.service';
     ReactiveFormsModule,
     RouterLink,
     IonContent,
-    IonHeader,
-    IonTitle,
-    IonToolbar,
     IonItem,
     IonLabel,
     IonInput,
     IonButton,
     IonIcon,
-    IonText,
     IonSpinner 
   ]
 })
@@ -46,6 +38,12 @@ export class LoginPage {
   loading = false;
   errorMessage = '';
   successMessage = '';
+  hasMinLength = false;
+  hasUpperCase = false;
+  hasLowerCase = false;
+  hasNumber = false;
+  hasSpecialChar = false;
+  passwordStrength = 0;
 
   constructor(
     private formBuilder: FormBuilder,
@@ -56,7 +54,7 @@ export class LoginPage {
       email: ['', [Validators.required, Validators.email, Validators.pattern(/^[^\s@]+@[^\s@]+\.[^\s@]+$/)]],
       password: ['', [Validators.required, Validators.minLength(12),  Validators.pattern(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*])[A-Za-z\d!@#$%^&*]{12,}$/)]]
     });
-    addIcons({ logoGoogle });
+    addIcons({mailOutline,mail,lockClosedOutline,lockClosed, logoGoogle});
   }
   getEmailError() {
     const control = this.loginForm.get('email');
@@ -129,5 +127,26 @@ export class LoginPage {
     } finally {
       this.loading = false;
     }
+  }
+  onPasswordInput() {
+    const password = this.loginForm.get('password')?.value;
+    
+    // Check requirements
+    this.hasMinLength = password?.length >= 12;
+    this.hasUpperCase = /[A-Z]/.test(password);
+    this.hasLowerCase = /[a-z]/.test(password);
+    this.hasNumber = /[0-9]/.test(password);
+    this.hasSpecialChar = /[!@#$%^&*]/.test(password);
+
+    // Calculate strength
+    const requirements = [
+      this.hasMinLength,
+      this.hasUpperCase,
+      this.hasLowerCase,
+      this.hasNumber,
+      this.hasSpecialChar
+    ];
+    
+    this.passwordStrength = (requirements.filter(Boolean).length / requirements.length) * 100;
   }
 }

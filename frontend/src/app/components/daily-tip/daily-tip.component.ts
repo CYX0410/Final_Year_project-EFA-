@@ -2,7 +2,6 @@ import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
 import {
-  IonContent,
   IonButton,
   IonIcon,
   IonCard,
@@ -72,7 +71,6 @@ const ECO_TIPS = [
   standalone: true,
   imports: [
     CommonModule,
-    IonContent,
     IonButton,
     IonIcon,
     IonCard,

@@ -27,7 +27,62 @@ const userController = {
             res.status(500).json({ message: error.message });
         }
     },
-
+    updatePassword: async (req, res) => {
+        try {
+            const { uid } = req.params;
+            const { password } = req.body;
+    
+            console.log('Updating password for uid:', uid); // Debug log
+    
+            if (!password) {
+                console.log('No password provided');
+                return res.status(400).json({ 
+                    message: 'Password is required',
+                    uid: uid 
+                });
+            }
+    
+            // First check if user exists
+            const [userRows] = await pool.query('SELECT * FROM users WHERE uid = ?', [uid]);
+            if (userRows.length === 0) {
+                console.log('User not found:', uid);
+                return res.status(404).json({ 
+                    message: 'User not found',
+                    uid: uid 
+                });
+            }
+    
+            // Update password with explicit column names
+            const [result] = await pool.query(
+                'UPDATE users SET password = ?, updated_at = CURRENT_TIMESTAMP WHERE uid = ?',
+                [password, uid]
+            );
+    
+            if (result.affectedRows === 0) {
+                console.log('Update failed - no rows affected');
+                return res.status(500).json({ 
+                    message: 'Password update failed',
+                    error: 'No rows were updated',
+                    uid: uid
+                });
+            }
+    
+            console.log('Password updated successfully for uid:', uid);
+            res.status(200).json({ 
+                message: 'Password updated successfully',
+                uid: uid,
+                affectedRows: result.affectedRows
+            });
+    
+        } catch (error) {
+            console.error('Error updating password:', error);
+            res.status(500).json({ 
+                message: 'Failed to update password in database',
+                error: error.message,
+                uid: req.params.uid 
+            });
+        }
+    },
     getUserByUid: async (req, res) => {
         try {
             const [rows] = await pool.query(

@@ -20,11 +20,11 @@ import {
 import { addIcons } from 'ionicons';
 import { 
   arrowBackOutline, 
-  homeOutline, 
-  leafOutline, 
-  bulbOutline, 
-  trophyOutline, 
-  analyticsOutline 
+  home, 
+  leaf, 
+  bulb, 
+  trophy, 
+  analytics
 } from 'ionicons/icons';
 
 @Component({
@@ -54,11 +54,11 @@ export class AboutEfaPage {
   constructor(private router: Router) {
     addIcons({ 
       arrowBackOutline, 
-      homeOutline, 
-      leafOutline, 
-      bulbOutline, 
-      trophyOutline, 
-      analyticsOutline 
+      home, 
+      leaf, 
+      bulb, 
+      trophy, 
+      analytics
     });
   }
 

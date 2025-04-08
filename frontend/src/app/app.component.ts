@@ -71,7 +71,8 @@ export class AppComponent {
       this.isDarkMode = savedTheme === 'true';
       this.applyTheme(this.isDarkMode);
     }
-  }
+    }
+  
 
   async closeMenu() {
     await this.menuController.close();
@@ -92,10 +93,11 @@ export class AppComponent {
   }
 
   toggleTheme() {
+    this.isDarkMode = !this.isDarkMode;
     this.applyTheme(this.isDarkMode);
     localStorage.setItem('darkMode', this.isDarkMode.toString());
   }
-
+  
   private applyTheme(isDark: boolean) {
     if (isDark) {
       document.documentElement.classList.add('ion-palette-dark');
@@ -111,6 +113,7 @@ export class AppComponent {
   async changePassword() {
     const alert = await this.alertController.create({
       header: 'Change Password',
+      cssClass: this.isDarkMode ? 'dark-alert' : 'light-alert',
       inputs: [
         {
           name: 'currentPassword',
@@ -183,6 +186,7 @@ export class AppComponent {
     const alert = await this.alertController.create({
       header: 'Error',
       message: message,
+      cssClass: this.isDarkMode ? 'dark-alert' : 'light-alert',
       buttons: ['OK'],
     });
     await alert.present();
@@ -192,6 +196,7 @@ export class AppComponent {
     const alert = await this.alertController.create({
       header: 'Success',
       message: message,
+      cssClass: this.isDarkMode ? 'dark-alert' : 'light-alert',
       buttons: ['OK'],
     });
     await alert.present();
@@ -200,6 +205,7 @@ export class AppComponent {
     const alert = await this.alertController.create({
       header: 'Confirm Logout',
       message: 'Are you sure you want to log out?',
+      cssClass: this.isDarkMode ? 'dark-alert' : 'light-alert',
       buttons: [
         {
           text: 'Cancel',
