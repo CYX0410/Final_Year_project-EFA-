@@ -73,20 +73,4 @@
       </ion-card-content>
     </ion-card>
   </ion-list>
-
-  <!-- Completed Challenges -->
-  <ion-list *ngIf="completedChallenges.length > 0">
-    <h2>Completed Challenges</h2>
-    <ion-card *ngFor="let progress of completedChallenges">
-      <ion-card-header>
-        <ion-card-title>
-          {{ progress.title }}
-          <ion-icon name="trophy" color="warning"></ion-icon>
-        </ion-card-title>
-        <ion-card-subtitle>
-          Completed on {{ progress.last_check_in | date }}
-        </ion-card-subtitle>
-      </ion-card-header>
-    </ion-card>
-  </ion-list>
 </ion-content>

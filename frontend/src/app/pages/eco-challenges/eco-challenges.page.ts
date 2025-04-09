@@ -46,10 +46,10 @@ export class EcoChallengesPage implements OnInit {
   today: string = new Date().toISOString().split('T')[0];
   availableChallenges: Challenge[] = [];
   activeChallenges: ChallengeProgress[] = [];
-  completedChallenges: ChallengeProgress[] = [];
   loading = false;
   errorMessage = '';
   checkedInChallenges: Set<string> = new Set(); // Add this to track checked-in challenges
+  
   constructor(
     private router: Router,
     private challengeService: ChallengeService,
@@ -80,7 +80,6 @@ export class EcoChallengesPage implements OnInit {
             this.errorMessage = 'Failed to load available challenges';
           }
         );
-  
         // Load user's challenges
         this.challengeService.getUserChallenges(user.uid).subscribe(
           progress => {
@@ -91,7 +90,6 @@ export class EcoChallengesPage implements OnInit {
                 this.checkedInChallenges.add(challenge.progress_id);
               }
             });
-            this.completedChallenges = progress.filter(p => p.completion_status === 'completed');
           },
           error => {
             console.error('Error loading user challenges:', error);

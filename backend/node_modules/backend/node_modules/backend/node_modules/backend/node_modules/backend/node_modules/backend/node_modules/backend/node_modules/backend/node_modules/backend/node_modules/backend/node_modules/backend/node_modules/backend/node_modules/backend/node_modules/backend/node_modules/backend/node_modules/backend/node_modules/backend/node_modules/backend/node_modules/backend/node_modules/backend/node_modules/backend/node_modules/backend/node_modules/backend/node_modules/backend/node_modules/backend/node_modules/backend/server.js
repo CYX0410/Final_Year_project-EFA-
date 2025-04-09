@@ -4,6 +4,7 @@ const cors = require('cors');
 const userRoutes = require('./routes/userRoutes');
 const challengeRoutes = require('./routes/challengeRoutes');
 const productRoutes = require('./routes/productRoutes');
+const feedbackRoutes = require('./routes/feedbackRoutes');
 require('dotenv').config();
 const app = express();
 const { GoogleGenerativeAI } = require('@google/generative-ai');
@@ -53,6 +54,7 @@ app.use((req, res, next) => {
 app.use('/api/users', userRoutes);
 app.use('/api/challenges', challengeRoutes);
 app.use('/api', productRoutes);
+app.use('/api/feedback', feedbackRoutes);
 // Error handling middleware
 app.use((err, req, res, next) => {
   console.error('Error:', err);

@@ -1,7 +1,10 @@
 import { Component } from '@angular/core';
+import { LocalNotifications } from '@capacitor/local-notifications';
+import { ChallengeService, ChallengeProgress } from './services/challenge.service';
 import { Router } from '@angular/router';
 import { FormsModule } from '@angular/forms';
-import { AlertController, MenuController } from '@ionic/angular/standalone';
+import { AlertController, MenuController, IonItemGroup } from '@ionic/angular/standalone';
+import { HttpClient } from '@angular/common/http';
 import { 
   IonApp, 
   IonRouterOutlet,
@@ -37,7 +40,7 @@ import {
   templateUrl: 'app.component.html',
   styleUrls: ['app.component.scss'],
   standalone: true,
-  imports: [
+  imports: [IonItemGroup, 
     FormsModule,
     IonApp, 
     IonRouterOutlet,
@@ -56,15 +59,22 @@ import {
   ],
 })
 export class AppComponent {
-  notificationsEnabled = true;
+  notificationsEnabled = false;
   isDarkMode = false;
-
+  private apiUrl = 'http://localhost:5010/api';
   constructor(
     private authService: AuthService,
     private router: Router,
     private alertController: AlertController,
     private menuController: MenuController,
+    private http: HttpClient,
+    private challengeService: ChallengeService
   ) {
+    const savedNotificationPref = localStorage.getItem('notificationsEnabled');
+    this.notificationsEnabled = savedNotificationPref === 'true';
+    if (this.notificationsEnabled) {
+      this.initializeNotifications();
+    }
     addIcons({arrowBackOutline,language,notifications,moon,chatbox,logOut,keyOutline,informationCircle,settings});
     const savedTheme = localStorage.getItem('darkMode');
     if (savedTheme !== null) {
@@ -73,9 +83,73 @@ export class AppComponent {
     }
     }
   
-
   async closeMenu() {
     await this.menuController.close();
+  }
+  async provideFeedback() {
+    const alert = await this.alertController.create({
+      header: 'Provide Feedback',
+      cssClass: this.isDarkMode ? 'dark-alert' : 'light-alert',
+      inputs: [
+        {
+          name: 'feedback',
+          type: 'textarea',
+          placeholder: 'Share your thoughts with us...'
+        },
+        {
+          name: 'rating',
+          type: 'number',
+          placeholder: 'Rating (1-5)',
+          min: 1,
+          max: 5
+        }
+      ],
+      buttons: [
+        {
+          text: 'Cancel',
+          role: 'cancel'
+        },
+        {
+          text: 'Submit',
+          handler: async (data) => {
+            if (!data.feedback?.trim()) {
+              this.showError('Please enter your feedback');
+              return false;
+            }
+  
+            const rating = parseInt(data.rating);
+            if (isNaN(rating) || rating < 1 || rating > 5) {
+              this.showError('Please enter a valid rating between 1 and 5');
+              return false;
+            }
+  
+            try {
+              const user = await this.authService.getCurrentUser();
+              if (!user) {
+                this.showError('Please log in to submit feedback');
+                return false;
+              }
+  
+              await this.http.post(`${this.apiUrl}/feedback`, {
+                uid: user.uid,
+                message: data.feedback.trim(),
+                rating: rating
+              }).toPromise();
+  
+              this.showSuccess('Thank you for your feedback!');
+              await this.menuController.close();
+              return true;
+            } catch (error) {
+              console.error('Feedback submission error:', error);
+              this.showError('Failed to submit feedback');
+              return false;
+            }
+          }
+        }
+      ]
+    });
+  
+    await alert.present();
   }
   async aboutEFA() {
     await this.menuController.close();
@@ -87,11 +161,80 @@ export class AppComponent {
     console.log('Change language clicked');
   }
 
-  toggleNotifications() {
-    // Implement notifications toggle logic
-    console.log('Notifications:', this.notificationsEnabled);
+  async toggleNotifications() {
+    try {
+      if (this.notificationsEnabled) {
+        // Request permission when enabling
+        const permResult = await LocalNotifications.requestPermissions();
+        if (permResult.display !== 'granted') {
+          this.showError('Notification permission is required');
+          this.notificationsEnabled = false;
+          return;
+        }
+      }
+
+      // Save preference
+      localStorage.setItem('notificationsEnabled', this.notificationsEnabled.toString());
+
+      if (this.notificationsEnabled) {
+        await this.initializeNotifications();
+        this.showSuccess('Notifications enabled');
+      } else {
+        await this.cancelNotifications();
+        this.showSuccess('Notifications disabled');
+      }
+    } catch (error) {
+      console.error('Notification toggle error:', error);
+      this.showError('Failed to update notification settings');
+    }
   }
 
+  private async initializeNotifications() {
+    try {
+      const user = await this.authService.getCurrentUser();
+      if (!user) return;
+
+      // Get active challenges
+      this.challengeService.getUserChallenges(user.uid).subscribe({
+        next: async (challenges) => {
+          const activeChallenges = challenges.filter(c => c.completion_status === 'in_progress');
+          
+          if (activeChallenges.length > 0) {
+            // Schedule daily notification
+            await LocalNotifications.schedule({
+              notifications: [{
+                id: 1,
+                title: 'Daily Challenge Check-in',
+                body: 'Remember to check in for your active eco challenges!',
+                schedule: {
+                  at: new Date(new Date().setHours(9, 0, 0, 0)), // Set for 9 AM
+                  every: 'day'  // Daily repeat
+                }
+              }]
+            });
+          }
+        },
+        error: (error) => {
+          console.error('Error fetching challenges for notifications:', error);
+        }
+      });
+    } catch (error) {
+      console.error('Error initializing notifications:', error);
+    }
+}
+
+private async cancelNotifications() {
+    try {
+      // Use cancel instead of cancelAll
+      await LocalNotifications.cancel({
+        notifications: [{
+          id: 1
+        }]
+      });
+    } catch (error) {
+      console.error('Error canceling notifications:', error);
+    }
+}
   toggleTheme() {
     this.isDarkMode = !this.isDarkMode;
     this.applyTheme(this.isDarkMode);

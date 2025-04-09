@@ -7,56 +7,62 @@
             <ion-icon name="arrow-back-outline"></ion-icon>
           </ion-button>
         </ion-buttons>
-        <ion-title>Settings</ion-title>
+        <ion-title class="settings-title">Settings</ion-title>
       </ion-toolbar>
     </ion-header>
-    <ion-content>
-      <ion-list>
-        <ion-item button (click)="changeLanguage()">
-          <ion-icon slot="start" name="language"></ion-icon>
-          <ion-label>Language</ion-label>
-        </ion-item>
 
-        <ion-item button (click)="toggleNotifications()">
-          <ion-icon slot="start" name="notifications"></ion-icon>
-          <ion-label>Notifications</ion-label>
-          <ion-toggle slot="end" [(ngModel)]="notificationsEnabled"></ion-toggle>
-        </ion-item>
+    <ion-content class="settings-content">
+      <div class="settings-container">
+        <ion-list>
+          <ion-item-group>
+            <ion-item button (click)="changeLanguage()" class="settings-item">
+              <ion-icon slot="start" name="language" color="success"></ion-icon>
+              <ion-label>Language</ion-label>
+            </ion-item>
 
-        <ion-item>
-          <ion-icon slot="start" name="moon"></ion-icon>
-          <ion-label>Dark Theme</ion-label>
-          <ion-toggle 
-            slot="end" 
-            [checked]="isDarkMode" 
-            (ionChange)="toggleTheme()">
-          </ion-toggle>
-        </ion-item>
+            <ion-item button (click)="toggleNotifications()" class="settings-item">
+              <ion-icon slot="start" name="notifications" color="success"></ion-icon>
+              <ion-label>Notifications</ion-label>
+              <ion-toggle slot="end" [(ngModel)]="notificationsEnabled"></ion-toggle>
+            </ion-item>
 
-        <ion-item button (click)="provideFeedback()">
-          <ion-icon slot="start" name="chatbox"></ion-icon>
-          <ion-label>Feedback</ion-label>
-        </ion-item>
+            <ion-item class="settings-item">
+              <ion-icon slot="start" name="moon" color="success"></ion-icon>
+              <ion-label>Dark Theme</ion-label>
+              <ion-toggle slot="end" [checked]="isDarkMode" (ionChange)="toggleTheme()"></ion-toggle>
+            </ion-item>
+          </ion-item-group>
 
-        <ion-item button (click)="logout()" class="logout-item">
-          <ion-icon slot="start" name="log-out" color="danger"></ion-icon>
-          <ion-label color="danger">Logout</ion-label>
-        </ion-item>
+          <ion-item-group>
+            <ion-item button (click)="provideFeedback()" class="settings-item">
+              <ion-icon slot="start" name="chatbox" color="success"></ion-icon>
+              <ion-label>Feedback</ion-label>
+            </ion-item>
 
-        <ion-item button (click)="changePassword()">
-          <ion-icon slot="start" name="key-outline"></ion-icon>
-          <ion-label>Change Password</ion-label>
-        </ion-item>
-        
-        <ion-item button (click)="aboutEFA()">
-          <ion-icon slot="start" name="information-circle"></ion-icon>
-          <ion-label>About EFA</ion-label>
-        </ion-item>
-      </ion-list>
+            <ion-item button (click)="changePassword()" class="settings-item">
+              <ion-icon slot="start" name="key-outline" color="success"></ion-icon>
+              <ion-label>Change Password</ion-label>
+            </ion-item>
+            
+            <ion-item button (click)="aboutEFA()" class="settings-item">
+              <ion-icon slot="start" name="information-circle" color="success"></ion-icon>
+              <ion-label>About EFA</ion-label>
+            </ion-item>
+          </ion-item-group>
+
+          <ion-item button (click)="logout()" class="settings-item logout-item">
+            <ion-icon slot="start" name="log-out" color="danger"></ion-icon>
+            <ion-label color="danger">Logout</ion-label>
+          </ion-item>
+        </ion-list>
+      </div>
+
+      <!-- Eco5 Logo Section -->
+      <div class="eco-logo-container">
+        <img src="assets/icon/eco5.png" alt="Eco5 Logo" class="eco-logo">
+        <p class="eco-tagline">Making sustainability a daily habit</p>
+      </div>
     </ion-content>
   </ion-menu>
-
-  <div class="ion-page" id="main-content">
-    <ion-router-outlet></ion-router-outlet>
-  </div>
+  <ion-router-outlet id="main-content"></ion-router-outlet>
 </ion-app>
