@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
 import { Router, RouterLink } from '@angular/router';
 import { addIcons } from 'ionicons';
+import { IonCheckbox } from '@ionic/angular/standalone';
 import { logoGoogle, lockClosedOutline, mailOutline, mail, lockClosed } from 'ionicons/icons'; 
 import { 
   IonContent, 
@@ -30,7 +31,8 @@ import { AuthService } from '../../services/auth.service';
     IonInput,
     IonButton,
     IonIcon,
-    IonSpinner 
+    IonSpinner,
+    IonCheckbox
   ]
 })
 export class LoginPage {
@@ -52,8 +54,14 @@ export class LoginPage {
   ) {
     this.loginForm = this.formBuilder.group({
       email: ['', [Validators.required, Validators.email, Validators.pattern(/^[^\s@]+@[^\s@]+\.[^\s@]+$/)]],
-      password: ['', [Validators.required, Validators.minLength(12),  Validators.pattern(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*])[A-Za-z\d!@#$%^&*]{12,}$/)]]
+      password: ['', [Validators.required, Validators.minLength(12),  Validators.pattern(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*])[A-Za-z\d!@#$%^&*]{12,}$/)]],
+      rememberMe: [false] 
     });
+    const savedCredentials = localStorage.getItem('savedCredentials');
+    if (savedCredentials) {
+      const { email, password } = JSON.parse(savedCredentials);
+      this.loginForm.patchValue({ email, password, rememberMe: true });
+    }
     addIcons({mailOutline,mail,lockClosedOutline,lockClosed, logoGoogle});
   }
   getEmailError() {
@@ -84,8 +92,16 @@ export class LoginPage {
       this.loading = true;
       this.errorMessage = '';
       try {
-        const { email, password } = this.loginForm.value;
+        const { email, password, rememberMe } = this.loginForm.value;
         await this.authService.login(email, password);
+
+        // Save or remove credentials based on remember me checkbox
+        if (rememberMe) {
+          localStorage.setItem('savedCredentials', JSON.stringify({ email, password }));
+        } else {
+          localStorage.removeItem('savedCredentials');
+        }
+
         this.router.navigate(['/tabs']);
       } catch (error: any) {
         this.errorMessage = error.message;

@@ -5,7 +5,12 @@
         <ion-icon name="arrow-back-outline"></ion-icon>
       </ion-button>
     </ion-buttons>
-    <ion-title>Eco Tips</ion-title>
+    <ion-title>
+      <div class="title-container">
+        <img src="assets/icon/eco6.png" alt="AI Assistant" class="assistant-icon">
+        Eco Tips Assistant
+      </div>
+    </ion-title>
   </ion-toolbar>
 </ion-header>
 
@@ -13,12 +18,15 @@
   <ion-list>
     <ion-item lines="none" *ngFor="let message of messages">
       <ion-card [class.user-message]="message.isUser" [class.bot-message]="!message.isUser">
-        <ion-card-content>
-          {{ message.text }}
-          <div class="timestamp">
-            {{ message.timestamp | date:'shortTime' }}
-          </div>
-        </ion-card-content>
+        <div class="message-container">
+          <img *ngIf="!message.isUser" src="assets/icon/eco6.png" alt="AI Assistant" class="bot-icon">
+          <ion-card-content>
+            {{ message.text }}
+            <div class="timestamp">
+              {{ message.timestamp | date:'shortTime' }}
+            </div>
+          </ion-card-content>
+        </div>
       </ion-card>
     </ion-item>
   </ion-list>

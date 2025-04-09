@@ -69,7 +69,14 @@ export class EcotipsPage implements OnInit {
 
   ngOnInit() {
     this.messages.push({
-      text: 'Hello! I\'m your eco-assistant. You can ask me about:\n- Sustainable living tips\n- Environmental conservation\n- Eco-friendly alternatives\n- Daily green practices',
+      text: 'Hello! I\'m your eco-assistant. I can help with environmental topics like:\n\n' +
+            '• Sustainable living tips\n' +
+            '• Recycling methods\n' +
+            '• Energy conservation\n' +
+            '• Waste reduction\n' +
+            '• Green alternatives\n' +
+            '• Environmental protection\n\n' +
+            'Please note: I can only answer questions about eco-friendly topics.',
       isUser: false,
       timestamp: new Date()
     });
@@ -77,42 +84,49 @@ export class EcotipsPage implements OnInit {
 
   async sendMessage() {
     if (!this.userMessage.trim()) return;
-
+  
     const userQuery = this.userMessage.trim();
     this.messages.push({
       text: userQuery,
       isUser: true,
       timestamp: new Date()
     });
-
+  
     this.userMessage = '';
     this.isLoading = true;
-    this.errorMessage = '';
-
+  
     try {
       const response = await this.chatService.sendMessage(userQuery).toPromise();
       
-      // Format the response text
+      // Format the response text with proper spacing
       const formattedText = response.message
-        .replace(/•/g, '\n•') // Add newlines before bullets
-        .replace(/(\d+\.)/g, '\n$1'); // Add newlines before numbered lists
+        .split('\n')
+        .map((point: string) => point.trim())
+        .filter((point: string) => point.length > 0)
+        .join('\n\n');
       
       this.messages.push({
         text: formattedText,
         isUser: false,
         timestamp: new Date()
       });
-    } catch (error: any) {
+  
+      await this.scrollToBottom();
+    } catch (error) {
       console.error('Error sending message:', error);
-      this.errorMessage = error.message || 'Failed to get response';
       this.messages.push({
-        text: 'Sorry, I encountered an error. Please try again.',
+        text: '**Note**: I can only provide information about eco-friendly and environmental topics.\n\n' +
+              'Please ask about:\n\n' +
+              '• Sustainable living\n\n' +
+              '• Recycling practices\n\n' +
+              '• Energy conservation\n\n' +
+              '• Waste reduction\n\n' +
+              '• Green alternatives',
         isUser: false,
         timestamp: new Date()
       });
     } finally {
       this.isLoading = false;
-      await this.scrollToBottom();
     }
   }
 

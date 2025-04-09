@@ -122,22 +122,6 @@ form {
   font-size: 0.8em;
   margin: 5px 0 0 16px;
 }
-
-.forgot-password {
-  display: block;
-  text-align: right;
-  color: #2E7D32;
-  text-decoration: none;
-  font-size: 14px;
-  font-weight: 400;
-  margin: -8px 4px 16px 0;
-  cursor: pointer;
-
-  &:hover {
-    text-decoration: underline;
-  }
-}
-
 .password-strength {
   padding: 8px 16px;
   margin-bottom: 16px;
@@ -291,3 +275,46 @@ ion-content {
     background: rgba(255, 255, 255, 0.4); // Lighter overlay
   }
   }
+// login.page.scss
+// Add these styles
+.auth-options {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin: 8px 0 16px;
+  padding: 0 4px;
+
+  .remember-me {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+
+    ion-checkbox {
+      --size: 12px;
+      --checkbox-background-checked: var(--ion-color-success);
+      margin: 0;
+    }
+
+    ion-label {
+      font-size: 12px;
+      color: #2E7D32;
+      margin: 0;
+    }
+  }
+
+  .forgot-password {
+    color: #2E7D32;
+    text-decoration: none;
+    font-size: 12px;
+    font-weight: 400;
+    cursor: pointer;
+
+    &:hover {
+      text-decoration: underline;
+    }
+  }
+}
+
+// Remove or comment out the old styles
+// .remember-me-item { ... }
+// .forgot-password { ... }

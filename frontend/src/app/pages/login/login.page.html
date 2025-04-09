@@ -28,8 +28,14 @@
         <ion-label position="floating">Password</ion-label>
         <ion-input type="password" formControlName="password" (ionInput)="onPasswordInput()"></ion-input>
       </ion-item>
-      
-      <a class="forgot-password" (click)="resetPassword()">Forgot Password?</a>
+
+      <div class="auth-options">
+        <div class="remember-me">
+          <ion-checkbox slot="start" formControlName="rememberMe"></ion-checkbox>
+          <ion-label>Remember me</ion-label>
+        </div>
+        <a class="forgot-password" (click)="resetPassword()">Forgot Password?</a>
+      </div>
 
       <div class="password-strength" *ngIf="loginForm.get('password')?.dirty">
         <div class="strength-meter">
