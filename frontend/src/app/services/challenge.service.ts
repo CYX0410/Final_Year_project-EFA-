@@ -24,6 +24,8 @@ export interface ChallengeProgress {
   description: string;
   duration_days: number;
   points: number;
+  completion_count: number;
+  total_points_earned: number;
 }
 
 @Injectable({

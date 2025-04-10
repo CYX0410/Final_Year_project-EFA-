@@ -5,26 +5,21 @@
         <ion-icon name="arrow-back-outline"></ion-icon>
       </ion-button>
     </ion-buttons>
-    <ion-title>Eco Challenges</ion-title>
+    <ion-title>
+      <div class="title-container">
+        Eco Challenges
+      </div>
+    </ion-title>
   </ion-toolbar>
 </ion-header>
-
 <ion-content [fullscreen]="true" class="ion-padding">
-   <!-- Loading Indicator -->
-   <div *ngIf="loading" class="loading-container">
-    <ion-spinner></ion-spinner>
-    <p>Loading challenges...</p>
-  </div>
- 
-  <!-- Error Message -->
-  <div *ngIf="errorMessage" class="error-message">
-    {{ errorMessage }}
-  </div>
-
-  <!-- Active Challenges -->
-  <ion-list *ngIf="activeChallenges.length > 0">
-    <h2>Active Challenges</h2>
-    <ion-card *ngFor="let progress of activeChallenges; let i = index">
+  <ion-list>
+    <!-- Active Challenges -->
+    <h2>
+      <ion-icon name="trophy-outline" color="success"></ion-icon>
+      Active Challenges
+    </h2>
+    <ion-card *ngFor="let progress of activeChallenges">
       <ion-card-header>
         <ion-card-title>{{ progress.title }}</ion-card-title>
         <ion-card-subtitle>
@@ -41,33 +36,37 @@
           </div>
         </div>
         <ion-button 
-          expand="block" 
-          (click)="checkIn(progress.progress_id)" 
-          class="ion-margin-top"
-          [disabled]="isCheckedIn(progress.progress_id)"
-          [color]="isCheckedIn(progress.progress_id) ? 'medium' : 'primary'">
-          {{ isCheckedIn(progress.progress_id) ? 'Already Checked In' : 'Daily Check-in' }}
-        </ion-button>
+        expand="block" 
+        (click)="checkIn(progress.progress_id)" 
+        [disabled]="isCheckedIn(progress.progress_id)"
+        color="success">
+        {{ isCheckedIn(progress.progress_id) ? 'Already Checked In' : 'Daily Check-in' }}
+      </ion-button>
       </ion-card-content>
     </ion-card>
-  </ion-list>
 
-  <!-- Available Challenges -->
-  <ion-list>
-    <h2>Available Challenges</h2>
-    <div *ngIf="availableChallenges.length === 0 && !loading" class="no-data">
-      No challenges available at the moment.
-    </div>
+    <!-- Available Challenges -->
+    <h2>
+      <ion-icon name="leaf-outline" color="success"></ion-icon>
+      Available Challenges
+    </h2>
     <ion-card *ngFor="let challenge of availableChallenges">
       <ion-card-header>
         <ion-card-title>{{ challenge.title }}</ion-card-title>
-        <ion-card-subtitle>
-          {{ challenge.duration_days }} days • {{ challenge.points }} points
-        </ion-card-subtitle>
+        <div class="challenge-stats">
+          <div class="stat-item">
+            <ion-icon name="time-outline"></ion-icon>
+            {{ challenge.duration_days }} days
+          </div>
+          <div class="stat-item">
+            <ion-icon name="trophy-outline"></ion-icon>
+            {{ challenge.points }} points
+          </div>
+        </div>
       </ion-card-header>
       <ion-card-content>
         <p>{{ challenge.description }}</p>
-        <ion-button expand="block" (click)="startChallenge(challenge.challenge_id)" class="ion-margin-top">
+        <ion-button expand="block" (click)="startChallenge(challenge.challenge_id)">
           Start Challenge
         </ion-button>
       </ion-card-content>

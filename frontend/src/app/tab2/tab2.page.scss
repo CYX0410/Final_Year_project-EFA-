@@ -1,11 +1,21 @@
+* {
+  font-family: 'Poppins', sans-serif;
+}
+
+ion-content {
+  --background: linear-gradient(135deg, #F1F8E9, #DCEDC8);
+}
+
 .large-avatar {
   width: 100px;
   height: 100px;
   margin: 20px auto;
-  border: 2px solid var(--ion-color-primary);
+  border: 2px solid #4CAF50;
   border-radius: 50%;
   overflow: hidden;
+  box-shadow: 0 4px 12px rgba(76, 175, 80, 0.2);
 }
+
 .content-container {
   display: flex;
   flex-direction: column;
@@ -14,12 +24,33 @@
   margin: 0 auto;
   padding: 20px;
 }
-// Add this to your existing styles
+
+.profile-header {
+  text-align: center;
+  margin-bottom: 24px;
+
+  h2 {
+    font-family: 'Poppins', sans-serif;
+    font-size: 24px;
+    font-weight: 600;
+    color: #2E7D32;
+    margin: 12px 0 4px;
+  }
+
+  p {
+    font-family: 'Poppins', sans-serif;
+    font-size: 14px;
+    color: #558B2F;
+    margin: 0;
+  }
+}
+
 .action-buttons {
   padding: 16px;
   margin-top: 20px;
 
   ion-button {
+    font-family: 'Poppins', sans-serif;
     margin: 8px 0;
     height: 48px;
     --border-radius: 8px;
@@ -43,7 +74,6 @@
   }
 }
 
-// Update existing styles
 .custom-input {
   --background: rgba(255, 255, 255, 0.9); 
   --border-radius: 15px;
@@ -67,17 +97,18 @@
   }
 
   ion-label {
+    font-family: 'Poppins', sans-serif;
     color: #2E7D32; 
     margin-left: 8px;
-    font-size: 18px;
-    font-weight: 400;
+    font-size: 16px;
+    font-weight: 500;
   }
 
   ion-input, ion-textarea {
     --padding-start: 8px;
     font-family: 'Poppins', sans-serif;
     font-size: 15px;
-    --placeholder-color: var(--ion-color-medium);
+    --placeholder-color: #558B2F;
     --placeholder-opacity: 0.8;
   }
 
@@ -90,8 +121,9 @@
   }
 
   &:hover {
-    --border-color: var(--ion-color-medium);
+    --border-color: #558B2F;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    transform: translateY(-1px);
   }
 
   &[readonly] {
@@ -100,33 +132,79 @@
   }
 }
 
-// Update ion-list styles
 ion-list {
   margin-top: 20px;
   background: transparent;
   padding: 0;
 }
 
-// Update ion-item styles
 ion-item {
   --padding-start: 0;
   --background: transparent;
   margin-bottom: 16px;
+  font-family: 'Poppins', sans-serif;
 }
 
 h2 {
+  font-family: 'Poppins', sans-serif;
   margin: 10px 0;
   font-size: 1.5rem;
-  color: var(--ion-color-dark);
+  color: #1B5E20;
+  font-weight: 600;
 }
 
 p {
+  font-family: 'Poppins', sans-serif;
   margin: 0;
-  color: var(--ion-color-medium);
+  color: #558B2F;
+  font-size: 14px;
 }
 
 .inline-item {
   --background: transparent;
   width: 80%;
   margin: 0 auto;
+}
+
+// Error message
+.error-message {
+  color: var(--ion-color-danger);
+  font-family: 'Poppins', sans-serif;
+  font-size: 14px;
+  text-align: center;
+  margin: 8px 0;
+}
+
+// Animations
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.profile-header,
+.custom-input,
+.action-buttons {
+  animation: fadeIn 0.6s ease-out forwards;
+}
+
+// Media Queries
+@media (max-width: 768px) {
+  .content-container {
+    padding: 16px;
+  }
+
+  .large-avatar {
+    width: 80px;
+    height: 80px;
+  }
+
+  .profile-header h2 {
+    font-size: 20px;
+  }
 }

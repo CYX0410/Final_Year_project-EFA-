@@ -10,47 +10,67 @@
 </ion-header>
 
 <ion-content [fullscreen]="true" class="ion-padding">
-  <!-- Loading State -->
-  <div *ngIf="loading" class="loading-container">
-    <ion-spinner></ion-spinner>
-    <p>Loading products...</p>
-  </div>
+  <div class="content-wrapper">
+    <!-- Loading State -->
+    <div *ngIf="loading" class="loading-container">
+      <ion-spinner></ion-spinner>
+      <p>Loading products...</p>
+    </div>
 
-  <!-- Error State -->
-  <div *ngIf="error" class="error-message">
-    <ion-icon name="alert-circle-outline"></ion-icon>
-    <p>{{ error }}</p>
-  </div>
+    <!-- Error State -->
+    <div *ngIf="error" class="error-message">
+      <ion-icon name="alert-circle-outline"></ion-icon>
+      <p>{{ error }}</p>
+    </div>
 
-  <!-- Products List -->
-  <ion-list *ngIf="!loading && !error">
-    <ion-card *ngFor="let product of products">
-      <ion-card-header>
-        <ion-card-subtitle>{{ product.category }}</ion-card-subtitle>
-        <ion-card-title>{{ product.name }}</ion-card-title>
-      </ion-card-header>
-
-      <ion-card-content>
-        <p>{{ product.description }}</p>
-
-        <!-- Eco Alternatives -->
-        <div *ngIf="hasAlternatives(product)" class="alternatives-section">
-          <h3>
-            <ion-icon name="leaf-outline" color="success"></ion-icon>
-            Eco-Friendly Alternatives
-          </h3>
-          <ion-accordion-group>
-            <ion-accordion *ngFor="let alt of product.alternatives">
-              <ion-item slot="header">
-                <ion-label>{{ alt.name }}</ion-label>
-              </ion-item>
-              <div slot="content" class="ion-padding">
-                <p>{{ alt.description }}</p>
-              </div>
-            </ion-accordion>
-          </ion-accordion-group>
+    <!-- Products List -->
+    <div class="products-container" *ngIf="!loading && !error">
+      <div *ngFor="let product of products" class="flip-container" [class.is-flipped]="product.isFlipped">
+        <div class="flipper">
+          <!-- Front - Non-Eco Product -->
+          <div class="front">
+            <ion-card (click)="flipCard(product)">
+              <img [src]="'assets/images/products/non-eco/' + product.product_id + '.jpg'" [alt]="product.name"/>
+              <ion-card-header>
+                <div class="category-badge">{{ product.category }}</div>
+                <ion-card-title>{{ product.name }}</ion-card-title>
+              </ion-card-header>
+              <ion-card-content>
+                <p class="product-description">{{ product.description }}</p>
+                <div class="flip-prompt">
+                  <ion-icon name="refresh-outline"></ion-icon>
+                  <p>Tap to see eco-friendly alternatives</p>
+                </div>
+              </ion-card-content>
+            </ion-card>
+          </div>
+          
+          <!-- Back - Eco Alternatives -->
+          <div class="back">
+            <ion-card (click)="flipCard(product)">
+              <ion-card-header>
+                <div class="eco-badge">
+                  <ion-icon name="leaf-outline"></ion-icon>
+                  Eco-Friendly Alternatives
+                </div>
+              </ion-card-header>
+              <ion-card-content>
+                <div class="alternatives-grid">
+                  <div *ngFor="let alt of product.alternatives" class="alternative-item">
+                    <img [src]="'assets/images/products/eco/' + alt.product_id + '.jpg'" [alt]="alt.name"/>
+                    <h4>{{ alt.name }}</h4>
+                    <p>{{ alt.description }}</p>
+                  </div>
+                </div>
+                <div class="flip-prompt">
+                  <ion-icon name="refresh-outline"></ion-icon>
+                  <p>Tap to go back</p>
+                </div>
+              </ion-card-content>
+            </ion-card>
+          </div>
         </div>
-      </ion-card-content>
-    </ion-card>
-  </ion-list>
+      </div>
+    </div>
+  </div>
 </ion-content>

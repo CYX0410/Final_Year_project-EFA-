@@ -89,9 +89,14 @@ const challengeController = {
             );
     
             if (newStreak >= challenge[0].duration_days) {
+                // Update completion status and increment completion count
                 await pool.query(
-                    'UPDATE user_challenge_progress SET completion_status = ? WHERE progress_id = ?',
-                    ['completed', progressId]
+                    `UPDATE user_challenge_progress 
+                     SET completion_status = ?, 
+                         completion_count = completion_count + 1,
+                         total_points_earned = total_points_earned + ?
+                     WHERE progress_id = ?`,
+                    ['completed', challenge[0].points, progressId]
                 );
             }
     

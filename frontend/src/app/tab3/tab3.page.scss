@@ -1,72 +1,197 @@
+* {
+  font-family: 'Poppins', sans-serif;
+}
+
+ion-content {
+  --background: linear-gradient(135deg, #F1F8E9, #DCEDC8);
+}
+
 .loading-container {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    height: 200px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 200px;
   
-    p {
-      margin-top: 16px;
-      color: var(--ion-color-medium);
-    }
+  p {
+    margin-top: 16px;
+    color: #558B2F;
+    font-weight: 500;
   }
-  
-  .points-card {
-    background: linear-gradient(135deg, var(--ion-color-primary), var(--ion-color-secondary));
-    color: white;
-    margin-bottom: 20px;
-  
+}
+
+.points-card {
+  background: linear-gradient(145deg, #2E7D32, #43A047);
+  border-radius: 20px;
+  margin: 16px;
+  box-shadow: 0 8px 16px rgba(46, 125, 50, 0.2);
+  transform: translateY(0);
+  transition: all 0.3s ease;
+
+  &:hover {
+    transform: translateY(-5px);
+  }
+
+  ion-card-header {
+    padding: 20px;
+
     ion-card-subtitle {
-      color: rgba(255, 255, 255, 0.8);
+      color: rgba(255, 255, 255, 0.9);
+      font-size: 1em;
+      font-weight: 500;
     }
-  
+
     .points-title {
       display: flex;
       align-items: center;
-      gap: 8px;
-      font-size: 24px;
-  
+      gap: 12px;
+      font-size: 32px;
+      color: white;
+      margin-top: 8px;
+
       ion-icon {
-        font-size: 28px;
+        font-size: 36px;
+        animation: bounce 2s infinite;
       }
     }
   }
-  
-  ion-list-header {
-    font-size: 1.1em;
-    font-weight: 600;
-    padding-top: 16px;
+}
+
+ion-list-header {
+  font-size: 1.2em;
+  font-weight: 600;
+  color: #1B5E20;
+  padding: 16px;
+  letter-spacing: 0.5px;
+}
+
+ion-card {
+  margin: 16px;
+  border-radius: 16px;
+  background: white;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+  transition: all 0.3s ease;
+
+  &:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
   }
-  
-  .points-badge {
-    display: flex;
-    align-items: center;
-    gap: 4px;
-    margin-top: 12px;
-    color: var(--ion-color-medium);
-    font-size: 0.9em;
-  
-    &.earned {
-      color: var(--ion-color-success);
+
+  ion-card-header {
+    background: rgba(46, 125, 50, 0.05);
+    
+    ion-card-subtitle {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      color: #558B2F;
+      font-weight: 500;
+      font-size: 0.9em;
+
+      ion-icon {
+        font-size: 18px;
+      }
     }
-  
-    ion-icon {
-      font-size: 18px;
+
+    ion-card-title {
+      color: #2E7D32;
+      font-size: 1.1em;
+      font-weight: 600;
+      margin-top: 4px;
     }
   }
-  
-  ion-progress-bar {
-    margin-top: 8px;
-  }
-  
-  .no-data-message {
-    text-align: center;
-    padding: 32px 16px;
-    color: var(--ion-color-medium);
-  }
-  
-  .error-message {
-    color: var(--ion-color-danger);
+
+  ion-card-content {
     padding: 16px;
-    text-align: center;
+
+    p {
+      color: #666;
+      font-size: 0.95em;
+      margin: 8px 0;
+    }
   }
+}
+
+.points-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: rgba(76, 175, 80, 0.1);
+  padding: 6px 12px;
+  border-radius: 20px;
+  margin-top: 12px;
+  font-size: 0.9em;
+  
+  &.earned {
+    background: rgba(76, 175, 80, 0.2);
+    color: #2E7D32;
+  }
+  
+  ion-icon {
+    font-size: 18px;
+  }
+}
+
+ion-progress-bar {
+  margin: 12px 0;
+  height: 8px;
+  border-radius: 4px;
+  --background: rgba(0, 0, 0, 0.05);
+  --progress-background: #4CAF50;
+}
+
+.no-data-message {
+  text-align: center;
+  padding: 48px 24px;
+  color: #558B2F;
+  font-size: 1em;
+  
+  ion-icon {
+    font-size: 48px;
+    margin-bottom: 16px;
+    opacity: 0.7;
+  }
+}
+
+@keyframes bounce {
+  0%, 100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-5px);
+  }
+}
+
+// Responsive adjustments
+@media (max-width: 768px) {
+  .points-card {
+    margin: 12px;
+    
+    .points-title {
+      font-size: 28px;
+      
+      ion-icon {
+        font-size: 32px;
+      }
+    }
+  }
+
+  ion-card {
+    margin: 12px;
+  }
+}
+.section-title {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-family: 'Poppins', sans-serif;
+  font-size: 1.2em;
+  font-weight: 600;
+  color: #1B5E20;
+  margin: 24px 0 16px;
+  padding-left: 8px;
+
+  ion-icon {
+    font-size: 24px;
+  }
+}

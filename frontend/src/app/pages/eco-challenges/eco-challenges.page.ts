@@ -9,10 +9,9 @@ import {
   IonCardContent,IonList,IonSpinner
 } from '@ionic/angular/standalone';
 import { addIcons } from 'ionicons';
-import { arrowBackOutline, trophy, checkmark, time, checkmarkCircleOutline} from 'ionicons/icons';
+import { arrowBackOutline, trophy, checkmark, time, checkmarkCircleOutline, hourglassOutline, leafOutline, timeOutline, trophyOutline, flagOutline, alertCircleOutline } from 'ionicons/icons';
 import { ChallengeService, Challenge, ChallengeProgress } from '../../services/challenge.service';
 import { AuthService } from '../../services/auth.service';
-
 @Component({
   selector: 'app-eco-challenges',
   templateUrl: './eco-challenges.page.html',
@@ -38,8 +37,7 @@ import { AuthService } from '../../services/auth.service';
     IonContent, IonHeader, IonTitle, IonToolbar,
     IonButtons, IonButton, IonIcon, IonCard,
     IonCardHeader, IonCardTitle, IonCardSubtitle,
-    IonCardContent,IonList,
-    IonSpinner
+    IonCardContent,IonList
   ]
 })
 export class EcoChallengesPage implements OnInit {
@@ -49,19 +47,18 @@ export class EcoChallengesPage implements OnInit {
   loading = false;
   errorMessage = '';
   checkedInChallenges: Set<string> = new Set(); // Add this to track checked-in challenges
-  
   constructor(
     private router: Router,
     private challengeService: ChallengeService,
     private authService: AuthService
   ) {
-    addIcons({ arrowBackOutline, trophy, checkmark, time, checkmarkCircleOutline});
+    addIcons({arrowBackOutline,hourglassOutline,checkmarkCircleOutline,leafOutline,timeOutline,trophyOutline,
+    flagOutline,alertCircleOutline,trophy,checkmark,time
+  });
   }
-
   async ngOnInit() {
     await this.loadChallenges();
   }
-
   async loadChallenges() {
     try {
       this.loading = true;

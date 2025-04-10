@@ -9,7 +9,8 @@ exports.getNonEcoProducts = async (req, res) => {
                         JSON_OBJECT(
                             'product_id', p2.product_id,
                             'name', p2.name,
-                            'description', p2.description
+                            'description', p2.description,
+                            'category', p2.category
                         )
                     ),
                     '[]'
@@ -21,7 +22,6 @@ exports.getNonEcoProducts = async (req, res) => {
             GROUP BY p1.product_id
         `);
 
-        // Parse the JSON string 'alternatives' into an array
         const products = rows.map(row => ({
             ...row,
             alternatives: JSON.parse(row.alternatives)

@@ -22,9 +22,11 @@ import {
   IonAccordionGroup
 } from '@ionic/angular/standalone';
 import { addIcons } from 'ionicons';
-import { arrowBackOutline, alertCircleOutline, leafOutline } from 'ionicons/icons';
+import { arrowBackOutline, alertCircleOutline, leafOutline, refreshOutline } from 'ionicons/icons';
 import { ProductService, Product } from '../../services/product.service';
-
+interface ProductWithFlip extends Product {
+  isFlipped: boolean;
+}
 @Component({
   selector: 'app-ecoproduct',
   templateUrl: './ecoproduct.page.html',
@@ -32,28 +34,24 @@ import { ProductService, Product } from '../../services/product.service';
   standalone: true,
   imports: [
     CommonModule,
-    IonContent, 
-    IonHeader, 
-    IonTitle, 
+    IonTitle,
     IonToolbar,
-    IonButtons,
+    IonHeader,
+    IonContent, 
     IonButton,
+    IonButtons,
     IonIcon,
     IonCard,
     IonCardHeader,
     IonCardTitle,
-    IonCardSubtitle,
     IonCardContent,
     IonList,
-    IonItem,
-    IonLabel,
     IonSpinner,
-    IonAccordion,
-    IonAccordionGroup
   ]
 })
+
 export class EcoproductPage implements OnInit {
-  products: Product[] = [];
+  products: ProductWithFlip[] = [];
   loading = false;
   error = '';
 
@@ -61,7 +59,7 @@ export class EcoproductPage implements OnInit {
     private router: Router,
     private productService: ProductService
   ) {
-    addIcons({ arrowBackOutline, alertCircleOutline, leafOutline });
+    addIcons({alertCircleOutline,refreshOutline,leafOutline,arrowBackOutline});
   }
 
   ngOnInit() {
@@ -74,7 +72,10 @@ export class EcoproductPage implements OnInit {
     
     this.productService.getNonEcoProducts().subscribe({
       next: (products: Product[]) => {
-        this.products = products;
+        this.products = products.map(p => ({
+          ...p,
+          isFlipped: false
+        }));
         this.loading = false;
       },
       error: (error: any) => {
@@ -83,6 +84,10 @@ export class EcoproductPage implements OnInit {
         this.loading = false;
       }
     });
+  }
+
+  flipCard(product: ProductWithFlip) {
+    product.isFlipped = !product.isFlipped;
   }
   hasAlternatives(product: Product): boolean {
     return Array.isArray(product.alternatives) && product.alternatives.length > 0;

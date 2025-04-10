@@ -1,4 +1,3 @@
-
 <ion-content [fullscreen]="true" class="ion-padding">
   <!-- Loading State -->
   <div *ngIf="loading" class="loading-container">
@@ -23,53 +22,50 @@
   </ion-card>
 
   <!-- Active Challenges -->
-  <ion-list *ngIf="activeChallenges.length > 0">
-    <ion-list-header>
-      <ion-label>Active Challenges</ion-label>
-    </ion-list-header>
-
-    <ion-card *ngFor="let challenge of activeChallenges">
-      <ion-card-header>
-        <ion-card-subtitle>
-          <ion-icon name="time-outline"></ion-icon>
-          In Progress
-        </ion-card-subtitle>
-        <ion-card-title>{{ challenge.title }}</ion-card-title>
-      </ion-card-header>
-      <ion-card-content>
-        <p>Current Streak: {{ challenge.current_streak }} / {{ challenge.duration_days }} days</p>
-        <ion-progress-bar [value]="getProgressPercentage(challenge) / 100"></ion-progress-bar>
-        <div class="points-badge">
-          <ion-icon name="ribbon-outline"></ion-icon>
-          {{ challenge.points }} points
-        </div>
-      </ion-card-content>
-    </ion-card>
-  </ion-list>
+  <h2 *ngIf="activeChallenges.length > 0" class="section-title">
+    <ion-icon name="time-outline" color="primary"></ion-icon>
+    Active Challenges
+  </h2>
+  <ion-card *ngFor="let challenge of activeChallenges">
+    <ion-card-header>
+      <ion-card-subtitle>
+        <ion-icon name="time-outline"></ion-icon>
+        In Progress
+      </ion-card-subtitle>
+      <ion-card-title>{{ challenge.title }}</ion-card-title>
+    </ion-card-header>
+    <ion-card-content>
+      <p>Current Streak: {{ challenge.current_streak }} / {{ challenge.duration_days }} days</p>
+      <ion-progress-bar [value]="getProgressPercentage(challenge) / 100"></ion-progress-bar>
+      <div class="points-badge">
+        <ion-icon name="ribbon-outline"></ion-icon>
+        {{ challenge.points }} points
+      </div>
+    </ion-card-content>
+  </ion-card>
 
   <!-- Completed Challenges -->
-  <ion-list *ngIf="completedChallenges.length > 0">
-    <ion-list-header>
-      <ion-label>Completed Challenges</ion-label>
-    </ion-list-header>
-
-    <ion-card *ngFor="let challenge of completedChallenges">
-      <ion-card-header>
-        <ion-card-subtitle>
-          <ion-icon name="checkmark-circle-outline" color="success"></ion-icon>
-          Completed
-        </ion-card-subtitle>
-        <ion-card-title>{{ challenge.title }}</ion-card-title>
-      </ion-card-header>
-      <ion-card-content>
-        <p>Completed on: {{ challenge.last_check_in | date }}</p>
-        <div class="points-badge earned">
-          <ion-icon name="ribbon-outline"></ion-icon>
-          {{ challenge.points }} points earned
-        </div>
-      </ion-card-content>
-    </ion-card>
-  </ion-list>
+  <h2 *ngIf="completedChallenges.length > 0" class="section-title">
+    <ion-icon name="checkmark-circle-outline" color="success"></ion-icon>
+    Completed Challenges
+  </h2>
+  <ion-card *ngFor="let challenge of completedChallenges">
+    <ion-card-header>
+      <ion-card-subtitle>
+        <ion-icon name="checkmark-circle-outline" color="success"></ion-icon>
+        Completed
+      </ion-card-subtitle>
+      <ion-card-title>{{ challenge.title }}</ion-card-title>
+    </ion-card-header>
+    <ion-card-content>
+      <p>Completed on: {{ challenge.last_check_in | date }}</p>
+      <p>Times Completed: {{ challenge.completion_count }}</p>
+      <div class="points-badge earned">
+        <ion-icon name="ribbon-outline"></ion-icon>
+        {{ challenge.total_points_earned }} total points earned
+      </div>
+    </ion-card-content>
+  </ion-card>
 
   <!-- No Data Message -->
   <div *ngIf="!loading && activeChallenges.length === 0 && completedChallenges.length === 0" 
