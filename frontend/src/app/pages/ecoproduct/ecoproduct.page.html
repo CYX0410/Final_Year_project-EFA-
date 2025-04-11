@@ -30,13 +30,26 @@
           <!-- Front - Non-Eco Product -->
           <div class="front">
             <ion-card (click)="flipCard(product)">
-              <img [src]="'assets/images/products/non-eco/' + product.product_id + '.jpg'" [alt]="product.name"/>
               <ion-card-header>
-                <div class="category-badge">{{ product.category }}</div>
-                <ion-card-title>{{ product.name }}</ion-card-title>
+                <div class="category-badge">
+                  <ion-icon name="warning-outline"></ion-icon>
+                  Non-Eco Product
+                </div>
               </ion-card-header>
               <ion-card-content>
-                <p class="product-description">{{ product.description }}</p>
+                <div class="alternatives-grid">
+                  <div class="alternative-item">
+                    <img [src]="'assets/images/products/non-eco/' + product.product_id + '.jpg'" 
+                         [alt]="product.name"
+                         loading="eager"
+                         fetchpriority="high"
+                         width="300"
+                         height="300"
+                         (error)="handleImageError($event)"/>
+                    <h4>{{ product.name }}</h4>
+                    <p>{{ product.description }}</p>
+                  </div>
+                </div>
                 <div class="flip-prompt">
                   <ion-icon name="refresh-outline"></ion-icon>
                   <p>Tap to see eco-friendly alternatives</p>
@@ -57,7 +70,13 @@
               <ion-card-content>
                 <div class="alternatives-grid">
                   <div *ngFor="let alt of product.alternatives" class="alternative-item">
-                    <img [src]="'assets/images/products/eco/' + alt.product_id + '.jpg'" [alt]="alt.name"/>
+                    <img [src]="'assets/images/products/eco/' + alt.product_id + '.jpg'" 
+                         [alt]="alt.name"
+                         loading="lazy"
+                         width="300"
+                         height="300"
+                         decoding="async"
+                         (error)="handleImageError($event)"/>
                     <h4>{{ alt.name }}</h4>
                     <p>{{ alt.description }}</p>
                   </div>

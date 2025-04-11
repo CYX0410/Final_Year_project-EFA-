@@ -4,12 +4,15 @@
 
 ion-content {
   --background: linear-gradient(135deg, #F1F8E9, #DCEDC8);
+  --padding-top: 16px;
+  --padding-bottom: 16px;
 }
 
 .content-wrapper {
+  min-height: 100vh;
   display: block;
   width: 100%;
-  padding: 16px;
+  padding: 0 16px;
 }
 
 .products-container {
@@ -23,8 +26,7 @@ ion-content {
 .flip-container {
   perspective: 1000px;
   margin-bottom: 20px;
-  min-height: 600px; // Increased height
-  height: auto;
+  min-height: 650px;
 }
 
 .flipper {
@@ -39,19 +41,22 @@ ion-content {
   transform: rotateY(180deg);
 }
 
-.front,
-.back {
-  position: relative;
+.front, .back {
+  position: absolute;
+  top: 0;
+  left: 0;
   width: 100%;
   height: 100%;
   backface-visibility: hidden;
   -webkit-backface-visibility: hidden;
 }
 
+.front {
+  z-index: 2;
+}
+
 .back {
   transform: rotateY(180deg);
-  position: absolute; // Keep back absolute
-  top: 0;
 }
 
 ion-card {
@@ -62,12 +67,6 @@ ion-card {
   background: white;
   display: flex;
   flex-direction: column;
-  img {
-    width: 100%;
-    height: 300px; // Increased height
-    object-fit: cover;
-    object-position: center;
-  }
 
   ion-card-header {
     padding: 16px;
@@ -83,6 +82,42 @@ ion-card {
   }
 }
 
+.alternative-item {
+  background: rgba(255, 255, 255, 0.9);
+  border-radius: 12px;
+  overflow: hidden;
+  margin-bottom: 16px;
+  transition: transform 0.3s ease;
+
+  &:hover {
+    transform: translateY(-4px);
+  }
+  
+  img {
+    width: 100%;
+    height: 300px;
+    object-fit: contain;
+    background-color: white;
+    padding: 8px;
+  }
+
+  h4 {
+    padding: 12px 12px 4px;
+    margin: 0;
+    color: #1B5E20;
+    font-size: 1.2em;
+    font-weight: 600;
+  }
+
+  p {
+    padding: 0 12px 12px;
+    margin: 0;
+    color: #666;
+    font-size: 1em;
+    line-height: 1.5;
+  }
+}
+
 .category-badge,
 .eco-badge {
   display: inline-flex;
@@ -90,23 +125,23 @@ ion-card {
   gap: 8px;
   padding: 6px 14px;
   border-radius: 20px;
-  font-size: 0.9em;
+  font-size: 1.3em;
   font-weight: 500;
   margin-bottom: 12px;
+
+  ion-icon {
+    font-size: 20px;
+  }
 }
 
 .category-badge {
-  background: #E8F5E9;
-  color: #2E7D32;
+  background: #FFE0B2;
+  color: #E65100;
 }
 
 .eco-badge {
   background: #4CAF50;
   color: white;
-  
-  ion-icon {
-    font-size: 18px;
-  }
 }
 
 .alternatives-grid {
@@ -116,45 +151,23 @@ ion-card {
   margin: 16px 0;
 }
 
-.alternative-item {
-  background: rgba(255, 255, 255, 0.9);
-  border-radius: 12px;
-  overflow: hidden;
-  
-  img {
-    width: 100%;
-    height: 140px;
-    object-fit: cover;
-  }
-
-  h4 {
-    padding: 12px 12px 4px;
-    margin: 0;
-    color: #1B5E20;
-    font-size: 1em;
-    font-weight: 600;
-  }
-
-  p {
-    padding: 0 12px 12px;
-    margin: 0;
-    color: #666;
-    font-size: 0.9em;
-    line-height: 1.5;
-  }
-}
-
 .flip-prompt {
   display: flex;
   align-items: center;
   justify-content: center;
   gap: 8px;
-  margin-top: 16px;
-  padding: 8px;
+  margin-top: auto;
+  padding: 12px;
   color: #558B2F;
   font-size: 0.9em;
   background: rgba(76, 175, 80, 0.05);
   border-radius: 8px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+
+  &:hover {
+    background: rgba(76, 175, 80, 0.1);
+  }
 
   ion-icon {
     font-size: 18px;
@@ -174,6 +187,7 @@ ion-card {
   flex-direction: column;
   align-items: center;
   justify-content: center;
+  min-height: 200px;
   padding: 32px;
   text-align: center;
 }
@@ -185,10 +199,17 @@ ion-card {
   }
 
   .flip-container {
-    min-height: 650px; // Adjusted height for smaller screens
+    min-height: 600px;
   }
-  ion-card img {
-    height: 250px; // Adjusted for mobile
+
+  .alternative-item {
+    img {
+      height: 250px;
+    }
+  }
+
+  .back .alternative-item img {
+    height: 200px;
   }
 }
 
@@ -198,10 +219,25 @@ ion-card {
   }
 
   .flip-container {
-    min-height: 600px;
+    min-height: 550px;
   }
 
-  .alternative-item img {
-    height: 200px;
+  .alternative-item {
+    img {
+      height: 200px;
+    }
+  }
+
+  .back .alternative-item img {
+    height: 180px;
+  }
+
+  .category-badge,
+  .eco-badge {
+    font-size: 1.1em;
+  }
+
+  .flip-prompt {
+    font-size: 0.85em;
   }
 }

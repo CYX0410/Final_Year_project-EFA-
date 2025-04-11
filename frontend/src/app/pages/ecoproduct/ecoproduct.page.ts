@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
+
 import { 
   IonContent, 
   IonHeader, 
@@ -11,18 +12,11 @@ import {
   IonIcon,
   IonCard,
   IonCardHeader,
-  IonCardTitle,
-  IonCardSubtitle,
   IonCardContent,
-  IonList,
-  IonItem,
-  IonLabel,
   IonSpinner,
-  IonAccordion,
-  IonAccordionGroup
 } from '@ionic/angular/standalone';
 import { addIcons } from 'ionicons';
-import { arrowBackOutline, alertCircleOutline, leafOutline, refreshOutline } from 'ionicons/icons';
+import { arrowBackOutline, alertCircleOutline, leafOutline, refreshOutline, warningOutline } from 'ionicons/icons';
 import { ProductService, Product } from '../../services/product.service';
 interface ProductWithFlip extends Product {
   isFlipped: boolean;
@@ -43,9 +37,7 @@ interface ProductWithFlip extends Product {
     IonIcon,
     IonCard,
     IonCardHeader,
-    IonCardTitle,
     IonCardContent,
-    IonList,
     IonSpinner,
   ]
 })
@@ -59,13 +51,15 @@ export class EcoproductPage implements OnInit {
     private router: Router,
     private productService: ProductService
   ) {
-    addIcons({alertCircleOutline,refreshOutline,leafOutline,arrowBackOutline});
+    addIcons({arrowBackOutline,alertCircleOutline,warningOutline,refreshOutline,leafOutline});
   }
 
   ngOnInit() {
     this.loadProducts();
   }
-
+  handleImageError(event: any) {
+    event.target.src = 'assets/images/placeholder.jpg'; // Fallback image
+  }
   loadProducts() {
     this.loading = true;
     this.error = '';
