@@ -48,6 +48,7 @@
                          (error)="handleImageError($event)"/>
                     <h4>{{ product.name }}</h4>
                     <p>{{ product.description }}</p>
+                    <div class="category-tag">#{{ product.category }}</div>
                   </div>
                 </div>
                 <div class="flip-prompt">
@@ -79,6 +80,7 @@
                          (error)="handleImageError($event)"/>
                     <h4>{{ alt.name }}</h4>
                     <p>{{ alt.description }}</p>
+                    <div class="category-tag">#{{ alt.category }}</div>
                   </div>
                 </div>
                 <div class="flip-prompt">
