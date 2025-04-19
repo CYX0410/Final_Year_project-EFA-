@@ -1,0 +1,70 @@
+.calendar-grid {
+    .weekdays {
+      display: grid;
+      grid-template-columns: repeat(7, 1fr);
+      text-align: center;
+      margin-bottom: 8px;
+      
+      .weekday {
+        color: var(--ion-color-medium);
+        font-weight: 500;
+        padding: 8px;
+      }
+    }
+  
+    .days {
+      display: grid;
+      grid-template-columns: repeat(7, 1fr);
+      gap: 4px;
+  
+      .day {
+        position: relative;
+        aspect-ratio: 1;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border-radius: 50%;
+        cursor: pointer;
+        transition: all 0.2s ease;
+  
+        &.today {
+          background: var(--ion-color-success);
+          color: white;
+        }
+  
+        &.has-event {
+          font-weight: 600;
+          
+          ion-badge {
+            position: absolute;
+            top: -4px;
+            right: -4px;
+            padding: 4px;
+            border-radius: 50%;
+          }
+        }
+  
+        &:hover {
+          background: var(--ion-color-success-tint);
+          color: white;
+        }
+      }
+    }
+  }
+  
+  // Dark mode support
+  :host-context(.ion-palette-dark) {
+    .calendar-grid {
+      .weekdays .weekday {
+        color: var(--ion-color-medium-shade);
+      }
+      
+      .days .day {
+        color: var(--ion-color-light);
+        
+        &:hover {
+          background: var(--ion-color-success-shade);
+        }
+      }
+    }
+  }

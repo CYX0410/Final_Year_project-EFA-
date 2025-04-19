@@ -1,0 +1,81 @@
+<ion-header [translucent]="true">
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-back-button defaultHref="/tabs/home"></ion-back-button>
+    </ion-buttons>
+    <ion-title>Eco Calendar</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="ion-padding">
+  <ion-segment [(ngModel)]="view" (ionChange)="segmentChanged($event)">
+    <ion-segment-button value="calendar">
+      <ion-label>Calendar</ion-label>
+      <ion-icon name="calendar-outline"></ion-icon>
+    </ion-segment-button>
+    <ion-segment-button value="list">
+      <ion-label>List</ion-label>
+      <ion-icon name="list-outline"></ion-icon>
+    </ion-segment-button>
+  </ion-segment>
+
+  <!-- Calendar View -->
+  <div *ngIf="view === 'calendar'">
+    <ion-card>
+      <ion-card-header>
+        <ion-row class="ion-align-items-center">
+          <ion-col size="2">
+            <ion-button fill="clear" (click)="previousMonth()">
+              <ion-icon name="chevron-back"></ion-icon>
+            </ion-button>
+          </ion-col>
+          <ion-col size="8" class="ion-text-center">
+            <h2>{{ currentMonthYear }}</h2>
+          </ion-col>
+          <ion-col size="2">
+            <ion-button fill="clear" (click)="nextMonth()">
+              <ion-icon name="chevron-forward"></ion-icon>
+            </ion-button>
+          </ion-col>
+        </ion-row>
+      </ion-card-header>
+      <ion-card-content>
+        <div class="calendar-grid">
+          <div class="weekdays">
+            <div *ngFor="let day of weekDays" class="weekday">{{ day }}</div>
+          </div>
+          <div class="days">
+            <div *ngFor="let day of calendarDays" 
+                 class="day" 
+                 [class.today]="isToday(day)"
+                 [class.has-event]="hasEvent(day)"
+                 (click)="showDayEvents(day)">
+              {{ day?.getDate() }}
+              <ion-badge *ngIf="hasEvent(day)" color="success">
+                <ion-icon name="leaf"></ion-icon>
+              </ion-badge>
+            </div>
+          </div>
+        </div>
+      </ion-card-content>
+    </ion-card>
+  </div>
+
+  <!-- List View -->
+  <div *ngIf="view === 'list'">
+    <ion-list>
+      <ion-item-group *ngFor="let month of groupedEvents | keyvalue">
+        <ion-item-divider sticky>
+          <ion-label>{{ month.key }}</ion-label>
+        </ion-item-divider>
+        <ion-item *ngFor="let event of month.value" button (click)="showEventDetails(event)">
+          <ion-icon [name]="event.icon" slot="start" color="success"></ion-icon>
+          <ion-label>
+            <h2>{{ event.title }}</h2>
+            <p>{{ event.date | date:'mediumDate' }}</p>
+          </ion-label>
+        </ion-item>
+      </ion-item-group>
+    </ion-list>
+  </div>
+</ion-content>

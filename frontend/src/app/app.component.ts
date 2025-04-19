@@ -2,9 +2,11 @@ import { Component } from '@angular/core';
 import { LocalNotifications } from '@capacitor/local-notifications';
 import { ChallengeService, ChallengeProgress } from './services/challenge.service';
 import { Router } from '@angular/router';
+import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { AlertController, MenuController, IonItemGroup } from '@ionic/angular/standalone';
+import { AlertController, MenuController, IonItemGroup, IonBadge } from '@ionic/angular/standalone';
 import { HttpClient } from '@angular/common/http';
+import { EcoCalendarService } from './services/eco-calendar.service';
 import { 
   IonApp, 
   IonRouterOutlet,
@@ -33,14 +35,15 @@ import {
   logOut,
   settings,
   arrowBackOutline,
-  keyOutline, informationCircle } from 'ionicons/icons';
+  keyOutline, informationCircle, calendarOutline } from 'ionicons/icons';
 
 @Component({
   selector: 'app-root',
   templateUrl: 'app.component.html',
   styleUrls: ['app.component.scss'],
   standalone: true,
-  imports: [IonItemGroup, 
+  imports: [IonBadge, IonItemGroup, 
+    CommonModule,
     FormsModule,
     IonApp, 
     IonRouterOutlet,
@@ -61,6 +64,8 @@ import {
 export class AppComponent {
   notificationsEnabled = false;
   isDarkMode = false;
+  upcomingEventsCount = 0;  // Add this property
+  hasUpcomingEvents = false;
   private apiUrl = 'http://localhost:5010/api';
   constructor(
     private authService: AuthService,
@@ -68,23 +73,33 @@ export class AppComponent {
     private alertController: AlertController,
     private menuController: MenuController,
     private http: HttpClient,
-    private challengeService: ChallengeService
+    private challengeService: ChallengeService,
+    private ecoCalendarService: EcoCalendarService 
   ) {
+    
     const savedNotificationPref = localStorage.getItem('notificationsEnabled');
+    this.updateUpcomingEventsCount();
     this.notificationsEnabled = savedNotificationPref === 'true';
     if (this.notificationsEnabled) {
       this.initializeNotifications();
     }
-    addIcons({arrowBackOutline,language,notifications,moon,chatbox,logOut,keyOutline,informationCircle,settings});
+    addIcons({arrowBackOutline,notifications,calendarOutline,moon,chatbox,keyOutline,informationCircle,logOut,language,settings});
     const savedTheme = localStorage.getItem('darkMode');
     if (savedTheme !== null) {
       this.isDarkMode = savedTheme === 'true';
       this.applyTheme(this.isDarkMode);
     }
+    
     }
   
   async closeMenu() {
     await this.menuController.close();
+  }
+  private updateUpcomingEventsCount() {
+    const today = new Date();
+    const events = this.ecoCalendarService.getAllEvents();
+    this.upcomingEventsCount = events.filter(event => event.date >= today).length;
+    this.hasUpcomingEvents = this.upcomingEventsCount > 0;
   }
   async provideFeedback() {
     const alert = await this.alertController.create({
@@ -155,12 +170,10 @@ export class AppComponent {
     await this.menuController.close();
     this.router.navigate(['/about-efa']);
   }
-  
-  changeLanguage() {
-    // Implement language change logic
-    console.log('Change language clicked');
+  async ecoCalendar(){
+    await this.menuController.close();
+    this.router.navigate(['/eco-calendar']);
   }
-
   async toggleNotifications() {
     try {
       if (this.notificationsEnabled) {

@@ -37,6 +37,10 @@ export const routes: Routes = [
     path: 'about-efa',
     loadComponent: () => import('./pages/about-efa/about-efa.page').then( m => m.AboutEfaPage)
   },
+  {
+    path: 'eco-calendar',
+    loadComponent: () => import('./pages/eco-calendar/eco-calendar.page').then( m => m.EcoCalendarPage)
+  },
 ];
 
 // Initialize Firebase first

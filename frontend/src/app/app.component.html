@@ -20,7 +20,11 @@
               <ion-label>Notifications</ion-label>
               <ion-toggle slot="end" [(ngModel)]="notificationsEnabled"></ion-toggle>
             </ion-item>
-
+            <ion-item button (click)="ecoCalendar()" class="settings-item">
+              <ion-icon slot="start" name="calendar-outline" color="success"></ion-icon>
+              <ion-label>Eco Calendar</ion-label>
+              <ion-badge color="success" *ngIf="hasUpcomingEvents">{{ upcomingEventsCount }}</ion-badge>
+            </ion-item>
             <ion-item class="settings-item">
               <ion-icon slot="start" name="moon" color="success"></ion-icon>
               <ion-label>Dark Theme</ion-label>
