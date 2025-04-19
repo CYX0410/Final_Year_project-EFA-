@@ -3,21 +3,19 @@
 }
 
 ion-content {
-  --background: linear-gradient(135deg, #F1F8E9, #DCEDC8);
-  --padding-top: 16px;
-  --padding-bottom: 16px;
+  --background: linear-gradient(135deg, #E8F5E9, #C8E6C9);
 }
 
 .content-wrapper {
   min-height: 100vh;
-  display: block;
   width: 100%;
-  padding: 0 16px;
+  padding: 16px;
+
 }
 
 .products-container {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
   gap: 24px;
   max-width: 1200px;
   margin: 0 auto;
@@ -25,15 +23,20 @@ ion-content {
 
 .flip-container {
   perspective: 1000px;
-  margin-bottom: 20px;
+  margin-bottom: 24px;
   min-height: 650px;
+  
+  &:hover {
+    transform: translateY(-4px);
+    transition: transform 0.3s ease;
+  }
 }
 
 .flipper {
   position: relative;
   width: 100%;
   height: 100%;
-  transition: transform 0.8s;
+  transition: transform 0.8s cubic-bezier(0.4, 0, 0.2, 1);
   transform-style: preserve-3d;
 }
 
@@ -51,10 +54,6 @@ ion-content {
   -webkit-backface-visibility: hidden;
 }
 
-.front {
-  z-index: 2;
-}
-
 .back {
   transform: rotateY(180deg);
 }
@@ -62,19 +61,26 @@ ion-content {
 ion-card {
   margin: 0;
   height: 100%;
-  border-radius: 16px;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
-  background: white;
+  border-radius: 20px;
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+  background: rgba(255, 255, 255, 0.95);
+  backdrop-filter: blur(10px);
   display: flex;
   flex-direction: column;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  
+  &:hover {
+    box-shadow: 0 12px 24px rgba(0, 0, 0, 0.15);
+  }
 
   ion-card-header {
-    padding: 16px;
-    background: rgba(255, 255, 255, 0.95);
+    padding: 20px;
+    background: rgba(255, 255, 255, 0.9);
+    border-bottom: 1px solid rgba(0, 0, 0, 0.05);
   }
 
   ion-card-content {
-    padding: 16px;
+    padding: 20px;
     overflow-y: auto;
     flex: 1;
     display: flex;
@@ -83,14 +89,16 @@ ion-card {
 }
 
 .alternative-item {
-  background: rgba(255, 255, 255, 0.9);
-  border-radius: 12px;
+  background: white;
+  border-radius: 16px;
   overflow: hidden;
-  margin-bottom: 16px;
-  transition: transform 0.3s ease;
+  margin-bottom: 20px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+  transition: all 0.3s ease;
 
   &:hover {
     transform: translateY(-4px);
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
   }
   
   img {
@@ -98,23 +106,28 @@ ion-card {
     height: 300px;
     object-fit: contain;
     background-color: white;
-    padding: 8px;
+    padding: 12px;
+    transition: transform 0.3s ease;
+
+    &:hover {
+      transform: scale(1.05);
+    }
   }
 
   h4 {
-    padding: 12px 12px 4px;
+    padding: 16px 16px 8px;
     margin: 0;
     color: #1B5E20;
-    font-size: 1.2em;
+    font-size: 1.3em;
     font-weight: 600;
   }
 
   p {
-    padding: 0 12px 12px;
+    padding: 0 16px 16px;
     margin: 0;
-    color: #666;
+    color: #546E7A;
     font-size: 1em;
-    line-height: 1.5;
+    line-height: 1.6;
   }
 }
 
@@ -122,55 +135,81 @@ ion-card {
 .eco-badge {
   display: inline-flex;
   align-items: center;
-  gap: 8px;
-  padding: 6px 14px;
-  border-radius: 20px;
-  font-size: 1.3em;
+  gap: 10px;
+  padding: 8px 16px;
+  border-radius: 24px;
+  font-size: 1.2em;
   font-weight: 500;
-  margin-bottom: 12px;
+  margin-bottom: 16px;
+  transition: transform 0.3s ease;
+
+  &:hover {
+    transform: translateX(4px);
+  }
 
   ion-icon {
-    font-size: 20px;
+    font-size: 22px;
   }
 }
 
 .category-badge {
-  background: #FFE0B2;
+  background: linear-gradient(135deg, #FFE0B2, #FFCC80);
   color: #E65100;
 }
 
 .eco-badge {
-  background: #4CAF50;
+  background: linear-gradient(135deg, #66BB6A, #4CAF50);
   color: white;
+  box-shadow: 0 2px 8px rgba(76, 175, 80, 0.2);
 }
 
-.alternatives-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
-  gap: 16px;
-  margin: 16px 0;
+.category-tag {
+  display: inline-flex;
+  align-items: center;
+  padding: 6px 14px;
+  background: linear-gradient(135deg, #E8F5E9, #C8E6C9);
+  color: #2E7D32;
+  border-radius: 20px;
+  font-size: 0.9em;
+  margin: 12px 16px;
+  font-weight: 500;
+  transition: all 0.3s ease;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
+
+  &:hover {
+    transform: scale(1.05);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  }
+}
+
+.back .category-tag {
+  background: linear-gradient(135deg, #81C784, #4CAF50);
+  color: white;
 }
 
 .flip-prompt {
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 8px;
+  gap: 10px;
   margin-top: auto;
-  padding: 12px;
-  color: #558B2F;
-  font-size: 0.9em;
-  background: rgba(76, 175, 80, 0.05);
-  border-radius: 8px;
+  padding: 14px;
+  color: #2E7D32;
+  font-size: 1em;
+  background: linear-gradient(135deg, #E8F5E9, #C8E6C9);
+  border-radius: 12px;
   cursor: pointer;
-  transition: background-color 0.3s ease;
+  transition: all 0.3s ease;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
 
   &:hover {
-    background: rgba(76, 175, 80, 0.1);
+    background: linear-gradient(135deg, #C8E6C9, #A5D6A7);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
   }
 
   ion-icon {
-    font-size: 18px;
+    font-size: 20px;
     animation: rotate 2s infinite linear;
   }
 }
@@ -180,19 +219,47 @@ ion-card {
   to { transform: rotate(360deg); }
 }
 
-// Loading and error states
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+// Loading and error states with enhanced styling
 .loading-container,
 .error-message {
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  min-height: 200px;
+  min-height: 300px;
   padding: 32px;
   text-align: center;
+  background: rgba(255, 255, 255, 0.9);
+  border-radius: 20px;
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+  
+  ion-spinner {
+    transform: scale(1.5);
+    margin-bottom: 16px;
+  }
+
+  p {
+    color: #2E7D32;
+    font-size: 1.1em;
+    font-weight: 500;
+  }
 }
 
-// Media queries
+.error-message {
+  color: #D32F2F;
+  
+  ion-icon {
+    font-size: 48px;
+    margin-bottom: 16px;
+  }
+}
+
+// Responsive design
 @media (max-width: 768px) {
   .products-container {
     grid-template-columns: 1fr;
@@ -202,20 +269,14 @@ ion-card {
     min-height: 600px;
   }
 
-  .alternative-item {
-    img {
-      height: 250px;
-    }
-  }
-
-  .back .alternative-item img {
-    height: 200px;
+  .alternative-item img {
+    height: 250px;
   }
 }
 
 @media (max-width: 480px) {
   .content-wrapper {
-    padding: 8px;
+    padding: 12px;
   }
 
   .flip-container {
@@ -228,36 +289,14 @@ ion-card {
     }
   }
 
-  .back .alternative-item img {
-    height: 180px;
-  }
-
   .category-badge,
   .eco-badge {
     font-size: 1.1em;
+    padding: 6px 12px;
   }
 
   .flip-prompt {
-    font-size: 0.85em;
+    font-size: 0.9em;
+    padding: 12px;
   }
-}
-.category-tag {
-  display: inline-block;
-  padding: 4px 12px;
-  background: #E8F5E9;
-  color: #2E7D32;
-  border-radius: 16px;
-  font-size: 0.9em;
-  margin: 8px 12px;
-  font-weight: 500;
-  transition: transform 0.3s ease;
-
-  &:hover {
-    transform: scale(1.05);
-  }
-}
-
-.back .category-tag {
-  background: #4CAF50;
-  color: white;
 }

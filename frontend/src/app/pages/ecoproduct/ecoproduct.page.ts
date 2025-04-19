@@ -16,7 +16,7 @@ import {
   IonSpinner,
 } from '@ionic/angular/standalone';
 import { addIcons } from 'ionicons';
-import { arrowBackOutline, alertCircleOutline, leafOutline, refreshOutline, warningOutline } from 'ionicons/icons';
+import { arrowBackOutline, alertCircleOutline, leafOutline, refreshOutline, warningOutline, closeOutline } from 'ionicons/icons';
 import { ProductService, Product } from '../../services/product.service';
 interface ProductWithFlip extends Product {
   isFlipped: boolean;
@@ -51,7 +51,7 @@ export class EcoproductPage implements OnInit {
     private router: Router,
     private productService: ProductService
   ) {
-    addIcons({arrowBackOutline,alertCircleOutline,warningOutline,refreshOutline,leafOutline});
+    addIcons({arrowBackOutline,warningOutline,leafOutline,closeOutline,alertCircleOutline,refreshOutline});
   }
 
   ngOnInit() {

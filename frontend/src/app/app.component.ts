@@ -235,19 +235,18 @@ private async cancelNotifications() {
       console.error('Error canceling notifications:', error);
     }
 }
-  toggleTheme() {
-    this.isDarkMode = !this.isDarkMode;
-    this.applyTheme(this.isDarkMode);
-    localStorage.setItem('darkMode', this.isDarkMode.toString());
-  }
+private applyTheme(isDark: boolean) {
+  document.body.classList.toggle('ion-palette-dark', isDark);
+  document.body.style.setProperty('color-scheme', isDark ? 'dark' : 'light');
   
-  private applyTheme(isDark: boolean) {
-    if (isDark) {
-      document.documentElement.classList.add('ion-palette-dark');
-    } else {
-      document.documentElement.classList.remove('ion-palette-dark');
-    }
-  }
+  // Store theme preference
+  localStorage.setItem('darkMode', isDark.toString());
+}
+
+toggleTheme() {
+  this.isDarkMode = !this.isDarkMode;
+  this.applyTheme(this.isDarkMode);
+}
   async changePassword() {
     const alert = await this.alertController.create({
       header: 'Change Password',

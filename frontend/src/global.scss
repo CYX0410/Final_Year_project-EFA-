@@ -36,6 +36,7 @@
 /* @import "@ionic/angular/css/palettes/dark.class.css"; */
 @import '@ionic/angular/css/palettes/dark.system.css';
 @import '@ionic/angular/css/palettes/dark.class.css';
+
 ion-item {
   --transition: none;
 }
@@ -101,23 +102,19 @@ ion-item {
     color: var(--ion-color-primary);
   }
 }
-
 .dark-alert {
   .alert-wrapper {
     background: #1e1e1e;
     color: #ffffff;
   }
-
   .alert-input {
     background: #2d2d2d;
     color: #ffffff;
     border: 1px solid #3d3d3d;
   }
-
   .alert-button-cancel {
     color: #a0a0a0;
   }
-
   .alert-button-confirm {
     color: var(--ion-color-primary);
   }
