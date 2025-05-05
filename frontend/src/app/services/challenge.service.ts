@@ -2,6 +2,8 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { environment } from '../../environments/environment';
+import { BehaviorSubject, throwError } from 'rxjs';
+import { catchError, tap } from 'rxjs/operators';
 
 export interface Challenge {
   challenge_id: string;
@@ -34,6 +36,9 @@ export interface ChallengeProgress {
 export class ChallengeService {
   private apiUrl = 'http://localhost:5010/api';
   private checkedInToday = new Set<string>();
+  private challengeCache: BehaviorSubject<Challenge[]> = new BehaviorSubject<Challenge[]>([]);
+  private userChallengesCache = new Map<string, BehaviorSubject<ChallengeProgress[]>>();
+  private cacheTimeout = 5 * 60 * 1000; // 5 minutes
 
   constructor(private http: HttpClient) {
     this.loadCheckedInChallenges();
@@ -47,17 +52,56 @@ export class ChallengeService {
       this.checkedInToday.clear();
     }
   }
+
+  deleteChallenge(progressId: string): Observable<any> {
+    return this.http.delete(`${this.apiUrl}/challenges/progress/${progressId}`).pipe(
+        tap(() => {
+            this.clearAllCaches();
+        }),
+        catchError(error => {
+            console.error('Error deleting challenge:', error);
+            return throwError(() => new Error(error.error?.message || 'Failed to delete challenge'));
+        })
+    );
+}
+
   getAvailableChallenges(): Observable<Challenge[]> {
-    return this.http.get<Challenge[]>(`${this.apiUrl}/challenges`);
+    if (this.challengeCache.value.length === 0) {
+      this.http.get<Challenge[]>(`${this.apiUrl}/challenges`).pipe(
+        tap(challenges => {
+          this.challengeCache.next(challenges);
+          // Reset cache after timeout
+          setTimeout(() => this.clearChallengeCache(), this.cacheTimeout);
+        })
+      ).subscribe();
+    }
+    return this.challengeCache.asObservable();
   }
 
+
   getUserChallenges(uid: string): Observable<ChallengeProgress[]> {
-    return this.http.get<ChallengeProgress[]>(`${this.apiUrl}/challenges/progress/${uid}`);
+    if (!this.userChallengesCache.has(uid)) {
+      this.userChallengesCache.set(uid, new BehaviorSubject<ChallengeProgress[]>([]));
+      this.loadUserChallenges(uid);
+    }
+    return this.userChallengesCache.get(uid)!.asObservable();
+  }
+
+  private loadUserChallenges(uid: string) {
+    this.http.get<ChallengeProgress[]>(`${this.apiUrl}/challenges/progress/${uid}`).pipe(
+      tap(challenges => {
+        this.userChallengesCache.get(uid)?.next(challenges);
+        setTimeout(() => this.clearUserChallengesCache(uid), this.cacheTimeout);
+      })
+    ).subscribe();
   }
 
   startChallenge(uid: string, challengeId: string): Observable<any> {
-    return this.http.post(`${this.apiUrl}/challenges/start`, { uid, challengeId });
+    return this.http.post(`${this.apiUrl}/challenges/start`, { uid, challengeId }).pipe(
+      tap(() => this.clearAllCaches()) // Clear caches when starting new challenge
+    );
   }
+
   private saveCheckedInChallenges() {
     const today = new Date().toISOString().split('T')[0];
     localStorage.setItem(`checkedIn_${today}`, JSON.stringify([...this.checkedInToday]));
@@ -66,23 +110,31 @@ export class ChallengeService {
   isCheckedInToday(progressId: string): boolean {
     return this.checkedInToday.has(progressId);
   }
+
   checkIn(progressId: string): Observable<any> {
     if (this.isCheckedInToday(progressId)) {
-      return new Observable(observer => {
-        observer.error({ error: { message: 'Already checked in today' } });
-      });
+      return throwError(() => new Error('Already checked in today'));
     }
 
-    return new Observable(observer => {
-      this.http.post(`${this.apiUrl}/challenges/checkin`, { progressId }).subscribe({
-        next: (response) => {
-          this.checkedInToday.add(progressId);
-          this.saveCheckedInChallenges();
-          observer.next(response);
-          observer.complete();
-        },
-        error: (error) => observer.error(error)
-      });
-    });
+    return this.http.post(`${this.apiUrl}/challenges/checkin`, { progressId }).pipe(
+      tap(response => {
+        this.checkedInToday.add(progressId);
+        this.saveCheckedInChallenges();
+        this.clearAllCaches(); // Clear caches on successful check-in
+      })
+    );
   }
+    // Cache clearing methods
+    private clearChallengeCache() {
+      this.challengeCache.next([]);
+    }
+  
+    private clearUserChallengesCache(uid: string) {
+      this.userChallengesCache.delete(uid);
+    }
+  
+    private clearAllCaches() {
+      this.clearChallengeCache();
+      [...this.userChallengesCache.keys()].forEach(uid => this.clearUserChallengesCache(uid));
+    }
 }

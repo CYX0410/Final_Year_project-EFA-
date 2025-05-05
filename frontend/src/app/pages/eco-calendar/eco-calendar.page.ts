@@ -32,7 +32,23 @@ import {
   listOutline, 
   chevronBack, 
   chevronForward,
-  leaf, arrowBackOutline } from 'ionicons/icons';
+  leaf,
+  arrowBackOutline,
+  flashOutline,
+  waterOutline,
+  pawOutline,
+  earth,
+  bugOutline,
+  leafOutline,
+  boat,
+  sunny,
+  trashOutline,
+  cloudOutline,
+  bicycle,
+  restaurant,
+  shield,
+  trailSign
+} from 'ionicons/icons';
 import { EcoCalendarService, EcoEvent } from '../../services/eco-calendar.service';
 
 @Component({
@@ -77,7 +93,26 @@ export class EcoCalendarPage implements OnInit {
   upcomingEventsCount = 0; // Number of upcoming events to show
   constructor(private ecoCalendarService: EcoCalendarService, private alertController: AlertController,
      private router: Router,) {
-    addIcons({arrowBackOutline,calendarOutline,listOutline,chevronBack,chevronForward,leaf});
+    addIcons({  calendarOutline, 
+      listOutline, 
+      chevronBack, 
+      chevronForward,
+      leaf,
+      arrowBackOutline,
+      flashOutline,
+      waterOutline,
+      pawOutline,
+      earth,
+      bugOutline,
+      leafOutline,
+      boat,
+      sunny,
+      trashOutline,
+      cloudOutline,
+      bicycle,
+      restaurant,
+      shield,
+      trailSign});
   }
 
   ngOnInit() {
@@ -113,12 +148,16 @@ export class EcoCalendarPage implements OnInit {
       this.calendarDays.push(new Date(this.currentYear, this.currentMonth, day));
     }
   }
-
   loadEvents() {
-    const events = this.ecoCalendarService.getEvents(this.currentMonth);
+    // Get events for current month and year
+    const events = this.ecoCalendarService.getAllEvents().filter(event => 
+      event.date.getMonth() === this.currentMonth &&
+      event.date.getFullYear() === this.currentYear
+    );
     this.groupEvents(events);
-    this.updateUpcomingEventsCount(); // Update count when loading events
+    this.updateUpcomingEventsCount();
   }
+
 
   groupEvents(events: EcoEvent[]) {
     this.groupedEvents = events.reduce((groups: { [key: string]: EcoEvent[] }, event) => {
@@ -138,8 +177,7 @@ export class EcoCalendarPage implements OnInit {
     } else {
       this.currentMonth--;
     }
-    this.generateCalendarDays();
-    this.loadEvents();
+    this.refreshCalendar();
   }
 
   nextMonth() {
@@ -149,6 +187,9 @@ export class EcoCalendarPage implements OnInit {
     } else {
       this.currentMonth++;
     }
+    this.refreshCalendar();
+  }
+  private refreshCalendar() {
     this.generateCalendarDays();
     this.loadEvents();
   }
@@ -162,10 +203,14 @@ export class EcoCalendarPage implements OnInit {
   hasEvent(date: Date | null): boolean {
     if (!date) return false;
     
-    // Check if there are any events on this date
-    return this.ecoCalendarService.getEvents(this.currentMonth)
-      .some(event => event.date.toDateString() === date.toDateString());
+    return this.ecoCalendarService.getAllEvents()
+      .some(event => 
+        event.date.getDate() === date.getDate() && 
+        event.date.getMonth() === date.getMonth() && 
+        event.date.getFullYear() === date.getFullYear()
+      );
   }
+
 
   showDayEvents(date: Date | null) {
     if (!date) return;

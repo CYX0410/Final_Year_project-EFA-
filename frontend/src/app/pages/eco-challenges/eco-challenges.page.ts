@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
+import { AlertController } from '@ionic/angular/standalone';
 import { trigger, style, animate, transition, state } from '@angular/animations';
 import { 
   IonContent, IonHeader, IonTitle, IonToolbar,
@@ -9,7 +10,7 @@ import {
   IonCardContent,IonList,IonSpinner
 } from '@ionic/angular/standalone';
 import { addIcons } from 'ionicons';
-import { arrowBackOutline, trophy, checkmark, time, checkmarkCircleOutline, hourglassOutline, leafOutline, timeOutline, trophyOutline, flagOutline, alertCircleOutline } from 'ionicons/icons';
+import { arrowBackOutline, trophy, checkmark, time, checkmarkCircleOutline, hourglassOutline, leafOutline, timeOutline, trophyOutline, flagOutline, alertCircleOutline, trashOutline } from 'ionicons/icons';
 import { ChallengeService, Challenge, ChallengeProgress } from '../../services/challenge.service';
 import { AuthService } from '../../services/auth.service';
 @Component({
@@ -50,10 +51,11 @@ export class EcoChallengesPage implements OnInit {
   constructor(
     private router: Router,
     private challengeService: ChallengeService,
-    private authService: AuthService
+    private authService: AuthService,
+    private alertController: AlertController 
   ) {
     addIcons({arrowBackOutline,hourglassOutline,checkmarkCircleOutline,leafOutline,timeOutline,trophyOutline,
-    flagOutline,alertCircleOutline,trophy,checkmark,time
+    flagOutline,alertCircleOutline,trophy,checkmark,time, trashOutline  
   });
   }
   async ngOnInit() {
@@ -138,7 +140,51 @@ export class EcoChallengesPage implements OnInit {
   isCheckedIn(progressId: string): boolean {
     return this.challengeService.isCheckedInToday(progressId);
   }
+  async confirmDeleteChallenge(progressId: string) {
+    const alert = await this.alertController.create({
+      header: 'Confirm Deletion',
+      message: 'Are you sure you want to delete this challenge?',
+      buttons: [
+        {
+          text: 'Cancel',
+          role: 'cancel'
+        },
+        {
+          text: 'Delete',
+          role: 'destructive',
+          handler: () => {
+            this.deleteChallenge(progressId);
+          }
+        }
+      ]
+    });
 
+    await alert.present();
+  }
+  private async deleteChallenge(progressId: string) {
+    try {
+        this.loading = true;
+        await this.challengeService.deleteChallenge(progressId).toPromise();
+        await this.loadChallenges(); // Reload the challenges list
+        
+        const alert = await this.alertController.create({
+            header: 'Success',
+            message: 'Challenge deleted successfully',
+            buttons: ['OK']
+        });
+        await alert.present();
+    } catch (error: any) {
+        console.error('Error deleting challenge:', error);
+        const alert = await this.alertController.create({
+            header: 'Error',
+            message: error.message || 'Failed to delete challenge',
+            buttons: ['OK']
+        });
+        await alert.present();
+    } finally {
+        this.loading = false;
+    }
+}
   goBack() {
     this.router.navigate(['/tabs/home']);
   }

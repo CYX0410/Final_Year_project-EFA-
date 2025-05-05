@@ -4,6 +4,7 @@ import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angula
 import { Router, RouterLink } from '@angular/router';
 import { addIcons } from 'ionicons';
 import { IonCheckbox } from '@ionic/angular/standalone';
+import { ChangeDetectorRef } from '@angular/core';
 import { logoGoogle, lockClosedOutline, mailOutline, mail, lockClosed } from 'ionicons/icons'; 
 import { 
   IonContent, 
@@ -50,7 +51,8 @@ export class LoginPage {
   constructor(
     private formBuilder: FormBuilder,
     private authService: AuthService,
-    private router: Router
+    private router: Router,
+    private cdr: ChangeDetectorRef // Inject ChangeDetectorRef to trigger change detection manually
   ) {
     this.loginForm = this.formBuilder.group({
       email: ['', [Validators.required, Validators.email, Validators.pattern(/^[^\s@]+@[^\s@]+\.[^\s@]+$/)]],
@@ -108,6 +110,7 @@ export class LoginPage {
         console.error('Login failed:', error);
       } finally {
         this.loading = false;
+        this.cdr.detectChanges();
       }
     }
   }

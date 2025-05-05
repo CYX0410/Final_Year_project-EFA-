@@ -84,9 +84,14 @@ export class Tab1Page implements OnInit {
   }
   private calculateTotalPoints(challenges: ChallengeProgress[]) {
     this.totalPoints = challenges
-      .filter(c => c.completion_status === 'completed')
-      .reduce((sum, challenge) => sum + challenge.points, 0);
-  }
+        .filter(c => c.completion_status === 'completed')
+        .reduce((sum, challenge) => {
+            // Use total_points_earned instead of just points
+            const earnedPoints = challenge.total_points_earned || 
+                               (challenge.points * (challenge.completion_count || 1));
+            return sum + earnedPoints;
+        }, 0);
+}
   async openSettings() {
     await this.menuController.open();
   }
@@ -113,28 +118,24 @@ export class Tab1Page implements OnInit {
   }
 
   getEcoScore(): number {
-    // Calculate eco score based on:
-    // 1. Completed challenges
-    // 2. Total points earned
-    // 3. Sustainable actions tracked
     let score = 0;
     const maxScore = 100;
     
-    // Example calculation
     const challengeWeight = 0.4;
     const pointsWeight = 0.4;
     const actionsWeight = 0.2;
 
-    const challengeScore = (this.activeChallenges?.length || 0) * 10; // 10 points per challenge
-    const pointsScore = this.totalPoints / 100; // Convert points to percentage
-    const actionsScore = 80; // This could come from tracked sustainable actions
+    // Use completed challenges count instead of active challenges
+    const challengeScore = (this.completedChallenges?.length || 0) * 10;
+    const pointsScore = this.totalPoints / 100;
+    const actionsScore = 80;
 
     score = (challengeScore * challengeWeight) + 
             (pointsScore * pointsWeight) + 
             (actionsScore * actionsWeight);
 
     return Math.min(Math.round(score), maxScore);
-  }
+}
 
   getCompletedChallengesCount(): number {
     return this.completedChallenges?.length || 0;

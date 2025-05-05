@@ -21,7 +21,12 @@
     </h2>
     <ion-card *ngFor="let progress of activeChallenges">
       <ion-card-header>
-        <ion-card-title>{{ progress.title }}</ion-card-title>
+        <div class="header-content">
+          <ion-card-title>{{ progress.title }}</ion-card-title>
+          <ion-button fill="clear" color="danger" (click)="confirmDeleteChallenge(progress.progress_id)">
+            <ion-icon name="trash-outline"></ion-icon>
+          </ion-button>
+        </div>
         <ion-card-subtitle>
           Current Streak: {{ progress.current_streak }} days
         </ion-card-subtitle>

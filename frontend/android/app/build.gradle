@@ -1,20 +1,23 @@
 plugins {
     id 'com.android.application'
-    id 'com.google.gms.google-services' // Firebase Google Services plugin
+    id 'com.google.gms.google-services'  // Add this line
 }
 
+apply plugin: 'com.android.application'
+
 android {
-    namespace "com.frontend.app"
-    compileSdk rootProject.ext.compileSdkVersion
+    namespace "com.uum.efa"
+    compileSdk 34
     defaultConfig {
-        applicationId "com.frontend.app"
+        applicationId "com.uum.efa"
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
         versionCode 1
         versionName "1.0"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         aaptOptions {
-            // Files and dirs to omit from the packaged assets dir, modified to accommodate modern web apps.
+             // Files and dirs to omit from the packaged assets dir, modified to accommodate modern web apps.
+             // Default: https://android.googlesource.com/platform/frameworks/base/+/282e181b58cf72b6ca770dc7ca5f91f135444502/tools/aapt/AaptAssets.cpp#61
             ignoreAssetsPattern '!.svn:!.git:!.ds_store:!*.scc:.*:!CVS:!thumbs.db:!picasa.ini:!*~'
         }
     }
@@ -27,11 +30,10 @@ android {
 }
 
 repositories {
-    flatDir {
+    flatDir{
         dirs '../capacitor-cordova-android-plugins/src/main/libs', 'libs'
     }
 }
-
 dependencies {
     implementation fileTree(include: ['*.jar'], dir: 'libs')
     implementation "androidx.appcompat:appcompat:$androidxAppCompatVersion"
@@ -42,12 +44,6 @@ dependencies {
     androidTestImplementation "androidx.test.ext:junit:$androidxJunitVersion"
     androidTestImplementation "androidx.test.espresso:espresso-core:$androidxEspressoCoreVersion"
     implementation project(':capacitor-cordova-android-plugins')
-
-    // Firebase BoM and dependencies
-    implementation platform('com.google.firebase:firebase-bom:33.10.0')
-    implementation 'com.google.firebase:firebase-analytics' // Analytics
-    implementation 'com.google.firebase:firebase-auth'     // Authentication
-    // Add other Firebase products as needed
 }
 
 apply from: 'capacitor.build.gradle'

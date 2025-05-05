@@ -10,7 +10,7 @@ const app = express();
 const { GoogleGenerativeAI } = require('@google/generative-ai');
 const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
 const model = genAI.getGenerativeModel({ model: 'gemini-1.5-flash' });
-
+const rateLimit = require('express-rate-limit');
 // CORS configuration - Move this to the top, before other middleware
 app.use(cors({
   origin: ['http://localhost:8100', 'http://localhost:4200'], // Add both development URLs
@@ -18,11 +18,16 @@ app.use(cors({
   allowedHeaders: ['Content-Type', 'Authorization'],
   credentials: true // Enable credentials if needed
 }));
-
+const limiter = rateLimit({
+  windowMs: 15 * 60 * 1000, // 15 minutes
+  max: 100 // limit each IP to 100 requests per windowMs
+});
 // Body parser middleware
 app.use(bodyParser.json());
+app.use(limiter);
 app.use(bodyParser.urlencoded({ extended: true }));
-app.use(express.json()); // Ensure this is added to parse JSON requests
+app.use(express.json());
+app.use('/api/challenges', require('./routes/challengeRoutes')); // Ensure this is added to parse JSON requests
 app.post('/chat', async (req, res) => {
   const userMessage = req.body.message;
   try {
@@ -74,7 +79,7 @@ app.post('/chat', async (req, res) => {
 
   const result = await model.generateContent(prompt);
   const response = result.response;
-  
+
   // Format the response with double line breaks
   const formattedResponse = response.text()
       .split('\n')
@@ -99,6 +104,7 @@ app.use((req, res, next) => {
 
 // Routes
 app.use('/api/users', userRoutes);
+app.use('/api/challenges', limiter);
 app.use('/api/challenges', challengeRoutes);
 app.use('/api', productRoutes);
 app.use('/api/feedback', feedbackRoutes);

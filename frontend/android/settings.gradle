@@ -1,16 +1,5 @@
-pluginManagement {
-    repositories {
-        gradlePluginPortal() // Default Gradle Plugin Portal
-        google()            // Add Google's Maven repository for the Google Services plugin
-        mavenCentral()      // Optional, but good practice
-    }
-}
-
 include ':app'
 include ':capacitor-cordova-android-plugins'
 project(':capacitor-cordova-android-plugins').projectDir = new File('./capacitor-cordova-android-plugins/')
 
 apply from: 'capacitor.settings.gradle'
-
-rootProject.name = 'fyp-efa' // Replace with your project name
-

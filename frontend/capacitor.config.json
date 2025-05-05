@@ -1,6 +1,6 @@
 {
-    "appId": "com.frontend.app",
-    "appName": "frontend",
+    "appId": "com.uum.efa",
+    "appName": "EFA",
     "webDir": "www",
     "server": {
       "androidScheme": "https"

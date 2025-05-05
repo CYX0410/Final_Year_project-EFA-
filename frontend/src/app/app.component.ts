@@ -63,10 +63,9 @@ import {
 })
 export class AppComponent {
   notificationsEnabled = false;
-  isDarkMode = false;
   upcomingEventsCount = 0;  // Add this property
   hasUpcomingEvents = false;
-  private apiUrl = 'http://localhost:5010/api';
+  private apiUrl = 'http://localhost:5010';
   constructor(
     private authService: AuthService,
     private router: Router,
@@ -83,13 +82,8 @@ export class AppComponent {
     if (this.notificationsEnabled) {
       this.initializeNotifications();
     }
-    addIcons({arrowBackOutline,notifications,calendarOutline,moon,chatbox,keyOutline,informationCircle,logOut,language,settings});
-    const savedTheme = localStorage.getItem('darkMode');
-    if (savedTheme !== null) {
-      this.isDarkMode = savedTheme === 'true';
-      this.applyTheme(this.isDarkMode);
-    }
-    
+    addIcons({arrowBackOutline,notifications,calendarOutline,moon,chatbox,
+      keyOutline,informationCircle,logOut,language,settings});
     }
   
   async closeMenu() {
@@ -104,7 +98,7 @@ export class AppComponent {
   async provideFeedback() {
     const alert = await this.alertController.create({
       header: 'Provide Feedback',
-      cssClass: this.isDarkMode ? 'dark-alert' : 'light-alert',
+      cssClass:'light-alert',
       inputs: [
         {
           name: 'feedback',
@@ -256,14 +250,10 @@ private applyTheme(isDark: boolean) {
   localStorage.setItem('darkMode', isDark.toString());
 }
 
-toggleTheme() {
-  this.isDarkMode = !this.isDarkMode;
-  this.applyTheme(this.isDarkMode);
-}
   async changePassword() {
     const alert = await this.alertController.create({
       header: 'Change Password',
-      cssClass: this.isDarkMode ? 'dark-alert' : 'light-alert',
+      cssClass:'light-alert',
       inputs: [
         {
           name: 'currentPassword',
@@ -336,7 +326,7 @@ toggleTheme() {
     const alert = await this.alertController.create({
       header: 'Error',
       message: message,
-      cssClass: this.isDarkMode ? 'dark-alert' : 'light-alert',
+      cssClass:'light-alert',
       buttons: ['OK'],
     });
     await alert.present();
@@ -346,7 +336,7 @@ toggleTheme() {
     const alert = await this.alertController.create({
       header: 'Success',
       message: message,
-      cssClass: this.isDarkMode ? 'dark-alert' : 'light-alert',
+      cssClass:'light-alert',
       buttons: ['OK'],
     });
     await alert.present();
@@ -355,7 +345,7 @@ toggleTheme() {
     const alert = await this.alertController.create({
       header: 'Confirm Logout',
       message: 'Are you sure you want to log out?',
-      cssClass: this.isDarkMode ? 'dark-alert' : 'light-alert',
+      cssClass:'light-alert',
       buttons: [
         {
           text: 'Cancel',

@@ -24,8 +24,7 @@ import {
   leaf, 
   bulb, 
   trophy, 
-  analytics
-} from 'ionicons/icons';
+  analytics, calendarOutline } from 'ionicons/icons';
 
 @Component({
   selector: 'app-about-efa',
@@ -52,14 +51,7 @@ import {
 })
 export class AboutEfaPage {
   constructor(private router: Router) {
-    addIcons({ 
-      arrowBackOutline, 
-      home, 
-      leaf, 
-      bulb, 
-      trophy, 
-      analytics
-    });
+    addIcons({arrowBackOutline,home,leaf,bulb,trophy,analytics,calendarOutline});
   }
 
   goBack() {

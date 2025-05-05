@@ -25,13 +25,7 @@
               <ion-label>Eco Calendar</ion-label>
               <ion-badge color="success" *ngIf="hasUpcomingEvents">{{ upcomingEventsCount }}</ion-badge>
             </ion-item>
-            <ion-item class="settings-item">
-              <ion-icon slot="start" name="moon" color="success"></ion-icon>
-              <ion-label>Dark Theme</ion-label>
-              <ion-toggle slot="end" [checked]="isDarkMode" (ionChange)="toggleTheme()"></ion-toggle>
-            </ion-item>
           </ion-item-group>
-
           <ion-item-group>
             <ion-item button (click)="provideFeedback()" class="settings-item">
               <ion-icon slot="start" name="chatbox" color="success"></ion-icon>

@@ -198,3 +198,12 @@ ion-button {
   font-size: 14px;
   margin: 8px 0 0;
 }
+.header-content {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  
+  ion-button {
+    margin: 0;
+  }
+}

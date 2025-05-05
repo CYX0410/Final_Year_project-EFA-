@@ -1,7 +1,7 @@
 <?xml version='1.0' encoding='utf-8'?>
 <resources>
-    <string name="app_name">frontend</string>
-    <string name="title_activity_main">frontend</string>
-    <string name="package_name">com.frontend.app</string>
-    <string name="custom_url_scheme">com.frontend.app</string>
+    <string name="app_name">EFA</string>
+    <string name="title_activity_main">EFA</string>
+    <string name="package_name">com.uum.efa</string>
+    <string name="custom_url_scheme">com.uum.efa</string>
 </resources>
