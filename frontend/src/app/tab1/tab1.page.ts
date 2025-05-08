@@ -83,13 +83,22 @@ export class Tab1Page implements OnInit {
     await this.presentDailyTip();
   }
   private calculateTotalPoints(challenges: ChallengeProgress[]) {
-    this.totalPoints = challenges
+    // Get unique challenges first to avoid counting duplicates
+    const uniqueCompletedChallenges = challenges
         .filter(c => c.completion_status === 'completed')
+        .reduce((map, challenge) => {
+            const existingChallenge = map.get(challenge.challenge_id);
+            if (!existingChallenge || 
+                new Date(challenge.last_check_in) > new Date(existingChallenge.last_check_in)) {
+                map.set(challenge.challenge_id, challenge);
+            }
+            return map;
+        }, new Map<string, ChallengeProgress>());
+
+    // Calculate total points from unique challenges only
+    this.totalPoints = Array.from(uniqueCompletedChallenges.values())
         .reduce((sum, challenge) => {
-            // Use total_points_earned instead of just points
-            const earnedPoints = challenge.total_points_earned || 
-                               (challenge.points * (challenge.completion_count || 1));
-            return sum + earnedPoints;
+            return sum + (Number(challenge.total_points_earned) || 0);
         }, 0);
 }
   async openSettings() {
@@ -125,9 +134,9 @@ export class Tab1Page implements OnInit {
     const pointsWeight = 0.4;
     const actionsWeight = 0.2;
 
-    // Use completed challenges count instead of active challenges
+    // Convert values to numbers
     const challengeScore = (this.completedChallenges?.length || 0) * 10;
-    const pointsScore = this.totalPoints / 100;
+    const pointsScore = Number(this.totalPoints) / 100 || 0;
     const actionsScore = 80;
 
     score = (challengeScore * challengeWeight) + 
@@ -142,6 +151,6 @@ export class Tab1Page implements OnInit {
   }
 
   getTotalPoints(): number {
-    return this.totalPoints || 0;
-  }
+    return Number(this.totalPoints) || 0;
+}
 }

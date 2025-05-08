@@ -278,7 +278,10 @@ ion-card {
   .content-wrapper {
     padding: 12px;
   }
-
+  .custom-searchbar {
+    margin: 10px 0;
+    --border-radius: 16px;
+  }
   .flip-container {
     min-height: 550px;
   }
@@ -298,5 +301,59 @@ ion-card {
   .flip-prompt {
     font-size: 0.9em;
     padding: 12px;
+  }
+}
+// Searchbar container and styling
+.search-container {
+  position: relative;
+  max-width: 600px;
+  margin: 0 auto 20px;
+  z-index: 100;
+}
+
+.suggestions-list {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  right: 0;
+  z-index: 1000;
+  background: white;
+  border-radius: 0 0 16px 16px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  max-height: 300px;
+  overflow-y: auto;
+  
+  ion-item {
+      --padding-start: 16px;
+      --padding-end: 16px;
+      --min-height: 44px;
+      
+      &:hover {
+          --background: var(--ion-color-light);
+          cursor: pointer;
+      }
+      
+      &.selected {
+          --background: var(--ion-color-light);
+          --color: var(--ion-color-primary);
+      }
+  }
+}
+
+.custom-searchbar {
+  --background: rgba(255, 255, 255, 0.95);
+  --border-radius: 20px;
+  --box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  --placeholder-color: #666;
+  --icon-color: #4CAF50;
+  --clear-button-color: #f44336;
+  margin: 0;
+  
+  &::part(container) {
+      padding: 0 16px;
+  }
+
+  &:focus-within {
+      --border-radius: 20px 20px 0 0;
   }
 }

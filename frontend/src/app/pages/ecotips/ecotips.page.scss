@@ -171,9 +171,45 @@ ion-card {
       padding: 10px 14px;
     }
   }
+  .suggestion-chips {
+    padding: 8px;
+  }
+  
+  ion-chip {
+    font-size: 0.9em;
+  }
 
   .bot-icon {
     width: 28px;
     height: 28px;
+  }
+}
+.suggestion-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  padding: 16px;
+  margin-bottom: 16px;
+}
+
+.suggestion-chip {
+  --background: rgba(255, 255, 255, 0.95);
+  --color: var(--ion-color-success);
+  border: 1px solid var(--ion-color-success);
+  transition: all 0.3s ease;
+  
+  &:hover {
+    --background: var(--ion-color-success);
+    --color: #ffffff;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  }
+
+  ion-icon {
+    color: var(--ion-color-success);
+  }
+
+  &:hover ion-icon {
+    color: #ffffff;
   }
 }

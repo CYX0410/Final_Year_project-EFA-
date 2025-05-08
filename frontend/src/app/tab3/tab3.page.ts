@@ -65,6 +65,7 @@ export class Tab3Page implements OnInit {
   }
   clearCache() {
     this._cachedCompletedChallenges = null;
+    this.calculateTotalPoints(); // Recalculate after clearing cache
 }
   async loadChallenges() {
     try {
@@ -73,73 +74,80 @@ export class Tab3Page implements OnInit {
       
       if (user) {
         this.challengeService.getUserChallenges(user.uid).pipe(
-          takeUntil(this.destroy$)
+            takeUntil(this.destroy$)
         ).subscribe({
-          next: (progress) => {
-            // Process data in batches to prevent UI blocking
-            requestAnimationFrame(() => {
-              this.activeChallenges = progress.filter(p => p.completion_status === 'in_progress');
-              this.completedChallenges = progress.filter(p => p.completion_status === 'completed');
-              this.calculateTotalPoints();
-              this.loading = false;
-              this.cdr.detectChanges();
-            });
-          },
-          error: (error) => {
-            console.error('Error loading challenges:', error);
-            this.errorMessage = 'Failed to load challenges';
-            this.loading = false;
-            this.cdr.detectChanges();
-          }
+            next: (progress) => {
+                requestAnimationFrame(() => {
+                    this.activeChallenges = progress.filter(p => p.completion_status === 'in_progress');
+                    this.completedChallenges = progress.filter(p => p.completion_status === 'completed');
+                    this._cachedCompletedChallenges = null; // Clear cache when new data arrives
+                    this.calculateTotalPoints(); // Calculate points after data is loaded
+                    this.loading = false;
+                    this.cdr.detectChanges();
+                });
+            },
+            error: (error) => {
+                console.error('Error loading challenges:', error);
+                this.errorMessage = 'Failed to load challenges';
+                this.loading = false;
+                this.cdr.detectChanges();
+            }
         });
-      }
-    } catch (error) {
-      console.error('Error:', error);
-      this.errorMessage = 'Failed to load tracking data';
-      this.loading = false;
-      this.cdr.detectChanges();
     }
+} catch (error) {
+    console.error('Error:', error);
+    this.errorMessage = 'Failed to load tracking data';
+    this.loading = false;
+    this.cdr.detectChanges();
+}
+}
+
+private calculateTotalPoints() {
+  if (this.completedChallenges.length === 0) {
+      this.totalPoints = 0;
+      return;
   }
 
-  private calculateTotalPoints() {
-    // Memoize the calculation to prevent recalculating unnecessarily
-    if (this.completedChallenges.length === 0) {
-        this.totalPoints = 0;
-        return;
-    }
-
-    requestAnimationFrame(() => {
-        this.totalPoints = this.completedChallenges.reduce((sum, challenge) => {
-            const earnedPoints = challenge.points * (challenge.completion_count || 1);
-            return sum + (earnedPoints || 0);
-        }, 0);
-        this.cdr.detectChanges();
-    });
+  requestAnimationFrame(() => {
+      // Use unique challenges to avoid counting duplicates
+      const uniqueChallenges = this.getUniqueCompletedChallenges();
+      this.totalPoints = uniqueChallenges.reduce((sum, challenge) => {
+          return sum + (Number(challenge.total_points_earned) || 0);
+      }, 0);
+      
+      this.cdr.detectChanges();
+  });
 }
 
   getProgressPercentage(challenge: ChallengeProgress): number {
     return (challenge.current_streak / challenge.duration_days) * 100;
   }
+
   getUniqueCompletedChallenges(): ChallengeProgress[] {
-    // Memoize the result to prevent recalculation on every change detection
     if (!this._cachedCompletedChallenges) {
         const challengeMap = new Map<string, ChallengeProgress>();
         
         this.completedChallenges.forEach(challenge => {
             const existingChallenge = challengeMap.get(challenge.challenge_id);
-            if (!existingChallenge || 
-                new Date(challenge.last_check_in) > new Date(existingChallenge.last_check_in)) {
-                const updatedChallenge = {
+            if (!existingChallenge) {
+                challengeMap.set(challenge.challenge_id, {
                     ...challenge,
-                    total_points_earned: challenge.points * (challenge.completion_count || 1)
-                };
-                challengeMap.set(challenge.challenge_id, updatedChallenge);
+                    // Ensure numeric values
+                    total_points_earned: Number(challenge.total_points_earned) || 0,
+                    completion_count: Number(challenge.completion_count) || 0
+                });
+            } else if (new Date(challenge.last_check_in) > new Date(existingChallenge.last_check_in)) {
+                challengeMap.set(challenge.challenge_id, {
+                    ...challenge,
+                    // Ensure numeric values
+                    total_points_earned: Number(challenge.total_points_earned) || 0,
+                    completion_count: Number(challenge.completion_count) || 0
+                });
             }
         });
         
         this._cachedCompletedChallenges = Array.from(challengeMap.values());
     }
-    
     return this._cachedCompletedChallenges;
 }
 }

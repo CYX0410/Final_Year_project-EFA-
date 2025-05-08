@@ -11,6 +11,28 @@
 
 <ion-content [fullscreen]="true" class="ion-padding">
   <div class="content-wrapper">
+    <div class="search-container">
+      <ion-searchbar
+      [(ngModel)]="searchTerm"
+      placeholder="Click here to see all non-eco products..."
+      (ionInput)="searchProducts($event)"
+      (ionFocus)="onSearchbarFocus()"
+      (ionClear)="clearSearch()"
+      [animated]="true"
+      show-clear-button="focus"
+      class="custom-searchbar">
+  </ion-searchbar>
+      
+      <!-- Product Suggestions Dropdown -->
+      <ion-list *ngIf="showSuggestions" class="suggestions-list">
+        <ion-item *ngFor="let name of availableProducts" 
+                 button
+                 (click)="selectProduct(name)"
+                 [class.selected]="name === searchTerm">
+            <ion-label>{{ name }}</ion-label>
+        </ion-item>
+    </ion-list>
+  </div>
     <!-- Loading State -->
     <div *ngIf="loading" class="loading-container">
       <ion-spinner></ion-spinner>
@@ -25,7 +47,7 @@
 
     <!-- Products List -->
     <div class="products-container" *ngIf="!loading && !error">
-      <div *ngFor="let product of products" class="flip-container" [class.is-flipped]="product.isFlipped">
+      <div *ngFor="let product of filteredProducts" class="flip-container" [class.is-flipped]="product.isFlipped">
         <div class="flipper">
           <!-- Front - Non-Eco Product -->
           <div class="front">

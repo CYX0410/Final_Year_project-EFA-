@@ -23,12 +23,26 @@ const challengeController = {
                     p.last_check_in,
                     p.completion_status,
                     p.current_streak,
-                    p.completion_count,
-                    p.total_points_earned,
                     c.title,
                     c.description,
                     c.duration_days,
-                    c.points
+                    c.points,
+                    COALESCE(
+                        (SELECT COUNT(*) 
+                         FROM challenge_history ch 
+                         WHERE ch.challenge_id = p.challenge_id 
+                         AND ch.uid = p.uid),
+                        p.completion_count,
+                        0
+                    ) as completion_count,
+                    COALESCE(
+                        (SELECT SUM(points_earned) 
+                         FROM challenge_history ch 
+                         WHERE ch.challenge_id = p.challenge_id 
+                         AND ch.uid = p.uid),
+                        p.total_points_earned,
+                        0
+                    ) as total_points_earned
                 FROM user_challenge_progress p
                 JOIN eco_challenges c ON p.challenge_id = c.challenge_id
                 WHERE p.uid = ?`,
@@ -120,6 +134,7 @@ const challengeController = {
             
             await pool.query('START TRANSACTION');
             try {
+                // Get current progress
                 const [progress] = await pool.query(
                     'SELECT * FROM user_challenge_progress WHERE progress_id = ?',
                     [progressId]
@@ -131,64 +146,115 @@ const challengeController = {
                 }
     
                 const currentProgress = progress[0];
-                let newStreak = currentProgress.current_streak + 1;
+                
+                // Check if already checked in today
+                if (currentProgress.last_check_in === today) {
+                    await pool.query('ROLLBACK');
+                    return res.status(400).json({ message: 'Already checked in today' });
+                }
     
+    
+                // Get challenge details
                 const [challenge] = await pool.query(
                     'SELECT duration_days, points FROM eco_challenges WHERE challenge_id = ?',
                     [currentProgress.challenge_id]
                 );
     
-                if (newStreak >= challenge[0].duration_days) {
+                if (challenge[0].duration_days === 1) {
                     const earnedPoints = challenge[0].points;
-                    // Create new progress entry for the same challenge
-                    const newProgressId = uuidv4();
+                    const newCompletionCount = (currentProgress.completion_count || 0) + 1;
+                    const newTotalPoints = (currentProgress.total_points_earned || 0) + earnedPoints;
                     
-                    // Mark current progress as completed
+                    await pool.query(
+                        `INSERT INTO challenge_history 
+                         (history_id, uid, challenge_id, completed_at, points_earned) 
+                         VALUES (?, ?, ?, ?, ?)`,
+                        [uuidv4(), currentProgress.uid, currentProgress.challenge_id, today, earnedPoints]
+                    );
+
+                    // Mark as completed
                     await pool.query(
                         `UPDATE user_challenge_progress 
                          SET completion_status = 'completed',
-                             completion_count = completion_count + 1,
-                             total_points_earned = total_points_earned + ?,
-                             last_check_in = ?
+                             completion_count = ?,
+                             total_points_earned = ?,
+                             last_check_in = ?,
+                             current_streak = 1
                          WHERE progress_id = ?`,
-                        [earnedPoints, today, progressId]
+                        [newCompletionCount, newTotalPoints, today, progressId]
                     );
     
-    
-                    // Start a new progress for the same challenge
-                    await pool.query(
-                        `INSERT INTO user_challenge_progress 
-                         (progress_id, uid, challenge_id, start_date, current_streak, 
-                          completion_status, completion_count, total_points_earned) 
-                         VALUES (?, ?, ?, ?, ?, ?, ?, ?)`,
-                        [newProgressId, currentProgress.uid, currentProgress.challenge_id, 
-                         today, 0, 'in_progress', currentProgress.completion_count + 1, 
-                         currentProgress.total_points_earned + earnedPoints]
-                    );
-                } else {
-                    await pool.query(
-                        'UPDATE user_challenge_progress SET last_check_in = ?, current_streak = ? WHERE progress_id = ?',
-                        [today, newStreak, progressId]
-                    );
+                    await pool.query('COMMIT');
+                    return res.json({ 
+                        message: 'Challenge completed successfully!',
+                        isCompleted: true,
+                        pointsEarned: earnedPoints,
+                        completionCount: newCompletionCount
+                    });
                 }
-    
+                    let newStreak = currentProgress.current_streak + 1;
+                    // Create new progress entry for the same challenge
+  
+                    if (newStreak >= challenge[0].duration_days) {
+                        // Challenge is completed
+                        const earnedPoints = challenge[0].points;
+                        const newCompletionCount = (currentProgress.completion_count || 0) + 1;
+                        const newTotalPoints = (currentProgress.total_points_earned || 0) + earnedPoints;
+                        
+                        await pool.query(
+                            `INSERT INTO challenge_history 
+                             (history_id, uid, challenge_id, completed_at, points_earned) 
+                             VALUES (?, ?, ?, ?, ?)`,
+                            [uuidv4(), currentProgress.uid, currentProgress.challenge_id, today, earnedPoints]
+                        );
+                        
+                        // Mark current challenge as completed
+                        await pool.query(
+                            `UPDATE user_challenge_progress 
+                             SET completion_status = 'completed',
+                                 completion_count = ?,
+                                 total_points_earned = ?,
+                                 last_check_in = ?,
+                                 current_streak = ?
+                             WHERE progress_id = ?`,
+                            [newCompletionCount, newTotalPoints, today, newStreak, progressId]
+                        );
+        
+                        await pool.query('COMMIT');
+                        return res.json({ 
+                            message: 'Challenge completed successfully!',
+                            isCompleted: true,
+                            pointsEarned: earnedPoints,
+                            completionCount: newCompletionCount
+                        });
+                    } else {
+                           // Just update streak and check-in date if not completed
+                await pool.query(
+                    `UPDATE user_challenge_progress 
+                     SET last_check_in = ?, 
+                         current_streak = ? 
+                     WHERE progress_id = ?`,
+                    [today, newStreak, progressId]
+                );
+
                 await pool.query('COMMIT');
                 return res.json({ 
                     message: 'Check-in successful',
                     newStreak,
-                    isCompleted: newStreak >= challenge[0].duration_days,
-                    pointsEarned: newStreak >= challenge[0].duration_days ? challenge[0].points : 0
+                    isCompleted: false,
+                    pointsEarned: 0,
+                    completionCount: currentProgress.completion_count || 0
                 });
-    
-            } catch (error) {
-                await pool.query('ROLLBACK');
-                throw error;
             }
         } catch (error) {
-            console.error('Error checking in:', error);
-            return res.status(500).json({ message: error.message });
+            await pool.query('ROLLBACK');
+            throw error;
         }
+    } catch (error) {
+        console.error('Error checking in:', error);
+        return res.status(500).json({ message: error.message });
     }
+}
     };
 
 module.exports = challengeController;

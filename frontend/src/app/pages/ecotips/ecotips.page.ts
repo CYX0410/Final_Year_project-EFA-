@@ -1,4 +1,3 @@
-// Add to both files
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
@@ -18,10 +17,9 @@ import {
   IonSpinner,
   IonCard,
   IonCardContent,
-  IonFooter 
-} from '@ionic/angular/standalone';
+  IonFooter, IonChip } from '@ionic/angular/standalone';
 import { addIcons } from 'ionicons';
-import { arrowBackOutline, sendOutline } from 'ionicons/icons';
+import { arrowBackOutline, sendOutline, flashOutline,leafOutline, trashOutline, waterOutline, bagHandleOutline  } from 'ionicons/icons';
 import { ChatService } from '../../services/chat.service';
 interface ChatMessage {
   text: string;
@@ -33,7 +31,7 @@ interface ChatMessage {
   templateUrl: './ecotips.page.html', // or './eco-challenges.page.html'
   styleUrls: ['./ecotips.page.scss'], // or './eco-challenges.page.scss'
   standalone: true,
-  imports: [
+  imports: [IonChip, 
     CommonModule, 
     FormsModule, 
     IonContent, 
@@ -49,7 +47,8 @@ interface ChatMessage {
     IonSpinner,
     IonCard,
     IonCardContent,
-    IonFooter 
+    IonFooter,
+    IonLabel
   ]
 })
 export class EcotipsPage implements OnInit {
@@ -60,11 +59,42 @@ export class EcotipsPage implements OnInit {
   isLoading: boolean = false;
   errorMessage: string = '';
 
+  suggestionTopics = [
+    { 
+      icon: 'leaf-outline',
+      text: 'Sustainable Living Tips',
+      query: 'What are some daily sustainable living tips?' 
+    },
+    { 
+      icon: 'trash-outline',
+      text: 'Recycling Guide',
+      query: 'How to recycle different types of materials properly?' 
+    },
+    { 
+      icon: 'flash-outline',
+      text: 'Energy Saving',
+      query: 'What are effective ways to save energy at home?' 
+    },
+    { 
+      icon: 'water-outline',
+      text: 'Water Conservation',
+      query: 'How can I conserve water in daily life?' 
+    },
+    { 
+      icon: 'bag-handle-outline',
+      text: 'Zero Waste Tips',
+      query: 'Give me tips for zero waste lifestyle' 
+    }
+  ];
+  selectSuggestion(query: string) {
+    this.userMessage = query;
+    this.sendMessage();
+  }
   constructor(
     private router: Router,
     private chatService: ChatService
   ) {
-    addIcons({ arrowBackOutline, sendOutline });
+    addIcons({ arrowBackOutline, sendOutline, flashOutline, leafOutline, trashOutline, waterOutline, bagHandleOutline });
   }
 
   ngOnInit() {
