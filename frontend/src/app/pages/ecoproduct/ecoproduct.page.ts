@@ -83,6 +83,7 @@ export class EcoproductPage implements OnInit {
     
     this.productService.getNonEcoProducts().subscribe({
         next: (products: Product[]) => {
+            console.log('Received products:', products.length);
             this.products = products.map(p => ({
                 ...p,
                 isFlipped: false
