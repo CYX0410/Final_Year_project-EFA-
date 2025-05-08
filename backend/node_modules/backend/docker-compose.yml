@@ -8,22 +8,20 @@ services:
       - DB_HOST=db
       - DB_PORT=3306
       - DB_USER=root
-      - DB_PASSWORD=ACE375!*!cyx
       - DB_NAME=eco_dataset
-      - GEMINI_API_KEY=${GEMINI_API_KEY}
+      - DB_PASSWORD=ACE375!*!cyx
+      - MYSQL_ROOT_PASSWORD=ACE375!*!cyx
+      - GEMINI_API_KEY=AIzaSyD61pf3ZbnCBndFEzlDEPBAnBiav2O1xVU
     depends_on:
       db:
         condition: service_healthy
     networks:
       - app-network
-
   db:
     image: mariadb:10.6
     environment:
       MYSQL_ROOT_PASSWORD: ACE375!*!cyx
       MYSQL_DATABASE: eco_dataset
-      MYSQL_TCP_PORT: 3306
-      MYSQL_ROOT_HOST: '%'
     ports:
       - "3308:3306"
     volumes:

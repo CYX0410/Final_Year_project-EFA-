@@ -14,7 +14,7 @@ const app = express();
 
 // CORS configuration - Move this to the top, before other middleware
 app.use(cors({
-  origin: ['http://localhost:8100', 'http://localhost:4200'], // Add both development URLs
+  origin: ['http://localhost:8100', 'http://localhost:4200',], // Add both development URLs
   methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
   allowedHeaders: ['Content-Type', 'Authorization'],
   credentials: true // Enable credentials if needed
