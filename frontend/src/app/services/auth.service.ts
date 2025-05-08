@@ -27,7 +27,7 @@ export interface UserProfile {
   providedIn: 'root'
 })
 export class AuthService {
-  private apiUrl = 'http://localhost:5010/api';
+  private apiUrl = 'http://13.250.1.199:5010/api';
   private authStateReady = false;
   
   constructor(

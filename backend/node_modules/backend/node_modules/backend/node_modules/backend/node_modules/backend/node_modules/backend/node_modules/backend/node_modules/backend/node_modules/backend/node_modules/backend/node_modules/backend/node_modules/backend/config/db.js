@@ -2,11 +2,6 @@
 require('dotenv').config();
 const mysql = require('mysql2/promise');
 
-console.log('DB_HOST:', dbConfig.host);
-console.log('DB_PORT:', dbConfig.port);
-console.log('DB_USER:', dbConfig.user);
-console.log('DB_PASSWORD:', dbConfig.password);
-console.log('DB_NAME:', dbConfig.database);
 const dbConfig = {
     host: 'db',           // Matches the service name in docker-compose.yml
     port: 3306,           // Internal port inside the Docker network
@@ -19,6 +14,14 @@ const dbConfig = {
     enableKeepAlive: true,
     keepAliveInitialDelay: 0
 };
+console.log('DB_HOST:', dbConfig.host);
+console.log('DB_PORT:', dbConfig.port);
+console.log('DB_USER:', dbConfig.user);
+console.log('DB_PASSWORD:', dbConfig.password);
+console.log('DB_NAME:', dbConfig.database);
+
+const mySqlPool = mysql.createPool(dbConfig);
+
 async function testConnection() {
     try {
         const connection = await mySqlPool.getConnection();

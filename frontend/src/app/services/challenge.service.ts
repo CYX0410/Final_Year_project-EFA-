@@ -34,7 +34,7 @@ export interface ChallengeProgress {
   providedIn: 'root'
 })
 export class ChallengeService {
-  private apiUrl = 'http://localhost:5010/api';
+  private apiUrl = 'http://13.250.1.199:5010/api';
   private checkedInToday = new Set<string>();
   private challengeCache: BehaviorSubject<Challenge[]> = new BehaviorSubject<Challenge[]>([]);
   private userChallengesCache = new Map<string, BehaviorSubject<ChallengeProgress[]>>();
