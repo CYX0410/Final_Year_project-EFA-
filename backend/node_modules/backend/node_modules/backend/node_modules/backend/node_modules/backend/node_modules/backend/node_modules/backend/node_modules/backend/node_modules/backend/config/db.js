@@ -2,25 +2,23 @@
 require('dotenv').config();
 const mysql = require('mysql2/promise');
 
-
-console.log('DB_HOST:', process.env.DB_HOST);
-console.log('DB_PORT:', process.env.DB_PORT);
-console.log('DB_USER:', process.env.DB_USER);
-console.log('DB_PASSWORD:', process.env.DB_PASSWORD);
-console.log('DB_NAME:', process.env.DB_NAME);
-console.log('MYSQL_ROOT_PASSWORD:', process.env.MYSQL_ROOT_PASSWORD);
-const mySqlPool = mysql.createPool({
-    host: process.env.DB_HOST,
-    port: process.env.DB_PORT,
-    user: process.env.DB_USER,
-    password: process.env.MYSQL_ROOT_PASSWORD || process.env.DB_PASSWORD,
-    database: process.env.DB_NAME,
+console.log('DB_HOST:', dbConfig.host);
+console.log('DB_PORT:', dbConfig.port);
+console.log('DB_USER:', dbConfig.user);
+console.log('DB_PASSWORD:', dbConfig.password);
+console.log('DB_NAME:', dbConfig.database);
+const dbConfig = {
+    host: 'db',           // Matches the service name in docker-compose.yml
+    port: 3306,           // Internal port inside the Docker network
+    user: 'root',
+    password: 'ACE375!*!cyx',
+    database: 'eco_dataset',
     waitForConnections: true,
     connectionLimit: 10,
     queueLimit: 0,
     enableKeepAlive: true,
     keepAliveInitialDelay: 0
-});
+};
 async function testConnection() {
     try {
         const connection = await mySqlPool.getConnection();
