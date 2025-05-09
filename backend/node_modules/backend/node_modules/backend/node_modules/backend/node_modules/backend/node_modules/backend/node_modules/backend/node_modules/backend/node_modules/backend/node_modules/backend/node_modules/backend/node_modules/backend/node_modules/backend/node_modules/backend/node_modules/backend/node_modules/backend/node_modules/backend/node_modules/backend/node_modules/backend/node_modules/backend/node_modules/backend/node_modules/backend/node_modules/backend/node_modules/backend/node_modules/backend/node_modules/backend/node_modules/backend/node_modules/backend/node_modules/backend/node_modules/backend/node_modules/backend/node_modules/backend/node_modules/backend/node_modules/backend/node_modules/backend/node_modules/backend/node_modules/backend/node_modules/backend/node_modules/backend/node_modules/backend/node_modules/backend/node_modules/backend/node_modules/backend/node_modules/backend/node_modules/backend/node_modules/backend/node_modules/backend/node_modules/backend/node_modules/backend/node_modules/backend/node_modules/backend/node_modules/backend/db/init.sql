@@ -45,34 +45,6 @@ INSERT INTO `challenge_history` VALUES ('3a1b5051-0010-476b-b07e-539ea3ca366a','
 UNLOCK TABLES;
 
 --
--- Table structure for table `eco_challenges`
---
-
-DROP TABLE IF EXISTS `eco_challenges`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!50503 SET character_set_client = utf8mb4 */;
-CREATE TABLE `eco_challenges` (
-  `challenge_id` int NOT NULL,
-  `title` varchar(255) COLLATE utf8mb4_general_ci NOT NULL,
-  `description` text COLLATE utf8mb4_general_ci,
-  `duration_days` int NOT NULL,
-  `points` int NOT NULL,
-  `created_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
-  PRIMARY KEY (`challenge_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-/*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Dumping data for table `eco_challenges`
---
-
-LOCK TABLES `eco_challenges` WRITE;
-/*!40000 ALTER TABLE `eco_challenges` DISABLE KEYS */;
-INSERT INTO `eco_challenges` VALUES (1,'Reduce Plastic Usage','Avoid using single-use plastics for a week',7,100,'2025-03-13 08:27:16'),(2,'Energy Conservation','Turn off unused lights and appliances',5,75,'2025-03-13 08:27:16'),(3,'Water Saving Challenge','Reduce your daily water consumption',3,50,'2025-03-13 08:27:16'),(4,'Reduce Shower Time','Limit your daily showers to 5 minutes to conserve water.',7,50,'2025-04-09 14:28:23'),(5,'No Single-Use Plastics','Avoid using plastic straws, cutlery, and bottles. Switch to reusable alternatives.',7,60,'2025-04-09 14:28:23'),(6,'Meatless Week','Eat plant-based meals every day to reduce your carbon footprint from meat consumption.',7,70,'2025-04-09 14:28:23'),(7,'Turn Off Unused Lights','Turn off lights and electronic devices when not in use to save electricity.',5,40,'2025-04-09 14:28:23'),(8,'Bring Your Own Bag','Use reusable shopping bags instead of plastic ones during grocery runs.',5,45,'2025-04-09 14:28:23'),(9,'Eco-Friendly Commuting','Use public transportation instead of personal vehicles for your daily commute.',7,65,'2025-04-09 14:28:23'),(10,'No Fast Fashion','Avoid buying new clothes. Try wearing what you already have or swap with friends.',10,80,'2025-04-09 14:44:50'),(11,'Recycle Daily','Separate recyclables and dispose of them properly each day',7,60,'2025-04-22 02:00:00'),(12,'Zero-Waste Cooking','Use all food scraps or leftovers while cooking',5,55,'2025-04-22 02:00:00'),(13,'Digital Detox Day','Avoid unnecessary screen time to save energy',1,30,'2025-04-22 02:00:00'),(14,'Paper-Free Day','Go one day without using paper products',1,25,'2025-04-22 02:00:00'),(15,'Reuse Before You Buy','Repurpose or reuse items before purchasing new ones',7,70,'2025-04-22 02:00:00'),(16,'Green Cleaning','Use homemade or eco-friendly cleaning products',5,50,'2025-04-22 02:00:00'),(17,'Plastic-Free Groceries','Avoid buying groceries with plastic packaging',7,65,'2025-04-22 02:00:00'),(18,'Support Local Produce','Buy only locally grown produce for a week',7,60,'2025-04-22 02:00:00'),(19,'Conscious Showering','Turn off the shower while soaping or shampooing',7,50,'2025-04-22 02:00:00'),(20,'Minimalist Living Challenge','Declutter and donate unused items from your home',10,80,'2025-04-22 02:00:00');
-/*!40000 ALTER TABLE `eco_challenges` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
 -- Table structure for table `products`
 --
 
@@ -124,6 +96,34 @@ LOCK TABLES `profiles` WRITE;
 /*!40000 ALTER TABLE `profiles` DISABLE KEYS */;
 INSERT INTO `profiles` VALUES ('yPiB2F9XUGWEeFrE1lvB4y3a0Cl1','CYX','zhangyongxuan420@gmail.com','Knowledge is the foundation of change','Electrical Vehicle (EV)');
 /*!40000 ALTER TABLE `profiles` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `eco_challenges`
+--
+
+DROP TABLE IF EXISTS `eco_challenges`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `eco_challenges` (
+  `challenge_id` int NOT NULL,
+  `title` varchar(255) COLLATE utf8mb4_general_ci NOT NULL,
+  `description` text COLLATE utf8mb4_general_ci,
+  `duration_days` int NOT NULL,
+  `points` int NOT NULL,
+  `created_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
+  PRIMARY KEY (`challenge_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `eco_challenges`
+--
+
+LOCK TABLES `eco_challenges` WRITE;
+/*!40000 ALTER TABLE `eco_challenges` DISABLE KEYS */;
+INSERT INTO `eco_challenges` VALUES (1,'Reduce Plastic Usage','Avoid using single-use plastics for a week',7,100,'2025-03-13 08:27:16'),(2,'Energy Conservation','Turn off unused lights and appliances',5,75,'2025-03-13 08:27:16'),(3,'Water Saving Challenge','Reduce your daily water consumption',3,50,'2025-03-13 08:27:16'),(4,'Reduce Shower Time','Limit your daily showers to 5 minutes to conserve water.',7,50,'2025-04-09 14:28:23'),(5,'No Single-Use Plastics','Avoid using plastic straws, cutlery, and bottles. Switch to reusable alternatives.',7,60,'2025-04-09 14:28:23'),(6,'Meatless Week','Eat plant-based meals every day to reduce your carbon footprint from meat consumption.',7,70,'2025-04-09 14:28:23'),(7,'Turn Off Unused Lights','Turn off lights and electronic devices when not in use to save electricity.',5,40,'2025-04-09 14:28:23'),(8,'Bring Your Own Bag','Use reusable shopping bags instead of plastic ones during grocery runs.',5,45,'2025-04-09 14:28:23'),(9,'Eco-Friendly Commuting','Use public transportation instead of personal vehicles for your daily commute.',7,65,'2025-04-09 14:28:23'),(10,'No Fast Fashion','Avoid buying new clothes. Try wearing what you already have or swap with friends.',10,80,'2025-04-09 14:44:50'),(11,'Recycle Daily','Separate recyclables and dispose of them properly each day',7,60,'2025-04-22 02:00:00'),(12,'Zero-Waste Cooking','Use all food scraps or leftovers while cooking',5,55,'2025-04-22 02:00:00'),(13,'Digital Detox Day','Avoid unnecessary screen time to save energy',1,30,'2025-04-22 02:00:00'),(14,'Paper-Free Day','Go one day without using paper products',1,25,'2025-04-22 02:00:00'),(15,'Reuse Before You Buy','Repurpose or reuse items before purchasing new ones',7,70,'2025-04-22 02:00:00'),(16,'Green Cleaning','Use homemade or eco-friendly cleaning products',5,50,'2025-04-22 02:00:00'),(17,'Plastic-Free Groceries','Avoid buying groceries with plastic packaging',7,65,'2025-04-22 02:00:00'),(18,'Support Local Produce','Buy only locally grown produce for a week',7,60,'2025-04-22 02:00:00'),(19,'Conscious Showering','Turn off the shower while soaping or shampooing',7,50,'2025-04-22 02:00:00'),(20,'Minimalist Living Challenge','Declutter and donate unused items from your home',10,80,'2025-04-22 02:00:00');
+/*!40000 ALTER TABLE `eco_challenges` ENABLE KEYS */;
 UNLOCK TABLES;
 
 --
