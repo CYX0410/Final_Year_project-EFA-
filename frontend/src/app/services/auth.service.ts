@@ -15,6 +15,7 @@ import {
 } from '@angular/fire/auth';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
+import { environment } from '../../environments/environment';
 export interface UserProfile {
   uid: string;
   username: string;
@@ -27,7 +28,7 @@ export interface UserProfile {
   providedIn: 'root'
 })
 export class AuthService {
-  private apiUrl = 'http://13.229.116.113:5010/api';
+  private apiUrl = environment.apiUrl;
   private authStateReady = false;
   
   constructor(

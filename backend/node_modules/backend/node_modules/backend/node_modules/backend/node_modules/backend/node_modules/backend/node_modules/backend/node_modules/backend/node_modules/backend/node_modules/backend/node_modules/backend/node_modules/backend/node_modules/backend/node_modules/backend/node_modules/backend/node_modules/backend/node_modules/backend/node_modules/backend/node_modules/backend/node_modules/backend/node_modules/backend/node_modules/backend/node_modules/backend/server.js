@@ -14,12 +14,32 @@ const app = express();
 
 // CORS configuration - Move this to the top, before other middleware
 app.use(cors({
-  origin: ['http://localhost:8100', 'http://localhost:4200',], // Add both development URLs
+  origin: [
+    'http://localhost:8100',
+    'http://localhost:4200',
+    'http://13.250.42.49:5010',
+    'capacitor://localhost',
+    'ionic://localhost',
+    'null',
+    '*'
+  ],
   methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
-  allowedHeaders: ['Content-Type', 'Authorization'],
-  credentials: true // Enable credentials if needed
+  allowedHeaders: [
+    'Content-Type', 
+    'Authorization', 
+    'Origin', 
+    'X-Requested-With', 
+    'Accept'
+  ],
+  credentials: true,
+  optionsSuccessStatus: 200
 }));
-
+app.use((req, res, next) => {
+  res.header('Access-Control-Allow-Origin', '*');
+  res.header('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE,OPTIONS');
+  res.header('Access-Control-Allow-Headers', 'Content-Type, Authorization');
+  next();
+});
 const limiter = rateLimit({
   windowMs: 15 * 60 * 1000, // 15 minutes
   max: 100 // limit each IP to 100 requests per windowMs
@@ -67,6 +87,6 @@ app.get('/', (req, res) => {
 });
 
 const PORT = process.env.PORT || 5010;
-app.listen(PORT, () => {
-  console.log(`Server running on http://localhost:${PORT}`);
+app.listen(PORT, '0.0.0.0', () => {
+  console.log(`Server running on http://0.0.0.0:${PORT}`);
 });

@@ -6,16 +6,32 @@ const ecoKeywords = [
     'eco', 'environment', 'sustainable', 'green', 'recycling', 'renewable',
     'climate', 'conservation', 'waste', 'energy', 'pollution', 'biodegradable',
     'composting', 'reusable', 'organic', 'carbon', 'footprint', 'nature',
-    'sustainable', 'environmental', 'ecology'
+    'sustainable', 'environmental', 'ecology', 'water', 'saving', 'tips', 
+    'guide', 'daily', 'home', 'zero', 'living', 'lifestyle', 'types',
+    'materials', 'properly', 'effective', 'ways', 'save', 'conserve'
 ];
 
 const chatController = {
     handleChatMessage: async (req, res) => {
         const userMessage = req.body.message;
         try {
+            // Improve keyword detection by checking word combinations
+            const words = userMessage.toLowerCase().split(' ');
             const isEcoRelated = ecoKeywords.some(keyword => 
-                userMessage.toLowerCase().split(' ').includes(keyword)
+                words.some(word => word.includes(keyword)) || 
+                userMessage.toLowerCase().includes(keyword)
             );
+
+            // Always process predefined topic suggestions
+            if (isPreDefinedTopic(userMessage)) {
+                const result = await model.generateContent(getChatPrompt(userMessage));
+                const response = result.response;
+                const formattedResponse = response.text()
+                    .split('\n')
+                    .filter(line => line.trim().length > 0)
+                    .join('\n\n');
+                return res.json({ message: formattedResponse });
+            }
 
             if (!isEcoRelated) {
                 return res.json({
@@ -23,16 +39,7 @@ const chatController = {
                 });
             }
 
-            const result = await model.generateContent(getChatPrompt(userMessage));
-            const response = result.response;
-
-            const formattedResponse = response.text()
-                .split('\n')
-                .filter(line => line.trim().length > 0)
-                .join('\n\n');
-
-            res.json({ message: formattedResponse });
-
+            // ... rest of your existing code
         } catch (error) {
             console.error('Error generating response:', error);
             res.status(500).json({ 
@@ -41,6 +48,16 @@ const chatController = {
         }
     }
 };
+function isPreDefinedTopic(message) {
+    const predefinedTopics = [
+        'What are some daily sustainable living tips?',
+        'How to recycle different types of materials properly?',
+        'What are effective ways to save energy at home?',
+        'How can I conserve water in daily life?',
+        'Give me tips for zero waste lifestyle'
+    ];
+    return predefinedTopics.includes(message);
+}
 
 function getDefaultEcoTopicsMessage() {
     return "I can only answer questions about environmental and eco-friendly topics. Please ask about:\n\n" +

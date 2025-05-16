@@ -3,7 +3,11 @@
     "appName": "EFA",
     "webDir": "www",
     "server": {
-      "androidScheme": "https"
+      "androidScheme": "http",
+      "cleartext": true,
+      "hostname": "13.250.42.49",
+      "port": "5010",
+      "allowNavigation": ["*"]
     },
     "plugins": {
       "LocalNotifications": {
@@ -11,6 +15,14 @@
         "iconColor": "#488AFF",
         "sound": "beep.wav"
       }
-    }
+    },
+      "android": {
+    "webContents": {
+      "androidxWebkit": true
+    },
+      "allowMixedContent": true,
+      "captureInput": true,
+      "allowLogs": true
+  }
 
   }

@@ -2,12 +2,13 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable, throwError } from 'rxjs';
 import { catchError, timeout } from 'rxjs/operators';
+import { environment } from '../../environments/environment';
 
 @Injectable({
   providedIn: 'root'
 })
 export class ChatService {
-  private apiUrl = 'http://13.229.116.113:5010';
+   private apiUrl = environment.apiUrl;
   private timeoutDuration = 30000; // 30 seconds timeout
 
   constructor(private http: HttpClient) {}
