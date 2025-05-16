@@ -1,6 +1,7 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
+import { Platform } from '@ionic/angular/standalone';
 import { 
   IonContent,
   IonList, IonItem, IonLabel, IonInput,
@@ -10,7 +11,7 @@ import {
 import { AuthService } from '../services/auth.service';
 import { addIcons } from 'ionicons';
 import { createOutline, checkmarkOutline, personOutline, mailOutline, bookOutline, leafOutline } from 'ionicons/icons';
-
+import { Keyboard } from '@capacitor/keyboard';
 interface PreferenceOption {
   value: string;
   label: string;
@@ -39,7 +40,8 @@ export class Tab2Page implements OnInit {
 
   constructor(
     private formBuilder: FormBuilder,
-    private authService: AuthService
+    private authService: AuthService,
+    private platform: Platform
   ) {
     addIcons({createOutline,checkmarkOutline,personOutline,mailOutline,bookOutline,leafOutline});
 
@@ -53,12 +55,6 @@ export class Tab2Page implements OnInit {
 
   ngOnInit() {
     this.loadUserProfile();
-  }
-  ionViewDidEnter() {
-    // Ensure content is properly initialized
-    setTimeout(() => {
-      this.content?.scrollToTop();
-    }, 100);
   }
   get username(): string {
     return this.profileForm.get('username')?.value || '';
@@ -113,6 +109,22 @@ export class Tab2Page implements OnInit {
         console.error('Error updating profile:', error);
         this.errorMessage = 'Failed to update profile';
       }
+    }
+  }
+  ionViewDidEnter() {
+    if (this.platform.is('capacitor')) {
+      Keyboard.addListener('keyboardWillShow', ({ keyboardHeight }) => {
+        const activeElement = document.activeElement as HTMLElement;
+        if (activeElement) {
+          this.content.scrollToPoint(0, activeElement.offsetTop - 20, 500);
+        }
+      });
+    }
+  }
+
+  ionViewWillLeave() {
+    if (this.platform.is('capacitor')) {
+      Keyboard.removeAllListeners();
     }
   }
 }

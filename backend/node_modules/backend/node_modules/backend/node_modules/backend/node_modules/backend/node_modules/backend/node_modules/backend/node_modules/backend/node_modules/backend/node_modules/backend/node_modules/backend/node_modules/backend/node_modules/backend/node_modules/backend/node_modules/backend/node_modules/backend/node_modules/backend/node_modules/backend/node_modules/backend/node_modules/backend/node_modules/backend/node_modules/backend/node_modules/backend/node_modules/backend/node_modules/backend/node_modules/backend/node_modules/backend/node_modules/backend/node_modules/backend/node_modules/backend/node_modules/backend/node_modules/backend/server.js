@@ -1,8 +1,48 @@
 const express = require('express');
 const bodyParser = require('body-parser');
+const rateLimit = require('express-rate-limit');
 const cors = require('cors');
 require('dotenv').config();
-const rateLimit = require('express-rate-limit');
+
+const app = express();
+
+const limiter = rateLimit({
+  windowMs: 15 * 60 * 1000, // 15 minutes
+  max: 100 // limit each IP to 100 requests per windowMs
+});
+
+app.use(cors({
+  origin: [
+    'http://localhost:8100',
+    'http://localhost:4200',
+    'http://localhost',
+    'http://localhost:5010',
+    'capacitor://localhost',
+    'ionic://localhost',
+    'http://localhost',
+    'null',
+    '*'
+  ],
+  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+  allowedHeaders: ['Content-Type', 'Authorization', 'Origin', 'X-Requested-With', 'Accept'],
+  credentials: true,
+  optionsSuccessStatus: 200,
+  preflightContinue: false
+}));
+// CORS configuration - Move this to the top, before other middleware
+app.use((req, res, next) => {
+  res.header('Access-Control-Allow-Origin', '*');
+  res.header('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE,OPTIONS');
+  res.header('Access-Control-Allow-Headers', 'Content-Type, Authorization, Content-Length, X-Requested-With');
+  res.header('Cache-Control', 'no-cache, no-store, must-revalidate');
+  res.header('Pragma', 'no-cache');
+  res.header('Expires', '0');
+  
+  if (req.method === 'OPTIONS') {
+    return res.sendStatus(200);
+  }
+  next();
+});
 
 const userRoutes = require('./routes/userRoutes');
 const challengeRoutes = require('./routes/challengeRoutes');
@@ -10,46 +50,11 @@ const productRoutes = require('./routes/productRoutes');
 const feedbackRoutes = require('./routes/feedbackRoutes');
 const chatRoutes = require('./routes/chatRoutes');
 
-const app = express();
-
-// CORS configuration - Move this to the top, before other middleware
-app.use(cors({
-  origin: [
-    'http://localhost:8100',
-    'http://localhost:4200',
-    'http://13.250.42.49:5010',
-    'capacitor://localhost',
-    'ionic://localhost',
-    'null',
-    '*'
-  ],
-  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
-  allowedHeaders: [
-    'Content-Type', 
-    'Authorization', 
-    'Origin', 
-    'X-Requested-With', 
-    'Accept'
-  ],
-  credentials: true,
-  optionsSuccessStatus: 200
-}));
-app.use((req, res, next) => {
-  res.header('Access-Control-Allow-Origin', '*');
-  res.header('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE,OPTIONS');
-  res.header('Access-Control-Allow-Headers', 'Content-Type, Authorization');
-  next();
-});
-const limiter = rateLimit({
-  windowMs: 15 * 60 * 1000, // 15 minutes
-  max: 100 // limit each IP to 100 requests per windowMs
-});
 // Body parser middleware
 app.use(bodyParser.json());
 app.use(limiter);
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(express.json());
-app.use('/api/challenges', require('./routes/challengeRoutes')); // Ensure this is added to parse JSON requests
 
 // Debugging middleware
 if (process.env.NODE_ENV !== 'production') {
@@ -60,18 +65,22 @@ if (process.env.NODE_ENV !== 'production') {
   });
 }
 
+app.use('/api/challenges', limiter);
+app.use('/api/chat', limiter);
 // Routes
 app.use('/api/users', userRoutes);
-app.use('/api/challenges', limiter);
 app.use('/api/challenges', challengeRoutes);
-app.use('/api', productRoutes);
+app.use('/api/challenges', require('./routes/challengeRoutes')); 
 app.use('/api/feedback', feedbackRoutes);
 app.use('/api/chat', chatRoutes);
-
+app.use('/api/products', productRoutes);
 // Error handling middleware
 app.use((err, req, res, next) => {
   console.error('Error:', err);
-  res.status(500).json({ message: err.message });
+  res.status(500).json({ 
+    message: err.message || 'Internal Server Error',
+    error: process.env.NODE_ENV === 'development' ? err : {}
+  });
 });
 
 app.get('/', (req, res) => {
@@ -87,6 +96,8 @@ app.get('/', (req, res) => {
 });
 
 const PORT = process.env.PORT || 5010;
-app.listen(PORT, '0.0.0.0', () => {
-  console.log(`Server running on http://0.0.0.0:${PORT}`);
+const HOST = '0.0.0.0';
+
+app.listen(PORT, HOST, () => {
+  console.log(`Server running on http://${HOST}:${PORT}`);
 });

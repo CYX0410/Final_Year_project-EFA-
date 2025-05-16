@@ -1,6 +1,7 @@
-import { Component } from '@angular/core';
+import { Component, ViewChild} from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
+import { Keyboard } from '@capacitor/keyboard';
 import { 
   IonHeader, 
   IonToolbar, 
@@ -50,11 +51,27 @@ import {
   ]
 })
 export class AboutEfaPage {
+   @ViewChild(IonContent) content!: IonContent;
   constructor(private router: Router) {
     addIcons({arrowBackOutline,home,leaf,bulb,trophy,analytics,calendarOutline});
   }
 
   goBack() {
     this.router.navigate(['/tabs/home']);
+  }
+    async ionViewDidEnter() {
+    // Handle keyboard
+    Keyboard.addListener('keyboardWillShow', () => {
+      // Scroll to focused input
+      const activeElement = document.activeElement as HTMLElement;
+      if (activeElement) {
+        this.content.scrollToPoint(0, activeElement.offsetTop - 20, 500);
+      }
+    });
+  }
+
+  ionViewWillLeave() {
+    // Remove keyboard listener
+    Keyboard.removeAllListeners();
   }
 }

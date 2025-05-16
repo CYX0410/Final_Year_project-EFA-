@@ -24,10 +24,15 @@
     </ion-card>
 
     <!-- Active Challenges -->
+    <div class = "section-header">
     <h2 *ngIf="activeChallenges.length > 0" class="section-title">
       <ion-icon name="time-outline" color="primary"></ion-icon>
       Active Challenges
     </h2>
+       <ion-button fill="clear" (click)="refreshData()" class="refresh-button">
+    <ion-icon name="refresh-outline"></ion-icon>
+  </ion-button>
+</div>
     <ion-card *ngFor="let challenge of activeChallenges">
       <ion-card-header>
         <ion-card-subtitle>In Progress</ion-card-subtitle>

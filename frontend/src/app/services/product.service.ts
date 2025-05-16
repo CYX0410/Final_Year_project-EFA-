@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
-import { Observable } from 'rxjs';
+import { HttpClient, HttpErrorResponse } from '@angular/common/http';
+import { Observable, throwError } from 'rxjs';
+import { catchError, retry } from 'rxjs/operators';
 import { environment } from '../../environments/environment';
 
 export interface Product {
@@ -20,6 +21,14 @@ export class ProductService {
   constructor(private http: HttpClient) {}
 
   getNonEcoProducts(): Observable<Product[]> {
-    return this.http.get<Product[]>(`${this.apiUrl}/products/non-eco`);
+    return this.http.get<Product[]>(`${this.apiUrl}/products/non-eco`).pipe(
+      retry(3),
+      catchError(this.handleError)
+    );
+  }
+
+  private handleError(error: HttpErrorResponse) {
+    console.error('An error occurred:', error);
+    return throwError(() => error);
   }
 }

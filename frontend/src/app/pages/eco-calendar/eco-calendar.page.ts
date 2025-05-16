@@ -64,7 +64,6 @@ import { EcoCalendarService, EcoEvent } from '../../services/eco-calendar.servic
     IonTitle,
     IonContent,
     IonButtons,
-    IonBackButton,
     IonSegment,
     IonSegmentButton,
     IonLabel,

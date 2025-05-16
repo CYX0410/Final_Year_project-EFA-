@@ -180,7 +180,16 @@ ion-progress-bar {
     margin: 12px;
   }
 }
+.section-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin: 24px 0 16px;
+  padding-left: 8px;
+}
+
 .section-title {
+  margin: 0;
   display: flex;
   align-items: center;
   gap: 8px;
@@ -188,10 +197,16 @@ ion-progress-bar {
   font-size: 1.2em;
   font-weight: 600;
   color: #1B5E20;
-  margin: 24px 0 16px;
-  padding-left: 8px;
 
   ion-icon {
     font-size: 24px;
+  }
+}
+.refresh-button {
+  margin: 0;
+  --color: var(--ion-color-success);
+  
+  ion-icon {
+    margin-right: 4px;
   }
 }

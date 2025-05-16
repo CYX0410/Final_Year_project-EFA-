@@ -11,13 +11,10 @@ import {
   IonCardContent,
   IonIcon,
   IonProgressBar,
-  IonList,
-  IonLabel,
   IonSpinner,
-  IonListHeader
-} from '@ionic/angular/standalone';
+  IonButton } from '@ionic/angular/standalone';
 import { addIcons } from 'ionicons';
-import { trophy, ribbonOutline, timeOutline, checkmarkCircleOutline } from 'ionicons/icons';
+import { trophy, ribbonOutline, timeOutline, checkmarkCircleOutline, refreshOutline } from 'ionicons/icons';
 import { ChallengeService, ChallengeProgress } from '../services/challenge.service';
 import { AuthService } from '../services/auth.service';
 
@@ -27,7 +24,7 @@ import { AuthService } from '../services/auth.service';
   styleUrls: ['tab3.page.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
   standalone: true,
-  imports: [
+  imports: [IonButton, 
     CommonModule,
     IonContent,
     IonCard,
@@ -53,9 +50,14 @@ export class Tab3Page implements OnInit {
     private authService: AuthService,
     private cdr: ChangeDetectorRef
   ) {
-    addIcons({ trophy, ribbonOutline, timeOutline, checkmarkCircleOutline });
+    addIcons({refreshOutline,trophy,timeOutline,checkmarkCircleOutline,ribbonOutline});
   }
-
+  async refreshData() {
+    this._cachedCompletedChallenges = null; // Clear cache
+    this.loading = true;
+    this.cdr.detectChanges();
+    await this.loadChallenges();
+  }
   ngOnInit() {
     this.loadChallenges();
   }

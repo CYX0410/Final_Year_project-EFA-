@@ -23,8 +23,22 @@ ion-content {
   max-width: 600px;
   margin: 0 auto;
   padding: 20px;
+  padding-bottom: 60px;
 }
+.profile-form {
+  padding: 16px;
+  
+  ion-item {
+    --padding-start: 0;
+    --inner-padding-end: 0;
+    margin-bottom: 16px;
+  }
 
+  ion-input, ion-textarea {
+    --padding-start: 16px;
+    margin-top: 8px;
+  }
+}
 .profile-header {
   text-align: center;
   margin-bottom: 24px;
@@ -80,7 +94,8 @@ ion-content {
   --border-width: 1px;
   --border-color: #81C784;
   --highlight-height: 0;
-  --padding-start: 16px;
+  --padding-start: 8px; // Reduced from 16px
+   --inner-padding-end: 4px;
   margin: 16px 0;
   transition: all 0.3s ease;
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
@@ -94,18 +109,19 @@ ion-content {
     font-size: 18px;
     transition: all 0.3s ease;
     color: var(--ion-color-medium);
+    margin-right: 4px; // Added small margin to prevent icon from touching input
   }
 
   ion-label {
     font-family: 'Poppins', sans-serif;
     color: #2E7D32; 
-    margin-left: 8px;
+    margin-left: 4px; // Reduced from 8px
     font-size: 16px;
     font-weight: 500;
   }
 
   ion-input, ion-textarea {
-    --padding-start: 8px;
+    --padding-start: 4px; // Reduced from 8px
     font-family: 'Poppins', sans-serif;
     font-size: 15px;
     --placeholder-color: #558B2F;
@@ -197,14 +213,36 @@ p {
 @media (max-width: 768px) {
   .content-container {
     padding: 16px;
+     padding-bottom: 80px;
   }
 
   .large-avatar {
     width: 80px;
     height: 80px;
   }
-
+  ion-item {
+    margin-bottom: 20px;
+  }
   .profile-header h2 {
     font-size: 20px;
   }
+}
+:host {
+  ion-content {
+    --keyboard-offset: 0 !important;
+  }
+}
+
+@media (max-width: 768px) {
+  .content-container {
+    padding-bottom: 100px;
+  }
+  
+  .form-fields {
+    margin-bottom: 32px;
+  }
+}
+.form-fields {
+  margin-top: 24px;
+  padding-bottom: env(safe-area-inset-bottom);
 }

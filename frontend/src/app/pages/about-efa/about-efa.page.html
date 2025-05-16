@@ -1,4 +1,4 @@
-<ion-header [translucent]="true">
+<ion-header class="ion-no-border" [translucent]="true">
   <ion-toolbar>
     <ion-buttons slot="start">
       <ion-button (click)="goBack()">
@@ -9,7 +9,7 @@
   </ion-toolbar>
 </ion-header>
 
-<ion-content [fullscreen]="true" class="ion-padding">
+<ion-content [fullscreen]="true" [scrollY]="true" class="ion-padding-bottom">
   <ion-card>
     <ion-card-header>
       <ion-card-title>Welcome to EFA (Eco-Friendly Assistant)</ion-card-title>

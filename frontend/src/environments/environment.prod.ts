@@ -8,5 +8,5 @@ export const environment = {
     messagingSenderId: "777269589498",
     appId: "1:777269589498:android:a6f129e931b64a9f64a043"
   },
-  apiUrl: 'http://13.250.42.49:5010/api'
+  apiUrl: 'http://localhost:5010/api'
 };
