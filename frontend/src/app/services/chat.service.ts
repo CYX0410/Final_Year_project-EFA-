@@ -8,7 +8,7 @@ import { environment } from '../../environments/environment';
   providedIn: 'root'
 })
 export class ChatService {
-   private apiUrl = environment.apiUrl;
+  private apiUrl = environment.apiUrl;
   private timeoutDuration = 30000; // 30 seconds timeout
 
   constructor(private http: HttpClient) {}

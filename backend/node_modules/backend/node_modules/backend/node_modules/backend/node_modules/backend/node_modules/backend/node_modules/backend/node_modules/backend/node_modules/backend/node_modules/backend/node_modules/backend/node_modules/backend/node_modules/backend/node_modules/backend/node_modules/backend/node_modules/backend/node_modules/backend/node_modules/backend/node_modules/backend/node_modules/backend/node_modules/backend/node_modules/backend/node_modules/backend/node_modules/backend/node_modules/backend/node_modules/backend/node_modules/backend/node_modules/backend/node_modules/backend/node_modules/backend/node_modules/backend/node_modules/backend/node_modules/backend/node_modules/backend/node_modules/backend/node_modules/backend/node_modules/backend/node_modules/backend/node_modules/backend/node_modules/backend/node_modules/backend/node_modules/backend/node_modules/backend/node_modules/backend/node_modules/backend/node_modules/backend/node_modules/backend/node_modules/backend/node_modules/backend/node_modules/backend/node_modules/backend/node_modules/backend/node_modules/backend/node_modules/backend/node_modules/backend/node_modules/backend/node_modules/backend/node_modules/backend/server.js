@@ -66,7 +66,7 @@ app.use('/api/challenges', limiter);
 app.use('/api/challenges', challengeRoutes);
 app.use('/api', productRoutes);
 app.use('/api/feedback', feedbackRoutes);
-app.use('/chat', chatRoutes);
+app.use('/api/chat', chatRoutes);
 
 // Error handling middleware
 app.use((err, req, res, next) => {
@@ -81,7 +81,7 @@ app.get('/', (req, res) => {
       users: '/api/users',
       challenges: '/api/challenges',
       products: '/api/products',
-      chat: '/chat'
+      chat: '/api/chat'
     }
   });
 });
