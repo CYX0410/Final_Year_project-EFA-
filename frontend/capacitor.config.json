@@ -5,7 +5,7 @@
     "server": {
       "androidScheme": "http",
       "cleartext": true,
-      "hostname": "localhost",
+      "hostname": "18.141.182.235",
       "port": "5010",
       "allowNavigation": ["*"]
     },

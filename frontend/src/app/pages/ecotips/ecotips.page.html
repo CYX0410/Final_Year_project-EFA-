@@ -15,14 +15,6 @@
 </ion-header>
 
 <ion-content [fullscreen]="true" class="ion-padding">
-  <div class="suggestion-chips">
-    <ion-chip *ngFor="let topic of suggestionTopics" 
-              (click)="selectSuggestion(topic.query)"
-              class="suggestion-chip">
-      <ion-icon [name]="topic.icon"></ion-icon>
-      <ion-label>{{ topic.text }}</ion-label>
-    </ion-chip>
-  </div>
   <ion-list>
     <ion-item lines="none" *ngFor="let message of messages">
       <ion-card [class.user-message]="message.isUser" [class.bot-message]="!message.isUser">
@@ -36,6 +28,14 @@
           </ion-card-content>
         </div>
       </ion-card>
+ <div *ngIf="!message.isUser && messages.length === 1" class="suggestion-chips">
+    <ion-chip *ngFor="let topic of suggestionTopics" 
+              (click)="selectSuggestion(topic.query)"
+              class="suggestion-chip">
+      <ion-icon [name]="topic.icon"></ion-icon>
+      <ion-label>{{ topic.text }}</ion-label>
+    </ion-chip>
+  </div>
     </ion-item>
   </ion-list>
 

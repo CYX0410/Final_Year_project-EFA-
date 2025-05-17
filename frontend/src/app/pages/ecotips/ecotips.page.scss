@@ -184,19 +184,21 @@ ion-card {
     height: 28px;
   }
 }
+
 .suggestion-chips {
   display: flex;
   flex-wrap: wrap;
   gap: 8px;
   padding: 16px;
-  margin-bottom: 16px;
+  margin: 8px 0;
+  width: 100%;
 }
-
 .suggestion-chip {
   --background: rgba(255, 255, 255, 0.95);
   --color: var(--ion-color-success);
   border: 1px solid var(--ion-color-success);
   transition: all 0.3s ease;
+  margin: 4px;
   
   &:hover {
     --background: var(--ion-color-success);
@@ -206,7 +208,8 @@ ion-card {
   }
 
   ion-icon {
-    color: var(--ion-color-success);
+    color: inherit;
+    margin-right: 4px;
   }
 
   &:hover ion-icon {

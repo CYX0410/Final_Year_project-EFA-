@@ -65,7 +65,7 @@ export class AppComponent {
   notificationsEnabled = false;
   upcomingEventsCount = 0;  // Add this property
   hasUpcomingEvents = false;
-  private apiUrl = 'http://localhost:5010/api';
+  private apiUrl = 'http://18.141.182.235:5010/api';
   constructor(
     private authService: AuthService,
     private router: Router,
